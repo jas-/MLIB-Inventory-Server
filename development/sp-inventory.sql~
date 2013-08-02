@@ -1,0 +1,131 @@
+DELIMITER //
+
+-- Search computer by sku, uuic or serial
+DROP PROCEDURE IF EXISTS Inv_ComputerSearch//
+CREATE DEFINER='inventoryAdmin'@'localhost' PROCEDURE Inv_ComputerSearch(IN `s` VARCHAR(128), IN `u` VARCHAR(128), IN `sl` VARCHAR(128))
+ DETERMINISTIC
+ SQL SECURITY INVOKER
+ COMMENT 'Add/Update computer'
+BEGIN
+ SELECT * FROM `inventory_computer` WHERE `sku` LIKE s OR `uuic` LIKE u OR `serial` LIKE sl;
+END//
+
+-- Add/Update computer
+DROP PROCEDURE IF EXISTS Inv_ComputerAddUpdate//
+CREATE DEFINER='inventoryAdmin'@'localhost' PROCEDURE Inv_ComputerAddUpdate(IN `m` VARCHAR(128), IN `s` VARCHAR(128), IN `u` VARCHAR(128), IN `sl` VARCHAR(128), IN `h` VARCHAR(128), IN `l` VARCHAR(128), IN `e` VARCHAR(32), IN `o` VARCHAR(32), IN `n` LONGTEXT)
+ DETERMINISTIC
+ SQL SECURITY INVOKER
+ COMMENT 'Add/Update computer'
+BEGIN
+ INSERT INTO `inventory_computer` (`model`, `sku`, `uuic`, `serial`, `hostname`, `location`, `eowd`, `opd`, `notes`) VALUES (m, s, u, sl, h, l, e, o, n) ON DUPLICATE KEY UPDATE `model`=m, `sku`=s, `uuic`=u, `serial`=sl, `hostname`=h, `location`=l, `eowd`=e, `opd`=o, `notes`=n;
+ SELECT ROW_COUNT() AS affected;
+END//
+
+-- Delete computer
+DROP PROCEDURE IF EXISTS Inv_ComputerDelete//
+CREATE DEFINER='inventoryAdmin'@'localhost' PROCEDURE Inv_ComputerDelete(IN `id` INT(255), OUT `x` INT)
+ DETERMINISTIC
+ SQL SECURITY INVOKER
+ COMMENT 'Delete computer'
+BEGIN
+ DELETE FROM `inventory_computer` WHERE `id`=id;
+ SELECT ROW_COUNT() AS affected;
+END//
+
+-- Search models
+DROP PROCEDURE IF EXISTS Inv_ModelSearch//
+CREATE DEFINER='inventoryAdmin'@'localhost' PROCEDURE Inv_ModelSearch(IN `model` VARCHAR(128), IN `token` LONGTEXT)
+ DETERMINISTIC
+ SQL SECURITY INVOKER
+ COMMENT 'Search computer records by model'
+BEGIN
+ SELECT `model` FROM `inventory_models`;
+END//
+
+-- Add/Update model
+DROP PROCEDURE IF EXISTS Inv_ModelAddUpdate//
+CREATE DEFINER='inventoryAdmin'@'localhost' PROCEDURE Inv_ModelAddUpdate(IN `model` VARCHAR(128), IN `type` VARCHAR(128), IN `description` VARCHAR(128), IN `notes` LONGTEXT, OUT `x` INT)
+ DETERMINISTIC
+ SQL SECURITY INVOKER
+ COMMENT 'Add/Update model'
+BEGIN
+ INSERT INTO `inventory_model` (`model`, `type`, `description`, `notes`) VALUES (model, type, description, notes) ON DUPLICATE KEY UPDATE `model`=model, `type`=type, `description`=description, `notes`=notes;
+ SELECT ROW_COUNT() AS affected;
+END//
+
+-- Select all models
+DROP PROCEDURE IF EXISTS Inv_ModelAll//
+CREATE DEFINER='inventoryAdmin'@'localhost' PROCEDURE Inv_ModelAll()
+ DETERMINISTIC
+ SQL SECURITY INVOKER
+ COMMENT 'Returns all models as array'
+BEGIN
+ SELECT `model` FROM `inventory_model`;
+END//
+
+-- Delete model
+DROP PROCEDURE IF EXISTS Inv_ModelDelete//
+CREATE DEFINER='inventoryAdmin'@'localhost' PROCEDURE Inv_ModelDelete(IN `id` INT(255), OUT `x` INT)
+ DETERMINISTIC
+ SQL SECURITY INVOKER
+ COMMENT 'Delete model'
+BEGIN
+ DELETE FROM `inventory_model` WHERE `id`=id;
+ SELECT ROW_COUNT() AS affected;
+END//
+
+-- Add/Update monitors
+DROP PROCEDURE IF EXISTS Inv_MonitorAddUpdate//
+CREATE DEFINER='inventoryAdmin'@'localhost' PROCEDURE Inv_MonitorAddUpdate(IN `s` VARCHAR(128), IN `sl` VARCHAR(128), IN `h` VARCHAR(128), IN `m` VARCHAR(128), IN `mm` VARCHAR(128), IN `l` VARCHAR(128), IN `e` VARCHAR(128), IN `o` VARCHAR(128))
+ DETERMINISTIC
+ SQL SECURITY INVOKER
+ COMMENT 'Add/Update monitor'
+BEGIN
+ INSERT INTO `inventory_monitors` (`sku`, `serial`, `hostname`, `model`, `mmodel`, `location`, `eowd`, `order`) VALUES (s, sl, h, m, mm, l, e, o) ON DUPLICATE KEY UPDATE `sku`=s, `serial`=s, `hostname`=h, `model`=m, `mmodel`=mm, `location`=l, `eowd`=e, `order`=o;
+ SELECT ROW_COUNT() AS affected;
+END//
+
+-- Delete monitor
+DROP PROCEDURE IF EXISTS Inv_MonitorDelete//
+CREATE DEFINER='inventoryAdmin'@'localhost' PROCEDURE Inv_MonitorDelete(IN `id` INT(255), OUT `x` INT)
+ DETERMINISTIC
+ SQL SECURITY INVOKER
+ COMMENT 'Delete monitor'
+BEGIN
+ DELETE FROM `inventory_monitors` WHERE `id`=id;
+ SELECT ROW_COUNT() AS affected;
+END//
+
+-- Validate record
+DROP PROCEDURE IF EXISTS Inv_ValidateRecord//
+CREATE DEFINER='inventoryAdmin'@'localhost' PROCEDURE Inv_ValidateRecord(IN `h` VARCHAR(128), IN `s` VARCHAR(128), IN `u` VARCHAR(128), IN `sl` VARCHAR(128))
+ DETERMINISTIC
+ SQL SECURITY INVOKER
+ COMMENT 'Validate computer/monitor record'
+BEGIN
+ SELECT COUNT(*) FROM `inventory_computer` WHERE `sku`=s XOR `uuic`=u XOR `serial`=sl AND `hostname`=h;
+END//
+
+-- Add/Update rma
+DROP PROCEDURE IF EXISTS Inv_RMAAddUpdate//
+CREATE DEFINER='inventoryAdmin'@'localhost' PROCEDURE Inv_RMAAddUpdate(IN `d` VARCHAR(12), IN `h` VARCHAR(128), IN `s` VARCHAR(128), IN `u` VARCHAR(128), IN `sl` VARCHAR(128), IN `m` VARCHAR(128), IN `i` INT(1), IN `p` VARCHAR(128), IN `n` LONGTEXT)
+ DETERMINISTIC
+ SQL SECURITY INVOKER
+ COMMENT 'Add/Update rma'
+BEGIN
+ INSERT INTO `inventory_rma` (`date`, `hostname`, `sku`, `uuic`, `serial`, `model`, `incorrect`, `part`, `notes`) VALUES (d, s, sl, h, m, mm, l, e, o) ON DUPLICATE KEY UPDATE `sku`=s, `serial`=sl, `hostname`=h, `model`=m, `mmodel`=mm, `location`=l, `eowd`=e, `order`=o;
+ SELECT ROW_COUNT() AS affected;
+END//
+
+-- Delete monitor
+DROP PROCEDURE IF EXISTS Inv_RMADelete//
+CREATE DEFINER='inventoryAdmin'@'localhost' PROCEDURE Inv_RMADelete(IN `id` INT(255), OUT `x` INT)
+ DETERMINISTIC
+ SQL SECURITY INVOKER
+ COMMENT 'Delete rma'
+BEGIN
+ DELETE FROM `inventory_rma` WHERE `id`=id LIMIT 1;
+ SELECT ROW_COUNT() AS affected;
+END//
+
+DELIMITER ;
