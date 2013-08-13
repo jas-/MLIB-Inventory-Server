@@ -12,7 +12,8 @@ class InventoryController extends AbstractRestfulController
     protected $inventory;
 
     public function getList(){
-        return $this->response(array('default' => 'List all records'));
+        $db = new InventoryDB('RO', $this->getServiceLocator());
+        return $this->response($db->viewComputer());
     }
 
     public function get($id){
@@ -28,7 +29,7 @@ class InventoryController extends AbstractRestfulController
             $computer = new Computer($request->getPost());
 
             if ($computer->isValid()) {
-                $db = new InventoryDB('RO', $this->getServiceLocator());
+                $db = new InventoryDB('RW', $this->getServiceLocator());
 
                 return $this->response(array('success'=>'Record saved successfully'));
             }
