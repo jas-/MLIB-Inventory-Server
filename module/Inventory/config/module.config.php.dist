@@ -1,17 +1,17 @@
 <?php
 return array(
 	'database' => array(
-		'host' => 'localhost',
-		'name' => 'inventory_v01',
+		'host' => '{SERVER}',
+		'name' => '{NAME}',
 		'driver' => 'Pdo_Mysql',
 		'accounts' => array(
 			'admin' => array(
-				'username' => 'Administrator',
-				'password' => 'password',
+				'username' => '{ADMIN}',
+				'password' => '{ADMIN_PW}',
 			),
 			'read-only' => array(
-				'username' => 'Read_Only',
-				'password' => 'password',
+				'username' => '{RO}',
+				'password' => '{RO_PW}',
 			),
 		),
 	),
