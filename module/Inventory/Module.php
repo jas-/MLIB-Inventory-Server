@@ -47,7 +47,7 @@ class Module
                     $dbAdapter = $sm->get('Zend\Db\Adapter\Adapter');
                     $resultSetPrototype = new ResultSet();
                     $resultSetPrototype->setArrayObjectPrototype(new Album());
-                    return new TableGateway('album', $dbAdapter, null, $resultSetPrototype);
+                    return new TableGateway('computers', $dbAdapter, null, $resultSetPrototype);
                 },
             ),
         );

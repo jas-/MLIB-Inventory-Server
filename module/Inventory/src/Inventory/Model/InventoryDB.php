@@ -19,7 +19,7 @@ class InventoryDB
 
 	public function viewComputer()
 	{
-		$sql = sprintf('CALL ComputerList()');
+		$sql = sprintf('CALL ComputerList();');
 		return $this->query($sql);
 	}
 
@@ -50,14 +50,10 @@ class InventoryDB
 
 	private function query($sql)
 	{
-		$result = $this->dbconn->query($sql);
+		$stmt = $this->dbconn->query($sql, \Zend\Db\Adapter\Adapter::QUERY_MODE_EXECUTE);
 
-		if ($result instanceof ResultInterface && $result->isQueryResult()) {
-			$resultSet = new ResultSet;
-			$resultSet->initialize($result);
-			return $resultSet->toArray();
-		}
-
+		$result = $stmt->fetchAll(\PDO::FETCH_OBJ);
+var_dump($result);
 		return array('error' => 'Result set empty');
 	}
 
