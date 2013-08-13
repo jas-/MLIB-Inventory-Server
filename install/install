@@ -3,30 +3,39 @@
 echo "Creating necessary database creation objects..."
 cp -fr templates/*.sql .
 
+echo "Creating necessary application configuration objects..."
+cp ../module/Inventory/config/module.config.php.dist ../module/Inventory/config/module.config.php
+
 echo "I need some environment information for the database..."
 
 echo ""
 
 read -p "Database server name [localhost]: " server
 sed -i "s/{SERVER}/${server:=localhost}/g" *.sql
+sed -i "s/{SERVER}/${server:=localhost}/g" ../module/Inventory/config/module.config.php
 
 read -p "Database name [inventory]: " name
 sed -i "s/{NAME}/${name:=inventory}/g" *.sql
+sed -i "s/{NAME}/${name:=inventory}/g" ../module/Inventory/config/module.config.php
 
 echo ""
 
 read -p "Read-Write username [Administrator]: " admin
 sed -i "s/{ADMIN}/${admin:=Administrator}/g" *.sql
+sed -i "s/{ADMIN}/${admin:=Administrator}/g" ../module/Inventory/config/module.config.php
 
 read -sp "Enter Read-Write password: " admin_pass
 sed -i "s/{ADMIN_PW}/${admin_pass:=}/g" *.sql
+sed -i "s/{ADMIN_PW}/${admin_pass:=localhost}/g" ../module/Inventory/config/module.config.php
 
 echo ""
 read -p "Read-Only username [Read_Only]: " ro
 sed -i "s/{RO}/${ro:=Read_Only}/g" *.sql
+sed -i "s/{RO}/${ro:=Read_Only}/g" ../module/Inventory/config/module.config.php
 
 read -sp "Read-Only password: " ro_pass
 sed -i "s/{RO_PW}/${ro_pass:=}/g" *.sql
+sed -i "s/{RO_PW}/${ro_pass:=localhost}/g" ../module/Inventory/config/module.config.php
 
 echo ""
 echo ""
