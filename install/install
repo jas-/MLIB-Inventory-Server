@@ -1,0 +1,63 @@
+#!/bin/bash
+
+echo "Creating necessary database creation objects..."
+cp -fr templates/*.sql .
+
+echo "I need some environment information for the database..."
+
+echo ""
+
+read -p "Database server name [localhost]: " server
+sed -i "s/{SERVER}/${server:=localhost}/g" *.sql
+
+read -p "Database name [inventory]: " name
+sed -i "s/{NAME}/${name:=inventory}/g" *.sql
+
+echo ""
+
+read -p "Read-Write username [Administrator]: " admin
+sed -i "s/{ADMIN}/${admin:=Administrator}/g" *.sql
+
+read -sp "Enter Read-Write password: " admin_pass
+sed -i "s/{ADMIN_PW}/${admin_pass:=}/g" *.sql
+
+echo ""
+read -p "Read-Only username [Read_Only]: " ro
+sed -i "s/{RO}/${ro:=Read_Only}/g" *.sql
+
+read -sp "Read-Only password: " ro_pass
+sed -i "s/{RO_PW}/${ro_pass:=}/g" *.sql
+
+echo ""
+echo ""
+
+read -sp "Enter root MySQL password: " pass;
+
+echo "";
+
+echo "Creating database, users & permissions..."
+mysql -u root --password=${pass} < database-schema.sql
+
+echo ""
+
+echo "Importing stored procedures..."
+
+echo ""
+
+echo "Creating computer record management procedures"
+mysql -u root --password=${pass} ${name} < sp_computers.sql
+
+echo "Creating monitor record management procedures"
+mysql -u root --password=${pass} ${name} < sp_monitors.sql
+
+echo "Creating model record management procedures"
+mysql -u root --password=${pass} ${name} < sp_models.sql
+
+echo "Creating rma record management procedures"
+mysql -u root --password=${pass} ${name} < sp_rma.sql
+
+echo "Creating shared management procedures"
+mysql -u root --password=${pass} ${name} < sp_shared.sql
+
+echo "Cleaning up..."
+rm *.sql
