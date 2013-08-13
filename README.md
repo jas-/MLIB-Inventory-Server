@@ -1,4 +1,4 @@
-= MLIB-Inventory-Server =
+MLIB-Inventory-Server
 =======================
 
 Introduction
