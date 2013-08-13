@@ -1,0 +1,13 @@
+<?php
+return array(
+    'db' => array(
+        'administrator' => array(
+            'username' => '{ADMIN}',
+            'password' => '{ADMIN_PW}'
+        ),
+        'read-only' => array(
+            'username' => '{RO}',
+            'password' => '{RO_PW}'
+        )
+    ),
+);
