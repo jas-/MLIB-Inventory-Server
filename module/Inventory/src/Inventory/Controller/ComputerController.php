@@ -8,7 +8,7 @@ use Inventory\Model\InventoryDB;
 use Inventory\Model\Computer;
 use Inventory\Model\Search;
 
-class InventoryController extends AbstractRestfulController
+class ComputerController extends AbstractRestfulController
 {
     protected $inventory;
 
@@ -18,13 +18,10 @@ class InventoryController extends AbstractRestfulController
     }
 
     public function get($id){
-        $request = $this->getRequest();
-
-        $search = new Search($request->getQuery());
+        $search = new Search($id);
 
         if ($search->isValid()) {
-            $obj = $request->getQuery();
-            $id = $this->wildcard($obj->id);
+            $id = $this->wildcard($id);
 
             $db = new InventoryDB('RO', $this->getServiceLocator());
             return $this->response($db->searchComputer($id));

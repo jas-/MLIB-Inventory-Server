@@ -39,6 +39,18 @@ class InventoryDB
 		return $this->query($sql);
 	}
 
+	public function viewMonitor()
+	{
+		$sql = sprintf('CALL MonitorList()');
+		return $this->query($sql);
+	}
+
+	public function searchMonitor($id)
+	{
+		$sql = sprintf('CALL MonitorSearch("%s")', $id);
+		return $this->query($sql);
+	}
+
     private function rw()
     {
         return $this->svc->get('Database_RW');
@@ -52,6 +64,7 @@ class InventoryDB
 	private function query($sql)
 	{
 		$query = $this->dbconn->createStatement($sql)->execute();
+
 		if ($query->count() > 0)
 			$result = new ResultSet();
 			return $result->initialize($query)->toArray();

@@ -15,7 +15,7 @@ class Search
 
     public function exchangeArray($data)
     {
-        $this->id = (isset($data->id)) ? $data->id : null;
+        $this->id = (isset($data)) ? $data : null;
     }
 
 	public function isValid()
