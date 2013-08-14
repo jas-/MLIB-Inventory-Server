@@ -3,6 +3,7 @@
 namespace Inventory\Model;
 
 use Zend\ModuleManager\Feature\ServiceProviderInterface;
+use Zend\Db\Adapter\Adapter;
 use Zend\Db\Adapter\Driver\ResultInterface;
 use Zend\Db\ResultSet\ResultSet;
 
@@ -19,7 +20,7 @@ class InventoryDB
 
 	public function viewComputer()
 	{
-		$sql = sprintf('CALL ComputerList();');
+		$sql = sprintf('CALL ComputerList()');
 		return $this->query($sql);
 	}
 
@@ -50,10 +51,11 @@ class InventoryDB
 
 	private function query($sql)
 	{
-		$stmt = $this->dbconn->query($sql, \Zend\Db\Adapter\Adapter::QUERY_MODE_EXECUTE);
+		$query = $this->dbconn->createStatement($sql)->execute();
+		if ($query->count() > 0)
+			$result = new ResultSet();
+			return $result->initialize($query)->toArray();
 
-		$result = $stmt->fetchAll(\PDO::FETCH_OBJ);
-var_dump($result);
 		return array('error' => 'Result set empty');
 	}
 

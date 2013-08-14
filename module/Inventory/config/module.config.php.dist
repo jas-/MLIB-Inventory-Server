@@ -2,7 +2,7 @@
 return array(
 	'database' => array(
 		'host' => '{SERVER}',
-		'name' => '{NAME}',
+		'database' => '{NAME}',
 		'driver' => 'Pdo_Mysql',
 		'accounts' => array(
 			'admin' => array(
