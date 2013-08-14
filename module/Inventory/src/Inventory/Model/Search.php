@@ -2,11 +2,7 @@
 
 namespace Inventory\Model;
 
-use Inventory\Model\Validate\Hostname;
-use Inventory\Model\Validate\Model;
-use Inventory\Model\Validate\SKU;
-use Inventory\Model\Validate\UUIC;
-use Inventory\Model\Validate\Serial;
+use Inventory\Model\Validate\SearchPattern;
 
 class Search
 {
@@ -24,11 +20,7 @@ class Search
 
 	public function isValid()
     {
-		if ((!Hostname::isValid($this->id)) &&
-			(!Model::isValid($this->id)) &&
-			(!SKU::isValid($this->id)) &&
-			(!UUIC::isValid($this->id)) &&
-			(!Serial::isValid($this->serial)))
+		if (!SearchPattern::isValid($this->id))
 			return false;
 
 		return true;

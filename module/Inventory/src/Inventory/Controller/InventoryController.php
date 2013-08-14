@@ -23,8 +23,11 @@ class InventoryController extends AbstractRestfulController
         $search = new Search($request->getQuery());
 
         if ($search->isValid()) {
+            $obj = $request->getQuery();
+            $id = $this->wildcard($obj->id);
+
             $db = new InventoryDB('RO', $this->getServiceLocator());
-            return $this->response($db->searchComputer($request->getQuery()));
+            return $this->response($db->searchComputer($id));
         } else {
             return $this->response(array('error'=>'Given parameters did meet validation requirements'));
         }
@@ -61,5 +64,10 @@ class InventoryController extends AbstractRestfulController
     private function response($obj)
     {
         return new JsonModel($obj);
+    }
+
+    private function wildcard($str)
+    {
+        return preg_replace('/\*/', '%', $str);
     }
 }

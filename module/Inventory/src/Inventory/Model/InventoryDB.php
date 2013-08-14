@@ -4,7 +4,6 @@ namespace Inventory\Model;
 
 use Zend\ModuleManager\Feature\ServiceProviderInterface;
 use Zend\Db\Adapter\Adapter;
-use Zend\Db\Adapter\Driver\ResultInterface;
 use Zend\Db\ResultSet\ResultSet;
 
 class InventoryDB
@@ -34,9 +33,9 @@ class InventoryDB
 		$sql = sprintf('CALL ComputerDelete("%d")');
 	}
 
-	public function searchComputer($obj)
+	public function searchComputer($id)
 	{
-		$sql = sprintf('CALL ComputerSearch("%s")', $obj->id);
+		$sql = sprintf('CALL ComputerSearch("%s")', $id);
 		return $this->query($sql);
 	}
 
@@ -62,6 +61,6 @@ class InventoryDB
 
 	function __destruct()
 	{
-		unset($this->dbconn);
+		//unset($this->dbconn);
 	}
 }
