@@ -2,10 +2,6 @@
 
 namespace Inventory\Model;
 
-use Zend\InputFilter\InputFilter;
-use Zend\InputFilter\Input;
-use Zend\Validator;
-
 use Inventory\Model\Validate\Hostname;
 use Inventory\Model\Validate\Model;
 use Inventory\Model\Validate\SKU;
@@ -15,7 +11,6 @@ use Inventory\Model\Validate\Serial;
 class Computer
 {
     public $id, $hostname, $model, $sku, $uuic, $serial, $notes, $data;
-    protected $chain;
 
 	function __construct($data)
 	{

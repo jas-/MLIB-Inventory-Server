@@ -6,6 +6,7 @@ use Zend\Mvc\Controller\AbstractRestfulController;
 use Zend\View\Model\JsonModel;
 use Inventory\Model\InventoryDB;
 use Inventory\Model\Computer;
+use Inventory\Model\Search;
 
 class InventoryController extends AbstractRestfulController
 {
@@ -19,7 +20,16 @@ class InventoryController extends AbstractRestfulController
     public function get($id){
         $request = $this->getRequest();
 
-        return $this->response(array('search'=>'Search available records'));
+        $search = new Search($request->getQuery());
+
+        if ($search->isValid()) {
+            $db = new InventoryDB('RO', $this->getServiceLocator());
+            return $this->response($db->searchComputer($request->getQuery()));
+        } else {
+            return $this->response(array('error'=>'Given parameters did meet validation requirements'));
+        }
+
+        return $this->response(array('error'=>'Unable to search records with given parameters'));
     }
 
     public function create($data){
@@ -32,6 +42,8 @@ class InventoryController extends AbstractRestfulController
                 $db = new InventoryDB('RW', $this->getServiceLocator());
 
                 return $this->response(array('success'=>'Record saved successfully'));
+            } else {
+                return $this->response(array('error'=>'Given parameters did meet validation requirements'));
             }
         }
 

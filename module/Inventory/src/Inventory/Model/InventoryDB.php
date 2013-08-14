@@ -36,7 +36,8 @@ class InventoryDB
 
 	public function searchComputer($obj)
 	{
-		$sql = sprintf('CALL ComputerSearch("%s")');
+		$sql = sprintf('CALL ComputerSearch("%s")', $obj->id);
+		return $this->query($sql);
 	}
 
     private function rw()
