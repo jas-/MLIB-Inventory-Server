@@ -31,9 +31,9 @@ class InventoryDB
 
 		$result = $this->query($sql);
 
-		$r = ($result[0]['affected'] === 1) ? 'added new' : 'updated existing'
+		$r = ($result[0]['affected'] === 1) ? 'added new' : 'updated existing';
 
-		if ($result[0]['affected'] === 0) {
+		if ($result[0]['affected'] > 0) {
 			return array('success'=>'Successfully '.$r.' record');
 		}
 		return array('error'=>'Whoops, an error occured while adding new record');
