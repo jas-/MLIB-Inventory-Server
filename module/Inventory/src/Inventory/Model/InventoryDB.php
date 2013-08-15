@@ -65,11 +65,11 @@ class InventoryDB
 	{
 		$query = $this->dbconn->createStatement($sql)->execute();
 
-		if ($query->count() > 0)
+		if ($query->count() > 0) {
 			$result = new ResultSet();
 			return $result->initialize($query)->toArray();
-
-		return array('error' => 'Result set empty');
+		}
+		return array('error' => 'Whoopsie! No records found, perhaps a wildcard search may help? (ex. computer-name*)');
 	}
 
 	function __destruct()

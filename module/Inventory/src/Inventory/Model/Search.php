@@ -20,8 +20,9 @@ class Search
 
 	public function isValid()
     {
-		if (!SearchPattern::isValid($this->id))
+		if (!SearchPattern::isValid($this->id)) {
 			return false;
+		}
 
 		return true;
     }
