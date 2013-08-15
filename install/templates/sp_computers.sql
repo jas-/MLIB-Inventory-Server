@@ -43,7 +43,7 @@ BEGIN
   INSERT INTO `computers` (`hostname`, `model`, `sku`, `uuic`, `serial`, `notes`) VALUES (h, m, s, u, sl, n);
   SELECT ROW_COUNT() AS affected;
  ELSE
-  UPDATE `computers` SET `hostname`=h, `model`=m, `location`=l, `notes`=n WHERE `sku`=s AND `uuic`=u AND `serial`=sl;
+  UPDATE `computers` SET `hostname`=h, `model`=m, `notes`=n WHERE `sku`=s AND `uuic`=u AND `serial`=sl;
   SELECT ROW_COUNT() AS affected;
  END IF;
 END//

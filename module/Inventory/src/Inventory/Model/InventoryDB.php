@@ -14,7 +14,7 @@ class InventoryDB
 	public function __construct($key, $svc)
 	{
 		$this->svc = $svc;
-		$this->dbconn = ($key == 'RO') ? $this->ro() : $this->rw;
+		$this->dbconn = ($key == 'RO') ? $this->ro() : $this->rw();
 	}
 
 	public function viewComputer()
@@ -25,11 +25,21 @@ class InventoryDB
 
 	public function addComputer($obj)
 	{
-		$sql = sprintf('CALL ComputerAddUpdate("%s", "%s", %s", "%s", %s", "%s")');
+		$sql = sprintf('CALL ComputerAddUpdate("%s", "%s", "%s", "%s", "%s", "%s")',
+					   $obj->hostname, $obj->model, $obj->sku, $obj->uuic,
+					   $obj->serial, $obj->notes);
+
+		$result = $this->query($sql);
+
+		if ($result[0]['affected'] > 0) {
+			return array('success'=>'Successfully added new record');
+		}
+		return array('error'=>'Whoops, an error occured while adding new record');
 	}
 
 	public function deleteComputer($obj)
 	{
+var_dump($obj);
 		$sql = sprintf('CALL ComputerDelete("%d")');
 	}
 

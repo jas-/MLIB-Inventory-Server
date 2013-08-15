@@ -40,6 +40,7 @@ class ComputerController extends AbstractRestfulController
 
             if ($computer->isValid()) {
                 $db = new InventoryDB('RW', $this->getServiceLocator());
+                $db->addComputer($request->getPost());
 
                 return $this->response(array('success'=>'Record saved successfully'));
             } else {
