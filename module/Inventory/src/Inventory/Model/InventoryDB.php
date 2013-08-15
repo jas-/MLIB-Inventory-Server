@@ -39,10 +39,28 @@ class InventoryDB
 		return array('error'=>'Whoops, an error occured while adding new record');
 	}
 
-	public function deleteComputer($obj)
+	public function updateComputer($id, $obj)
 	{
-var_dump($obj);
-		$sql = sprintf('CALL ComputerDelete("%d")');
+		$sql = sprintf('CALL ComputerUpdate("%d", "%s", "%s", "%s", "%s", "%s", "%s")',
+					   $id, $obj['hostname'], $obj['model'], $obj['sku'], $obj['uuic'],
+					   $obj['serial'], $obj['notes']);
+		$result = $this->query($sql);
+
+		if ($result[0]['affected'] > 0) {
+			return array('success'=>'Successfully updated record');
+		}
+		return array('error'=>'Whoops, an error occured while adding new record');
+	}
+
+	public function deleteComputer($id)
+	{
+		$sql = sprintf('CALL ComputerDelete("%d")', $id);
+		$result = $this->query($sql);
+
+		if ($result[0]['affected'] > 0) {
+			return array('success'=>'Successfully deleted record');
+		}
+		return array('error'=>'Whoops, an error occured while deleting record');
 	}
 
 	public function searchComputer($id)
@@ -55,6 +73,21 @@ var_dump($obj);
 	{
 		$sql = sprintf('CALL MonitorList()');
 		return $this->query($sql);
+	}
+
+	public function addMonitor($obj)
+	{
+		$sql = sprintf('CALL MonitorAddUpdate("%s", "%s", "%s", "%s")',
+					   $obj->hostname, $obj->model, $obj->sku, $obj->serial);
+
+		$result = $this->query($sql);
+
+		$r = ($result[0]['affected'] === 1) ? 'added new' : 'updated existing';
+
+		if ($result[0]['affected'] > 0) {
+			return array('success'=>'Successfully '.$r.' record');
+		}
+		return array('error'=>'Whoops, an error occured while adding new record');
 	}
 
 	public function searchMonitor($id)
@@ -86,6 +119,6 @@ var_dump($obj);
 
 	function __destruct()
 	{
-		//unset($this->dbconn);
+		unset($this->dbconn);
 	}
 }

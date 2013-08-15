@@ -20,26 +20,29 @@ class Monitor
     public function exchangeArray($data)
     {
         $this->id = (isset($data->id)) ? $data->id : null;
-        $this->hostname = (isset($data->hostname)) ? $data->hostname : null;
-        $this->model = (isset($data->model))  ? $data->model : null;
-        $this->sku = (isset($data->sku)) ? $data->sku : null;
-        $this->serial = (isset($data->serial))  ? $data->serial : null;
-        $this->notes = (isset($data->notes)) ? $data->notes : null;
+        $this->hostname = (isset($data->hostname)) ? $data->hostname : (isset($data['hostname'])) ? $data['hostname'] : null;
+        $this->model = (isset($data->model))  ? $data->model : (isset($data['model'])) ? $data['model'] : null;
+        $this->sku = (isset($data->sku)) ? $data->sku : (isset($data['sku'])) ? $data['sku'] : null;
+        $this->serial = (isset($data->serial))  ? $data->serial : (isset($data['serial'])) ? $data['serial'] : null;
     }
 
 	public function isValid()
     {
-		if (!Hostname::isValid($this->hostname))
+		if (!Hostname::isValid($this->hostname)) {
 			return false;
+		}
 
-		if (!Model::isValid($this->model))
+		if (!Model::isValid($this->model)) {
 			return false;
+		}
 
-		if (!SKU::isValid($this->sku))
+		if (!SKU::isValid($this->sku)) {
 			return false;
+		}
 
-		if (!Serial::isValid($this->serial))
+		if (!Serial::isValid($this->serial)) {
 			return false;
+		}
 
 		return true;
     }

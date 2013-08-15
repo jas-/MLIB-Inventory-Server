@@ -12,12 +12,14 @@ class MonitorController extends AbstractRestfulController
 {
     protected $inventory;
 
-    public function getList(){
+    public function getList()
+    {
         $db = new InventoryDB('RO', $this->getServiceLocator());
         return $this->response($db->viewMonitor());
     }
 
-    public function get($id){
+    public function get($id)
+    {
         $search = new Search($id);
 
         if ($search->isValid()) {
@@ -33,16 +35,16 @@ class MonitorController extends AbstractRestfulController
         return $this->response(array('error'=>'Unable to search records with given parameters'));
     }
 
-    public function create($data){
+    public function create($data)
+    {
         $request = $this->getRequest();
 
         if ($request->isPost()) {
-            $computer = new Monitor($request->getPost());
+            $monitor = new Monitor($request->getPost());
 
-            if ($computer->isValid()) {
+            if ($monitor->isValid()) {
                 $db = new InventoryDB('RW', $this->getServiceLocator());
-
-                return $this->response(array('success'=>'Record saved successfully'));
+                return $this->response($db->addMonitor($request->getPost()));
             } else {
                 return $this->response(array('error'=>'Given parameters did meet validation requirements'));
             }
@@ -51,12 +53,32 @@ class MonitorController extends AbstractRestfulController
         return $this->response(array('error'=>'Could not save record'));
     }
 
-    public function update($id, $data){
-        return $this->response(array('edit'=>'Edit specified record'));
+    public function update($id, $data)
+    {
+        $monitor = new Monitor($data);
+
+        if ($monitor->isValid()) {
+            $db = new InventoryDB('RW', $this->getServiceLocator());
+            return $this->response($db->addMonitor($data));
+        } else {
+            return $this->response(array('error'=>'Given parameters did meet validation requirements'));
+        }
+
+        return $this->response(array('error'=>'Could not edit record'));
     }
 
-    public function delete($id){
-        return $this->response(array('delete'=>'Delete specified record'));
+    public function delete($id)
+    {
+        $monitor = new Delete($id);
+
+        if ($monitor->isValid()) {
+            $db = new InventoryDB('RW', $this->getServiceLocator());
+            return $this->response($db->deleteMonitor($id));
+        } else {
+            return $this->response(array('error'=>'Given parameters did meet validation requirements'));
+        }
+
+        return $this->response(array('error'=>'Unable delete specified record'));
     }
 
     private function response($obj)

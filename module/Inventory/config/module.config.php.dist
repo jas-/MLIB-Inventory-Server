@@ -17,21 +17,35 @@ return array(
 	),
 	'controllers' => array(
         'invokables' => array(
-            'Inventory\Controller\Inventory' => 'Inventory\Controller\InventoryController',
+            'Inventory\Controller\Computer' => 'Inventory\Controller\ComputerController',
+            'Inventory\Controller\Monitor' => 'Inventory\Controller\MonitorController',
         ),
     ),
     'router' => array(
         'routes' => array(
-            'inventory' => array(
+            'computer' => array(
                 'type'    => 'segment',
                 'options' => array(
-                    'route'    => '/inventory[/:action][/:id]',
+                    'route'    => '/computer[/:action][/:id]',
                     'constraints' => array(
                         'action' => '[a-zA-Z][a-zA-Z0-9_-]*',
                         'id'     => '[0-9]+',
                     ),
                     'defaults' => array(
-                        'controller' => 'Inventory\Controller\Inventory',
+                        'controller' => 'Inventory\Controller\Computer',
+                    ),
+                ),
+												),
+            'monitor' => array(
+                'type'    => 'segment',
+                'options' => array(
+                    'route'    => '/monitor[/:action][/:id]',
+                    'constraints' => array(
+                        'action' => '[a-zA-Z][a-zA-Z0-9_-]*',
+                        'id'     => '[0-9]+',
+                    ),
+                    'defaults' => array(
+                        'controller' => 'Inventory\Controller\Monitor',
                     ),
                 ),
             ),

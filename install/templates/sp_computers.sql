@@ -48,6 +48,18 @@ BEGIN
  END IF;
 END//
 
+DROP PROCEDURE IF EXISTS `ComputerUpdate`;
+CREATE DEFINER=`{ADMIN}`@`{SERVER}` PROCEDURE `ComputerUpdate`(IN `i` BIGINT, IN `h` CHAR(128), IN `m` CHAR(128), IN `s` CHAR(128), IN `u` CHAR(128), IN `sl` CHAR(128), IN `n` LONGTEXT)
+ DETERMINISTIC
+ SQL SECURITY INVOKER
+ COMMENT 'Update computer record'
+BEGIN
+ SELECT `hostname` INTO @Hostname FROM `computers` WHERE `id` = i;
+ UPDATE `hostnames` SET `hostname` = h WHERE `hostname` = @Hostname;
+ UPDATE `computers` SET `hostname` = h, `model` = m, `sku` = s, `uuic` = u, `serial` = sl, `notes` = n WHERE `id` = i;
+ SELECT ROW_COUNT() AS affected;
+END//
+
 DROP PROCEDURE IF EXISTS `ComputerDelete`;
 CREATE DEFINER=`{ADMIN}`@`{SERVER}` PROCEDURE `ComputerDelete`(IN `id` INT(255))
  DETERMINISTIC

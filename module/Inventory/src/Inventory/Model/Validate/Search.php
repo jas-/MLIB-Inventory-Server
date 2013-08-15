@@ -10,8 +10,9 @@ class SearchPattern extends AbstractValidator
     public function isValid($value)
     {
         $val = new Regex(array('pattern'=>'/[\s\S]*?/i'));
-        if (!$val->isValid($value))
+        if (!$val->isValid($value)) {
 			return false;
+        }
 
         return true;
     }
