@@ -40,9 +40,7 @@ class ComputerController extends AbstractRestfulController
 
             if ($computer->isValid()) {
                 $db = new InventoryDB('RW', $this->getServiceLocator());
-                $db->addComputer($request->getPost());
-
-                return $this->response(array('success'=>'Record saved successfully'));
+                return $this->response($db->addComputer($request->getPost()));
             } else {
                 return $this->response(array('error'=>'Given parameters did meet validation requirements'));
             }

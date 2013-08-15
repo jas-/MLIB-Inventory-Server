@@ -44,7 +44,7 @@ BEGIN
   SELECT ROW_COUNT() AS affected;
  ELSE
   UPDATE `computers` SET `hostname`=h, `model`=m, `notes`=n WHERE `sku`=s AND `uuic`=u AND `serial`=sl;
-  SELECT ROW_COUNT() AS affected;
+  SELECT 2 AS affected;
  END IF;
 END//
 
