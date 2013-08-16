@@ -19,6 +19,8 @@ return array(
         'invokables' => array(
             'Inventory\Controller\Computer' => 'Inventory\Controller\ComputerController',
             'Inventory\Controller\Monitor' => 'Inventory\Controller\MonitorController',
+            'Inventory\Controller\Rma' => 'Inventory\Controller\RmaController',
+            'Inventory\Controller\Model' => 'Inventory\Controller\ModelController',
         ),
     ),
     'router' => array(
@@ -29,7 +31,6 @@ return array(
                     'route'    => '/computer[/:action][/:id]',
                     'constraints' => array(
                         'action' => '[a-zA-Z][a-zA-Z0-9_-]*',
-                        'id'     => '[0-9]+',
                     ),
                     'defaults' => array(
                         'controller' => 'Inventory\Controller\Computer',
@@ -42,10 +43,33 @@ return array(
                     'route'    => '/monitor[/:action][/:id]',
                     'constraints' => array(
                         'action' => '[a-zA-Z][a-zA-Z0-9_-]*',
-                        'id'     => '[0-9]+',
                     ),
                     'defaults' => array(
                         'controller' => 'Inventory\Controller\Monitor',
+                    ),
+                ),
+            ),
+            'rma' => array(
+                'type'    => 'segment',
+                'options' => array(
+                    'route'    => '/rma[/:action][/:id]',
+                    'constraints' => array(
+                        'action' => '[a-zA-Z][a-zA-Z0-9_-]*',
+                    ),
+                    'defaults' => array(
+                        'controller' => 'Inventory\Controller\Rma',
+                    ),
+                ),
+            ),
+            'model' => array(
+                'type'    => 'segment',
+                'options' => array(
+                    'route'    => '/model[/:action][/:id]',
+                    'constraints' => array(
+                        'action' => '[a-zA-Z][a-zA-Z0-9_-]*',
+                    ),
+                    'defaults' => array(
+                        'controller' => 'Inventory\Controller\Model',
                     ),
                 ),
             ),
