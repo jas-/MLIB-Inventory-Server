@@ -61,12 +61,12 @@ BEGIN
 END//
 
 DROP PROCEDURE IF EXISTS `ComputerDelete`;
-CREATE DEFINER=`{ADMIN}`@`{SERVER}` PROCEDURE `ComputerDelete`(IN `id` INT(255))
+CREATE DEFINER=`{ADMIN}`@`{SERVER}` PROCEDURE `ComputerDelete`(IN `i` BIGINT)
  DETERMINISTIC
  SQL SECURITY INVOKER
  COMMENT 'Delete computer'
 BEGIN
- DELETE FROM `computers` WHERE `id`=id;
+ DELETE FROM `computers` WHERE `id`=i;
  SELECT ROW_COUNT() AS affected;
 END//
 
