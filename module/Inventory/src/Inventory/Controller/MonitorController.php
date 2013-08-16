@@ -7,6 +7,7 @@ use Zend\View\Model\JsonModel;
 use Inventory\Model\InventoryDB;
 use Inventory\Model\Monitor;
 use Inventory\Model\Search;
+use Inventory\Model\Delete;
 
 class MonitorController extends AbstractRestfulController
 {
@@ -59,7 +60,7 @@ class MonitorController extends AbstractRestfulController
 
         if ($monitor->isValid()) {
             $db = new InventoryDB('RW', $this->getServiceLocator());
-            return $this->response($db->addMonitor($data));
+            return $this->response($db->updateMonitor($id, $data));
         } else {
             return $this->response(array('error'=>'Given parameters did meet validation requirements'));
         }

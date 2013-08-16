@@ -36,7 +36,7 @@ class InventoryDB
 		if ($result[0]['affected'] > 0) {
 			return array('success'=>'Successfully '.$r.' record');
 		}
-		return array('error'=>'Whoops, an error occured while adding new record');
+		return array('error'=>'Whoops, an error occured while adding new computerrecord');
 	}
 
 	public function updateComputer($id, $obj)
@@ -49,7 +49,7 @@ class InventoryDB
 		if ($result[0]['affected'] > 0) {
 			return array('success'=>'Successfully updated record');
 		}
-		return array('error'=>'Whoops, an error occured while adding new record');
+		return array('error'=>'Whoops, an error occured while updating computer record');
 	}
 
 	public function deleteComputer($id)
@@ -60,7 +60,7 @@ class InventoryDB
 		if ($result[0]['affected'] > 0) {
 			return array('success'=>'Successfully deleted record');
 		}
-		return array('error'=>'Whoops, an error occured while deleting record');
+		return array('error'=>'Whoops, an error occured while deleting computer record');
 	}
 
 	public function searchComputer($id)
@@ -87,13 +87,36 @@ class InventoryDB
 		if ($result[0]['affected'] > 0) {
 			return array('success'=>'Successfully '.$r.' record');
 		}
-		return array('error'=>'Whoops, an error occured while adding new record');
+		return array('error'=>'Whoops, an error occured while adding new monitor record');
+	}
+
+	public function updateMonitor($id, $obj)
+	{
+		$sql = sprintf('CALL MonitorUpdate("%d", "%s", "%s", "%s", "%s")',
+					   $id, $obj['hostname'], $obj['model'], $obj['sku'], $obj['serial']);
+		$result = $this->query($sql);
+
+		if ($result[0]['affected'] > 0) {
+			return array('success'=>'Successfully updated record');
+		}
+		return array('error'=>'Whoops, an error occured while updating monitor record');
 	}
 
 	public function searchMonitor($id)
 	{
 		$sql = sprintf('CALL MonitorSearch("%s")', $id);
 		return $this->query($sql);
+	}
+
+	public function deleteMonitor($id)
+	{
+		$sql = sprintf('CALL MonitorDelete("%d")', $id);
+		$result = $this->query($sql);
+
+		if ($result[0]['affected'] > 0) {
+			return array('success'=>'Successfully deleted record');
+		}
+		return array('error'=>'Whoops, an error occured while deleting monitor record');
 	}
 
     private function rw()
