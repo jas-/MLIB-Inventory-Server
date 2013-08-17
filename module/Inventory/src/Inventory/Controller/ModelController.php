@@ -3,36 +3,34 @@
 namespace Inventory\Controller;
 
 use Zend\Mvc\Controller\AbstractRestfulController;
-use Zend\View\Model\JsonModel;
-use Inventory\Model\ModelDB;
-use Inventory\Model\Model;
+use Inventory\Model\Db\ModelDB;
+use Inventory\Model\Models;
 use Inventory\Model\Search;
 use Inventory\Model\Delete;
 
 class ModelController extends AbstractRestfulController
 {
-    protected $inventory;
-
     public function getList()
     {
-        $db = new InventoryDB('RO', $this->getServiceLocator());
-        return $this->response($db->viewModel());
+        $db = new ModelDB('RO', $this->getServiceLocator());
+        return $db->response($db->view());
     }
 
     public function get($id)
     {
         $search = new Search($id);
+        $db = new ModelDB('RO', $this->getServiceLocator());
 
         if ($search->isValid()) {
-            $id = $this->wildcard($id);
+            $id = $search->doClean($id);
+            $id = $db->wildcard($id);
 
-            $db = new InventoryDB('RO', $this->getServiceLocator());
-            return $this->response($db->searchModel($id));
+            return $db->response($db->search($id));
         } else {
-            return $this->response(array('error'=>'Given parameters did meet validation requirements'));
+            return $db->response(array('error'=>'Given parameters did meet validation requirements'));
         }
 
-        return $this->response(array('error'=>'Unable to search records with given parameters'));
+        return $db->response(array('error'=>'Unable to search records with given parameters'));
     }
 
     public function create($data)
@@ -40,44 +38,51 @@ class ModelController extends AbstractRestfulController
         $request = $this->getRequest();
 
         if ($request->isPost()) {
-            $computer = new Model($request->getPost());
+            $model = new Models($data);
+            $post = $model->doClean($data);
 
-            if ($computer->isValid()) {
-                $db = new InventoryDB('RW', $this->getServiceLocator());
-                return $this->response($db->addModel($request->getPost()));
+            $db = new ModelDB('RW', $this->getServiceLocator());
+
+            if ($model->isValid()) {
+                return $db->response($db->add($post));
             } else {
-                return $this->response(array('error'=>'Given parameters did meet validation requirements'));
+                return $db->response(array('error'=>'Given parameters did meet validation requirements'));
             }
         }
 
-        return $this->response(array('error'=>'Could not save record'));
+        return $db->response(array('error'=>'Could not save record'));
     }
 
     public function update($id, $data)
     {
-        $computer = new Model($data);
+        $model = new Models($data);
+        $db = new ModelDB('RW', $this->getServiceLocator());
 
-        if ($computer->isValid()) {
-            $db = new InventoryDB('RW', $this->getServiceLocator());
-            return $this->response($db->updateModel($id, $data));
+        if ($model->isValid()) {
+            $id = $model->doClean($id);
+            $post = $model->doClean($data);
+
+            return $db->response($db->update($id, $post));
         } else {
-            return $this->response(array('error'=>'Given parameters did meet validation requirements'));
+            return $db->response(array('error'=>'Given parameters did meet validation requirements'));
         }
 
-        return $this->response(array('error'=>'Could not edit record'));
+        return $db->response(array('error'=>'Could not edit record'));
     }
 
     public function delete($id)
     {
-        $computer = new Delete($id);
+        $model = new Delete($id);
+        $db = new ModelDB('RW', $this->getServiceLocator());
 
-        if ($computer->isValid()) {
-            $db = new InventoryDB('RW', $this->getServiceLocator());
-            return $this->response($db->deleteModel($id));
+        if ($model->isValid()) {
+            $post = $model->doClean($id);
+
+            return $db->response($db->delete($post));
         } else {
-            return $this->response(array('error'=>'Given parameters did meet validation requirements'));
+            return $db->response(array('error'=>'Given parameters did meet validation requirements'));
         }
 
-        return $this->response(array('error'=>'Unable delete specified record'));
+        return $db->response(array('error'=>'Unable delete specified record'));
     }
 }

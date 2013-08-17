@@ -9,7 +9,7 @@ class Date extends AbstractValidator
 {
     public function isValid($value)
     {
-        $val = new Regex(array('pattern'=>'/[a-z0-9-_]*?/i'));
+        $val = new Regex(array('pattern'=>'/[0-9]{4}\-[0-9]{2}\-[0-9]{2}/i'));
         if (!$val->isValid($value)) {
 			return false;
         }

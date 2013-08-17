@@ -29,7 +29,7 @@ CREATE DEFINER=`{ADMIN}`@`{SERVER}` PROCEDURE `ModelAddUpdate`(IN `m` CHAR(128),
  SQL SECURITY INVOKER
  COMMENT 'Add/Update model'
 BEGIN
- INSERT INTO `models` (`model`, `eowd`, `opd`, `description`, `notes`) VALUES (m, e, o, d, n) ON DUPLICATE KEY UPDATE `model`=m, `eowd`=e, `opd`=o, `description`=d, `notes`=n;
+ INSERT INTO `models` (`model`, `eowd`, `opd`, `description`, `notes`) VALUES (m, UNIX_TIMESTAMP(e), UNIX_TIMESTAMP(o), d, n) ON DUPLICATE KEY UPDATE `model`=m, `eowd`=UNIX_TIMESTAMP(e), `opd`=UNIX_TIMESTAMP(o), `description`=d, `notes`=n;
  SELECT ROW_COUNT() AS affected;
 END//
 
@@ -39,17 +39,17 @@ CREATE DEFINER=`{ADMIN}`@`{SERVER}` PROCEDURE `ModelUpdate`(IN `i` BIGINT, IN `m
  SQL SECURITY INVOKER
  COMMENT 'Update model'
 BEGIN
- UPDATE `models` SET `model` = m, `eowd` = e, `opd` = o, `description` = d, `notes` = n WHERE `id` = i;
+ UPDATE `models` SET `model` = m, `eowd` = UNIX_TIMESTAMP(e), `opd` = UNIX_TIMESTAMP(o), `description` = d, `notes` = n WHERE `id` = i;
  SELECT ROW_COUNT() AS affected;
 END//
 
 DROP PROCEDURE IF EXISTS `ModelDelete`;
-CREATE DEFINER=`{ADMIN}`@`{SERVER}` PROCEDURE `ModelDelete`(IN `id` INT(255))
+CREATE DEFINER=`{ADMIN}`@`{SERVER}` PROCEDURE `ModelDelete`(IN `i` INT(255))
  DETERMINISTIC
  SQL SECURITY INVOKER
  COMMENT 'Delete model'
 BEGIN
- DELETE FROM `models` WHERE `id`=id;
+ DELETE FROM `models` WHERE `id`=i;
  SELECT ROW_COUNT() AS affected;
 END//
 
