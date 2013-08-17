@@ -20,7 +20,7 @@ class MonitorDB extends AbstractDB
 	public function add($obj)
 	{
 		$sql = sprintf('CALL MonitorAddUpdate("%s", "%s", "%s", "%s")',
-					   $obj->hostname, $obj->model, $obj->sku, $obj->serial);
+					   $obj['hostname'], $obj['model'], $obj['sku'], $obj['serial']);
 
 		$result = parent::query($sql);
 
