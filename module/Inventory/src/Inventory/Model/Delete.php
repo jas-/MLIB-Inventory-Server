@@ -3,6 +3,7 @@
 namespace Inventory\Model;
 
 use Inventory\Model\Validate\DeleteID;
+use Inventory\Model\Sanitize\StripTags;
 
 class Delete
 {
@@ -26,4 +27,10 @@ class Delete
 
 		return true;
     }
+
+	public function doClean($str)
+	{
+		$clean = new StripTags;
+		return $clean->doClean($str);
+	}
 }

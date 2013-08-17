@@ -80,14 +80,4 @@ class ModelController extends AbstractRestfulController
 
         return $this->response(array('error'=>'Unable delete specified record'));
     }
-
-    private function response($obj)
-    {
-        return new JsonModel($obj);
-    }
-
-    private function wildcard($str)
-    {
-        return preg_replace('/\*/', '%', $str);
-    }
 }

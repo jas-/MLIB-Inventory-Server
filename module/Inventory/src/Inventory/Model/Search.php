@@ -3,6 +3,7 @@
 namespace Inventory\Model;
 
 use Inventory\Model\Validate\SearchPattern;
+use Inventory\Model\Sanitize\StripTags;
 
 class Search
 {
@@ -26,4 +27,10 @@ class Search
 
 		return true;
     }
+
+	public function doClean($str)
+	{
+		$clean = new StripTags;
+		return $clean->doClean($str);
+	}
 }

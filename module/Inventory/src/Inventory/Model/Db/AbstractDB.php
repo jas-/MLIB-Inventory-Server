@@ -54,5 +54,4 @@ abstract class AbstractDB
     {
         return preg_replace('/\*/', '%', $str);
     }
-
 }

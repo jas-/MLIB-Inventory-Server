@@ -33,6 +33,16 @@ BEGIN
  SELECT ROW_COUNT() AS affected;
 END//
 
+DROP PROCEDURE IF EXISTS `ModelUpdate`;
+CREATE DEFINER=`{ADMIN}`@`{SERVER}` PROCEDURE `ModelUpdate`(IN `i` BIGINT, IN `m` CHAR(128), IN `e` CHAR(32), IN `o` CHAR(32), IN `d` CHAR(128), IN `n` LONGTEXT)
+ DETERMINISTIC
+ SQL SECURITY INVOKER
+ COMMENT 'Update model'
+BEGIN
+ UPDATE `models` SET `model` = m, `eowd` = e, `opd` = o, `description` = d, `notes` = n WHERE `id` = i;
+ SELECT ROW_COUNT() AS affected;
+END//
+
 DROP PROCEDURE IF EXISTS `ModelDelete`;
 CREATE DEFINER=`{ADMIN}`@`{SERVER}` PROCEDURE `ModelDelete`(IN `id` INT(255))
  DETERMINISTIC

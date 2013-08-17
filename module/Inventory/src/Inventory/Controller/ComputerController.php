@@ -22,7 +22,9 @@ class ComputerController extends AbstractRestfulController
         $db = new ComputerDB('RO', $this->getServiceLocator());
 
         if ($search->isValid()) {
+            $id = $search->doClean($id);
             $id = $db->wildcard($id);
+
             return $db->response($db->search($id));
         } else {
             return $db->response(array('error'=>'Given parameters did meet validation requirements'));
@@ -36,12 +38,13 @@ class ComputerController extends AbstractRestfulController
         $request = $this->getRequest();
 
         if ($request->isPost()) {
+            $computer = new Computer($data);
+            $post = $computer->doClean($data);
 
-            $computer = new Computer($request->getPost());
             $db = new ComputerDB('RW', $this->getServiceLocator());
 
             if ($computer->isValid()) {
-                return $db->response($db->add($request->getPost()));
+                return $db->response($db->add($post));
             } else {
                 return $db->response(array('error'=>'Given parameters did meet validation requirements'));
             }
@@ -56,7 +59,10 @@ class ComputerController extends AbstractRestfulController
         $db = new ComputerDB('RW', $this->getServiceLocator());
 
         if ($computer->isValid()) {
-            return $db->response($db->update($id, $data));
+            $id = $computer->doClean($id);
+            $post = $computer->doClean($data);
+
+            return $db->response($db->update($id, $post));
         } else {
             return $db->response(array('error'=>'Given parameters did meet validation requirements'));
         }
@@ -70,7 +76,9 @@ class ComputerController extends AbstractRestfulController
         $db = new ComputerDB('RW', $this->getServiceLocator());
 
         if ($computer->isValid()) {
-            return $db->response($db->delete($id));
+            $post = $computer->doClean($id);
+
+            return $db->response($db->delete($post));
         } else {
             return $db->response(array('error'=>'Given parameters did meet validation requirements'));
         }

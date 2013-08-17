@@ -22,7 +22,9 @@ class MonitorController extends AbstractRestfulController
         $db = new MonitorDB('RO', $this->getServiceLocator());
 
         if ($search->isValid()) {
+            $id = $search->doClean($id);
             $id = $db->wildcard($id);
+
             return $db->response($db->search($id));
         } else {
             return $db->response(array('error'=>'Given parameters did meet validation requirements'));
@@ -36,11 +38,12 @@ class MonitorController extends AbstractRestfulController
         $request = $this->getRequest();
 
         if ($request->isPost()) {
+            $monitor = new Monitor($request->getPost());
+            $post = $monitor->doClean($data);
 
-            $computer = new Monitor($request->getPost());
             $db = new MonitorDB('RW', $this->getServiceLocator());
 
-            if ($computer->isValid()) {
+            if ($monitor->isValid()) {
                 return $db->response($db->add($request->getPost()));
             } else {
                 return $db->response(array('error'=>'Given parameters did meet validation requirements'));
@@ -52,11 +55,14 @@ class MonitorController extends AbstractRestfulController
 
     public function update($id, $data)
     {
-        $computer = new Monitor($data);
+        $monitor = new Monitor($data);
         $db = new MonitorDB('RW', $this->getServiceLocator());
 
-        if ($computer->isValid()) {
-            return $db->response($db->update($id, $data));
+        if ($monitor->isValid()) {
+            $id = $monitor->doClean($id);
+            $post = $monitor->doClean($data);
+
+            return $db->response($db->update($id, $post));
         } else {
             return $db->response(array('error'=>'Given parameters did meet validation requirements'));
         }
@@ -66,10 +72,11 @@ class MonitorController extends AbstractRestfulController
 
     public function delete($id)
     {
-        $computer = new Delete($id);
+        $monitor = new Delete($id);
         $db = new MonitorDB('RW', $this->getServiceLocator());
 
-        if ($computer->isValid()) {
+        if ($monitor->isValid()) {
+            $post = $monitor->doClean($id);
             return $db->response($db->delete($id));
         } else {
             return $db->response(array('error'=>'Given parameters did meet validation requirements'));

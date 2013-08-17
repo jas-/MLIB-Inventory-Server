@@ -7,6 +7,7 @@ use Inventory\Model\Validate\Model;
 use Inventory\Model\Validate\SKU;
 use Inventory\Model\Validate\UUIC;
 use Inventory\Model\Validate\Serial;
+use Inventory\Model\Sanitize\StripTags;
 
 class Monitor
 {
@@ -46,4 +47,10 @@ class Monitor
 
 		return true;
     }
+
+	public function doClean($str)
+	{
+		$clean = new StripTags;
+		return $clean->doClean($str);
+	}
 }
