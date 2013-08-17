@@ -21,6 +21,7 @@ return array(
             'Inventory\Controller\Monitor' => 'Inventory\Controller\MonitorController',
             'Inventory\Controller\Rma' => 'Inventory\Controller\RmaController',
             'Inventory\Controller\Model' => 'Inventory\Controller\ModelController',
+            'Inventory\Controller\Cors' => 'Inventory\Controller\CorsController',
         ),
     ),
     'router' => array(
@@ -70,6 +71,18 @@ return array(
                     ),
                     'defaults' => array(
                         'controller' => 'Inventory\Controller\Model',
+                    ),
+                ),
+            ),
+            'cors' => array(
+                'type'    => 'segment',
+                'options' => array(
+                    'route'    => '/model[/:action][/:id]',
+                    'constraints' => array(
+                        'action' => '[a-zA-Z][a-zA-Z0-9_-]*',
+                    ),
+                    'defaults' => array(
+                        'controller' => 'Inventory\Controller\Cors',
                     ),
                 ),
             ),

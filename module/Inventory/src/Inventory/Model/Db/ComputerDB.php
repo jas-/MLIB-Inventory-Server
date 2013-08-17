@@ -30,7 +30,7 @@ class ComputerDB extends AbstractDB
 		if ((int)$result[0]['affected'] > 0) {
 			return array('success'=>'Successfully '.$r.' record');
 		}
-		return array('error'=>'Whoops, an error occured while adding new computerrecord');
+		return array('error'=>'Whoops, an error occured while adding new computer record');
 	}
 
 	public function update($id, $obj)
