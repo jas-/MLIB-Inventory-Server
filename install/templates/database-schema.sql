@@ -99,12 +99,22 @@ CREATE TABLE `rma` (
   UNIQUE KEY (`sku`, `serial`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci AUTO_INCREMENT=0;
 
+DROP TABLE IF EXISTS `cors`;
+CREATE TABLE IF NOT EXISTS `cors` (
+  `id` BIGINT NOT NULL AUTO_INCREMENT,
+  `application` CHAR(255) NOT NULL,
+  `url` LONGTEXT NOT NULL,
+  `ip` LONGTEXT NOT NULL,
+  PRIMARY KEY (`id`),
+  INDEX (`application`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci AUTO_INCREMENT=0;
+
 CREATE OR REPLACE DEFINER='{RO}'@'{SERVER}'
  SQL SECURITY INVOKER
 VIEW viewInventoryComputers AS
- SELECT c.hostname AS Hostname, c.model AS Model, c.sku AS SKU, c.uuic AS UUIC, c.serial AS Serial, c.notes AS Notes, m.eowd AS EOWD, m.opd AS OPD, m.description AS Description FROM computers c LEFT JOIN models m ON c.model = m.model ORDER BY c.hostname;
+ SELECT c.id AS Id, c.hostname AS Hostname, c.model AS Model, c.sku AS SKU, c.uuic AS UUIC, c.serial AS Serial, c.notes AS Notes, m.eowd AS EOWD, m.opd AS OPD, m.description AS Description FROM computers c LEFT JOIN models m ON c.model = m.model ORDER BY c.hostname;
 
 CREATE OR REPLACE DEFINER='{RO}'@'{SERVER}'
  SQL SECURITY INVOKER
 VIEW viewInventoryMonitors AS
- SELECT `hostname` AS Hostname, `model` AS Model, `sku` AS SKU, `serial` AS Serial FROM `monitors` ORDER BY `hostname`;
+ SELECT `id` AS Id, `hostname` AS Hostname, `model` AS Model, `sku` AS SKU, `serial` AS Serial FROM `monitors` ORDER BY `hostname`;
