@@ -24,17 +24,27 @@ CREATE DEFINER=`{ADMIN}`@`{SERVER}` PROCEDURE `RMAAddUpdate`(IN `d` CHAR(12), IN
  SQL SECURITY INVOKER
  COMMENT 'Add/Update rma'
 BEGIN
- INSERT INTO `rma` (`date`, `hostname`, `sku`, `uuic`, `serial`, `model`, `part`, `notes`) VALUES (d, h, s, u, sl, m, p, n) ON DUPLICATE KEY UPDATE `date`=d, `hostname`=h, `sku`=s, `uuic`=u, `serial`=sl, `model`=m, `part`=p, `notes`=n;
+ INSERT INTO `rma` (`date`, `hostname`, `sku`, `uuic`, `serial`, `model`, `part`, `notes`) VALUES (UNIX_TIMESTAMP(d), h, s, u, sl, m, p, n) ON DUPLICATE KEY UPDATE `date`=UNIX_TIMESTAMP(d), `hostname`=h, `sku`=s, `uuic`=u, `serial`=sl, `model`=m, `part`=p, `notes`=n;
+ SELECT ROW_COUNT() AS affected;
+END//
+
+DROP PROCEDURE IF EXISTS `RMAUpdate`;
+CREATE DEFINER=`{ADMIN}`@`{SERVER}` PROCEDURE `RMAUpdate`(IN `i` BIGINT, IN `d` CHAR(12), IN `h` CHAR(128), IN `s` CHAR(128), IN `u` CHAR(128), IN `sl` CHAR(128), IN `m` CHAR(128), IN `p` CHAR(128), IN `n` LONGTEXT)
+ DETERMINISTIC
+ SQL SECURITY INVOKER
+ COMMENT 'Add/Update rma'
+BEGIN
+ UPDATE `rma` SET `date`=UNIX_TIMESTAMP(d), `hostname`=h, `sku`=s, `uuic`=u, `serial`=sl, `model`=m, `part`=p, `notes`=n WHERE `id` = i;
  SELECT ROW_COUNT() AS affected;
 END//
 
 DROP PROCEDURE IF EXISTS `RMADelete`;
-CREATE DEFINER=`{ADMIN}`@`{SERVER}` PROCEDURE `RMADelete`(IN `id` INT(255))
+CREATE DEFINER=`{ADMIN}`@`{SERVER}` PROCEDURE `RMADelete`(IN `i` INT(255))
  DETERMINISTIC
  SQL SECURITY INVOKER
  COMMENT 'Delete rma'
 BEGIN
- DELETE FROM `rma` WHERE `id`=id LIMIT 1;
+ DELETE FROM `rma` WHERE `id`=i LIMIT 1;
  SELECT ROW_COUNT() AS affected;
 END//
 
