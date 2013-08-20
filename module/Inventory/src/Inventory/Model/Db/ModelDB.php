@@ -43,6 +43,10 @@ class ModelDB extends AbstractDB
 		if ((int)$result[0]['affected'] > 0) {
 			return array('success'=>'Successfully updated record');
 		}
+
+		if ((int)$result[0]['affected'] == 0) {
+			return array('warning'=>'No changes to model record occured');
+		}
 		return array('error'=>'Whoops, an error occured while updating model record');
 	}
 

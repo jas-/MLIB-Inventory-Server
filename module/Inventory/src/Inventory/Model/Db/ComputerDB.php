@@ -43,6 +43,10 @@ class ComputerDB extends AbstractDB
 		if ((int)$result[0]['affected'] > 0) {
 			return array('success'=>'Successfully updated record');
 		}
+
+		if ((int)$result[0]['affected'] == 0) {
+			return array('warning'=>'No changes to computer record occured');
+		}
 		return array('error'=>'Whoops, an error occured while updating computer record');
 	}
 

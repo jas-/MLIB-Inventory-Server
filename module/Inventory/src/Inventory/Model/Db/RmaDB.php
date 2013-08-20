@@ -1,6 +1,6 @@
 <?php
 
-namespace Inventory\Rma\Db;
+namespace Inventory\Model\Db;
 
 class RmaDB extends AbstractDB
 {
@@ -35,14 +35,20 @@ class RmaDB extends AbstractDB
 
 	public function update($id, $obj)
 	{
-		$sql = sprintf('CALL RmaAddUpdate("%d", "%s", "%s", "%s", "%s","%s", "%s", "%s", "%s")',
+		$sql = sprintf('CALL RmaUpdate("%d", "%s", "%s", "%s", "%s","%s", "%s", "%s", "%s")',
 					   $id, $obj['date'], $obj['hostname'], $obj['sku'], $obj['uuic'], $obj['serial'],
 					   $obj['model'], $obj['part'], $obj['description']);
+
 		$result = parent::query($sql);
 
 		if ((int)$result[0]['affected'] > 0) {
 			return array('success'=>'Successfully updated record');
 		}
+
+		if ((int)$result[0]['affected'] == 0) {
+			return array('warning'=>'No changes to RMA record occured');
+		}
+
 		return array('error'=>'Whoops, an error occured while updating RMA record');
 	}
 
