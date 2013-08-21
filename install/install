@@ -65,6 +65,9 @@ mysql -u root --password=${pass} ${name} < sp_models.sql
 echo "Creating rma record management procedures"
 mysql -u root --password=${pass} ${name} < sp_rma.sql
 
+echo "Creating cors record management procedures"
+mysql -u root --password=${pass} ${name} < sp_cors.sql
+
 echo "Creating shared management procedures"
 mysql -u root --password=${pass} ${name} < sp_shared.sql
 
