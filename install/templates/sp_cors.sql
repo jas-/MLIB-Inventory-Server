@@ -29,12 +29,12 @@ BEGIN
 END//
 
 DROP PROCEDURE IF EXISTS `CorsUpdate`;
-CREATE DEFINER=`{ADMIN}`@`{SERVER}` PROCEDURE `CorsUpdate`(IN `i` BIGINT, IN `a` CHAR(128), IN `u` LONGTEXT, IN `i` LONGTEXT)
+CREATE DEFINER=`{ADMIN}`@`{SERVER}` PROCEDURE `CorsUpdate`(IN `i` BIGINT, IN `a` CHAR(128), IN `u` LONGTEXT, IN `ip` LONGTEXT)
  DETERMINISTIC
  SQL SECURITY INVOKER
  COMMENT 'Add/Update cors'
 BEGIN
- UPDATE `cors` SET `application`=a, `url`=u, `ip`=i WHERE `id` = i;
+ UPDATE `cors` SET `application`=a, `url`=u, `ip`=ip WHERE `id` = i;
  SELECT ROW_COUNT() AS affected;
 END//
 
