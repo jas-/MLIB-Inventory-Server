@@ -9,19 +9,17 @@ class Hostname extends AbstractValidator
 {
     public function isValid($value)
     {
-		if (strlen($value) < 4) {
-			return false;
-		}
+        $val = new Regex(array('pattern'=>'/\b(([\w-]+://?|www[.])[^\s()<>]+(?:\([\w\d]+\)|([^[:punct:]\s]|/)))/i'));
 
-		if (strlen($value) > 64) {
-			return false;
-		}
-
-        $val = new Regex(array('pattern'=>'/^(([a-zA-Z]|[a-zA-Z][a-zA-Z0-9\-]*[a-zA-Z0-9])\.)*([A-Za-z]|[A-Za-z][A-Za-z0-9\-]*[A-Za-z0-9])$/Di'));
-        if (!$val->isValid($value)) {
+        if ((!$val->isValid($value)) || (!$this->filter($value))) {
 			return false;
         }
 
         return true;
     }
+
+	private function filter($value)
+	{
+		return filter_var($value, FILTER_VALIDATE_URL);
+	}
 }

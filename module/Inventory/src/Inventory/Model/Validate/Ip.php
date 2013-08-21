@@ -9,19 +9,23 @@ class Hostname extends AbstractValidator
 {
     public function isValid($value)
     {
-		if (strlen($value) < 4) {
-			return false;
-		}
+        $ipv4 = new Regex(array('pattern'=>'/((2[0-4]|1\d|[1-9])?\d|25[0-5])(\.(?1)){3}\z/Di'));
+		$ipv6 = new Regex(array('pattern'=>'//^(((?=(?>.*?(::))(?!.+\3)))\3?|([\dA-F]{1,4}(\3|:(?!$)|$)|\2))(?4){5}((?4){2}|((2[0-4]|1\d|[1-9])?\d|25[0-5])(\.(?7)){3})\z/i/Di'));
 
-		if (strlen($value) > 64) {
-			return false;
-		}
-
-        $val = new Regex(array('pattern'=>'/^(([a-zA-Z]|[a-zA-Z][a-zA-Z0-9\-]*[a-zA-Z0-9])\.)*([A-Za-z]|[A-Za-z][A-Za-z0-9\-]*[A-Za-z0-9])$/Di'));
-        if (!$val->isValid($value)) {
+        if ((!$ipv4->isValid($value)) || (!$ipv6->isValid($value)) || (!$this->inet($value)) || ($this->filter($value))) {
 			return false;
         }
 
         return true;
     }
+
+	private function inet($value)
+	{
+		return inet_pton($value);
+	}
+
+	private function filter($value)
+	{
+		return filter_var($value, FILTER_VALIDATE_IP, FILTER_FLAG_IPV4 | FILTER_FLAG_IPV6);
+	}
 }
