@@ -5,13 +5,13 @@ namespace Inventory\Model\Validate;
 use Zend\Validator\AbstractValidator;
 use Zend\Validator\Regex;
 
-class Hostname extends AbstractValidator
+class Url extends AbstractValidator
 {
     public function isValid($value)
     {
-        $val = new Regex(array('pattern'=>'/\b(([\w-]+://?|www[.])[^\s()<>]+(?:\([\w\d]+\)|([^[:punct:]\s]|/)))/i'));
+        $val = new Regex(array('pattern'=>'/\b(?:(?:https?|ftp):\/\/|www\.)[-a-z0-9+&@#\/%?=~_|!:,.;]*[-a-z0-9+&@#\/%=~_|]/i'));
 
-        if ((!$val->isValid($value)) || (!$this->filter($value))) {
+        if ((!$val->isValid($value)) || (!self::filter($value))) {
 			return false;
         }
 
