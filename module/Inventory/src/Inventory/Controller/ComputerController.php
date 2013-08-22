@@ -3,13 +3,94 @@
 namespace Inventory\Controller;
 
 use Zend\Mvc\Controller\AbstractRestfulController;
+use Zend\EventManager\EventManagerInterface;
+use Zend\Http\Headers;
+use Zend\Http\Response;
+
 use Inventory\Model\Db\ComputerDB;
+use Inventory\Model\Db\CorsDB;
 use Inventory\Model\Computer;
+use Inventory\Model\Cors;
 use Inventory\Model\Search;
 use Inventory\Model\Delete;
 
 class ComputerController extends AbstractRestfulController
 {
+    protected $allowedCollectionMethods = array(
+        'OPTIONS',
+        'GET',
+        'PUT',
+        'POST',
+        'DELETE',
+    );
+
+    protected $allowedResourceMethods = array(
+        'GET',
+        'POST',
+        'PUT',
+        'DELETE',
+    );
+
+    public function setEventManager(EventManagerInterface $events)
+    {
+        parent::setEventManager($events);
+        $events->attach('dispatch', array($this, 'checkOptions'), 10);
+        $events->attach('dispatch', array($this, 'injectLinkHeader'), 20);
+    }
+
+    public function injectLinkHeader($e)
+    {
+        $response = $e->getResponse();
+        $headers  = $response->getHeaders();
+        $headers->addHeaderLine('Link', sprintf(
+            '<%s>; rel="describedby"',
+            'http://inventory.dev:8080'
+            //$this->url('documentation-route-name')
+        ));
+    }
+
+    public function checkOptions($e)
+    {
+        $matches  = $e->getRouteMatch();
+        $response = $e->getResponse();
+        $request  = $e->getRequest();
+        $method   = $request->getMethod();
+
+        if ($matches->getParam('id', false)) {
+            if (!in_array($method, $this->allowedResourceMethods)) {
+                $response->setStatusCode(404);
+                return $response;
+            }
+            return;
+        }
+
+        if (!in_array($method, $this->allowedCollectionMethods)) {
+            $response->setStatusCode(405);
+            return $response;
+        }
+        return;
+    }
+
+    public function options()
+    {
+        $response = $this->getResponse();
+        $headers  = $response->getHeaders();
+
+        if ($this->params()->fromRoute('id', false)) {
+            $headers->addHeaderLine('Allow', implode(
+                ',', 
+                $this->allowedResourceMethods
+            ));
+        }
+
+        $headers->addHeaderLine('Allow', implode(
+            ',',
+            $this->allowedCollectionMethods
+        ));
+
+        return true;
+    }
+
     public function getList()
     {
         $db = new ComputerDB('RO', $this->getServiceLocator());
@@ -19,7 +100,7 @@ class ComputerController extends AbstractRestfulController
     public function get($id)
     {
         $search = new Search($id);
-        $db = new ComputerDB('RO', $this->getServiceLocator());
+        $db = new ComputerDB('RO', $this->getServiceLocator()); 
 
         if ($search->isValid()) {
             $id = $search->doClean($id);
