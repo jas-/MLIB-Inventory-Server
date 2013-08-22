@@ -77,16 +77,20 @@ class ComputerController extends AbstractRestfulController
         $headers  = $response->getHeaders();
 
         if ($this->params()->fromRoute('id', false)) {
-            $headers->addHeaderLine('Allow', implode(
+            $headers->addHeaderLine('Access-Control-Allow-Methods', implode(
                 ',', 
                 $this->allowedResourceMethods
             ));
+            $headers->addHeaderLine('Access-Control-Allow-Credentials', 'true');
+            $headers->addHeaderLine('Access-Control-Allow-Origin', 'http://local.dev:8080');
         }
 
-        $headers->addHeaderLine('Allow', implode(
+        $headers->addHeaderLine('Access-Control-Allow-Methods', implode(
             ',',
             $this->allowedCollectionMethods
         ));
+        $headers->addHeaderLine('Access-Control-Allow-Credentials', 'true');
+        $headers->addHeaderLine('Access-Control-Allow-Origin', 'http://local.dev:8080');
 
         return true;
     }
