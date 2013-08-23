@@ -34,7 +34,7 @@ abstract class AbstractDB
 
 		if ($query->count() > 0) {
 			$result = new ResultSet();
-			return $result->initialize($query)->toArray();
+			return $this->formatResults($result->initialize($query)->toArray());
 		}
 		return array('error' => 'Whoopsie! No records found, perhaps a wildcard search may help? (ex. computer-name*)');
 	}
@@ -54,4 +54,21 @@ abstract class AbstractDB
     {
         return preg_replace('/\*/', '%', $str);
     }
+
+	private function formatResults($array)
+	{
+		foreach($array as $key => $value) {
+			$tmp[$value['Id']]['data']['Id'] = $value['Id'];
+			$tmp[$value['Id']]['data']['Hostname'] = $value['Hostname'];
+			$tmp[$value['Id']]['data']['Model'] = $value['Model'];
+			$tmp[$value['Id']]['data']['SKU'] = $value['SKU'];
+			$tmp[$value['Id']]['data']['UUIC'] = $value['UUIC'];
+			$tmp[$value['Id']]['data']['Serial'] = $value['Serial'];
+			$tmp[$value['Id']]['data']['EOWD'] = $value['EOWD'];
+			$tmp[$value['Id']]['data']['OPD'] = $value['OPD'];
+			$tmp[$value['Id']]['data']['Description'] = $value['Description'];
+			$tmp[$value['Id']]['data']['Notes'] = $value['Notes'];
+		}
+		return $tmp;
+	}
 }

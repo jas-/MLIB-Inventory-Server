@@ -3,13 +3,33 @@
 namespace Inventory\Controller;
 
 use Zend\Mvc\Controller\AbstractRestfulController;
+use Zend\EventManager\EventManagerInterface;
+
 use Inventory\Model\Db\RmaDB;
+use Inventory\Model\Cors;
 use Inventory\Model\Rmas;
 use Inventory\Model\Search;
 use Inventory\Model\Delete;
 
 class RmaController extends AbstractRestfulController
 {
+    public function setEventManager(EventManagerInterface $events)
+    {
+        parent::setEventManager($events);
+        $events->attach('dispatch', array($this, 'checkOptions'), 10);
+    }
+
+    public function checkOptions($e)
+    {
+        $cors = new Cors();
+        $cors->doResponse($e);
+    }
+
+    public function options()
+    {
+        return true;
+    }
+
     public function getList()
     {
         $db = new RmaDB('RO', $this->getServiceLocator());

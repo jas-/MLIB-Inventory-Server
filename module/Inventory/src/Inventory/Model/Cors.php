@@ -13,9 +13,34 @@ class Cors
 {
     public $id, $hostname, $model, $sku, $uuic, $serial, $notes, $data;
 
-	function __construct($data)
+    protected $allowedCollectionMethods = array(
+        'OPTIONS',
+        'GET',
+        'PUT',
+        'POST',
+        'DELETE',
+    );
+
+    protected $allowedResourceMethods = array(
+        'GET',
+        'POST',
+        'PUT',
+        'DELETE',
+    );
+
+    protected $allowedRequestHeaders = array(
+        'accept',
+        'origin',
+        'content-md5',
+        'content-type',
+        'x-requested-with',
+        'x-alt-referer',
+    );
+
+	function __construct($data = false)
 	{
-		$this->exchangeArray($data);
+		if (isset($data))
+			$this->exchangeArray($data);
 	}
 
     public function exchangeArray($data)
@@ -49,39 +74,56 @@ class Cors
 		return $clean->doClean($str);
 	}
 
-	public function doResponse($request, $db)
+    public function injectLinkHeader($e)
+    {
+        $response = $e->getResponse();
+        $headers  = $response->getHeaders();
+        $headers->addHeaderLine('Link', sprintf(
+            '<%s>; rel="describedby"',
+            'http://inventory.dev:8080'
+            //$this->url('documentation-route-name')
+        ));
+    }
+
+	public function doResponse($e)
 	{
-		$http = new Headers();
-		$response = new Response();
+        $matches  = $e->getRouteMatch();
+        $response = $e->getResponse();
+        $request  = $e->getRequest();
+        $method   = $request->getMethod();
+        $headers  = $response->getHeaders();
 
-		if (!$http->has('origin')) {
-			$response->setContent('Required "Origin" header value not found');
-			$response->setStatusCode(Response::STATUS_CODE_405);
-			return false;
-		}
+/*
+        if ($matches->getParam('id', false)) {
+            if (!in_array($method, $this->allowedResourceMethods)) {
+                $response->setStatusCode(405);
+                return $response;
+            }
+            return;
+        }
+*/
 
-		$validated = $this->valRequest($request);
+        if (!in_array($method, $this->allowedCollectionMethods)) {
+            $response->setStatusCode(405);
+            return $response;
+        }
 
-		if (!$this->valRequest($http->get('origin'))) {
-			$response->setContent('"Origin" value not on approved whitelist of referring applications');
-			$response->setStatusCode(Response::STATUS_CODE_405);
-			return false;
-		}
+        $headers->addHeaderLine('Access-Control-Allow-Origin', 'http://grid-dev.dev:8080');
+        $headers->addHeaderLine('Access-Control-Allow-Methods', implode(
+            ',',
+            $this->allowedResourceMethods
+        ));
+        $headers->addHeaderLine('Access-Control-Allow-Credentials', 'true');
+        $headers->addHeaderLine('Access-Control-Allow-Headers', implode(
+            ',',
+            $this->allowedRequestHeaders
+        ));
 
-		$response->setStatusCode(Response::STATUS_CODE_200);
-		$response->getHeaders()->addHeaders(array(
-			'Access-Control-Allow-Origin' => $validated,
-			'Access-Control-Allow-Methods' => 'ORIGIN, GET, PUT, POST, DELETE',
-			'Access-Control-Allow-Headers' => 'Content-MD5, X-Alt-Referer, X-Requested-With',
-			'Access-Control-Allow-Credentials' => true,
-			'Content-Type' => 'application/json',
-		));
-		return true;
-	}
+		$this->injectLinkHeader($e);
 
-	private function valRequest($request)
-	{
-		print_r($request);
-		return true;
+        (strcasecmp($request->getMethod(), 'options') == 0) ?
+            $response->setStatusCode(204) : $response->setStatusCode(200);
+
+        return;
 	}
 }
