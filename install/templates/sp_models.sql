@@ -1,17 +1,12 @@
 DELIMITER //
 
 DROP PROCEDURE IF EXISTS `ModelList`;
-CREATE DEFINER=`{RO}`@`{SERVER}` PROCEDURE `ModelList`(IN `b` INT(1))
+CREATE DEFINER=`{RO}`@`{SERVER}` PROCEDURE `ModelList`()
  DETERMINISTIC
  SQL SECURITY INVOKER
  COMMENT 'Returns models'
 BEGIN
- IF (b >= 1)
- THEN
-  SELECT * FROM `models`;
- ELSE
-  SELECT `model` FROM `models` ORDER BY `model`;
- END IF;
+ SELECT * FROM `models` ORDER BY `model`;
 END//
 
 DROP PROCEDURE IF EXISTS `ModelSearch`;

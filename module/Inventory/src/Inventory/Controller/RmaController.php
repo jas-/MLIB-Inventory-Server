@@ -21,7 +21,7 @@ class RmaController extends AbstractRestfulController
 
     public function checkOptions($e)
     {
-        $cors = new Cors();
+        $cors = new Cors(null, $this->getServiceLocator());
         $cors->doResponse($e);
     }
 

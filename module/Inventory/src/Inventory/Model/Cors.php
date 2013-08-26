@@ -4,6 +4,8 @@ namespace Inventory\Model;
 
 use Zend\Http\Response;
 use Zend\Http\Headers;
+
+use Inventory\Model\Db\CorsDB;
 use Inventory\Model\Validate\Paragraph;
 use Inventory\Model\Validate\Url;
 use Inventory\Model\Validate\Ip;
@@ -13,22 +15,15 @@ class Cors
 {
     public $id, $hostname, $model, $sku, $uuic, $serial, $notes, $data;
 
-    protected $allowedCollectionMethods = array(
-        'OPTIONS',
-        'GET',
-        'PUT',
-        'POST',
-        'DELETE',
-    );
-
-    protected $allowedResourceMethods = array(
+    protected $allowedMethods = array(
+		'OPTIONS',
         'GET',
         'POST',
         'PUT',
         'DELETE',
     );
 
-    protected $allowedRequestHeaders = array(
+    protected $allowedHeaders = array(
         'accept',
         'origin',
         'content-md5',
@@ -37,10 +32,18 @@ class Cors
         'x-alt-referer',
     );
 
-	function __construct($data = false)
+	protected $allowedURI = array();
+
+	function __construct($data = false, $svc = false)
 	{
-		if (isset($data))
+		if (isset($data)) {
 			$this->exchangeArray($data);
+		}
+
+		if (isset($svc)) {
+			$db = new CorsDB('RO', $svc);
+			$this->allowedURI = $this->extractURL($db->view());
+		}
 	}
 
     public function exchangeArray($data)
@@ -77,11 +80,11 @@ class Cors
     public function injectLinkHeader($e)
     {
         $response = $e->getResponse();
+		$request  = $e->getRequest();
         $headers  = $response->getHeaders();
         $headers->addHeaderLine('Link', sprintf(
             '<%s>; rel="describedby"',
-            'http://inventory.dev:8080'
-            //$this->url('documentation-route-name')
+            $request->getUri()
         ));
     }
 
@@ -93,37 +96,58 @@ class Cors
         $method   = $request->getMethod();
         $headers  = $response->getHeaders();
 
-/*
-        if ($matches->getParam('id', false)) {
-            if (!in_array($method, $this->allowedResourceMethods)) {
-                $response->setStatusCode(405);
-                return $response;
-            }
-            return;
-        }
-*/
+		$this->injectLinkHeader($e);
 
-        if (!in_array($method, $this->allowedCollectionMethods)) {
+        if (!in_array($method, $this->allowedMethods)) {
             $response->setStatusCode(405);
             return $response;
         }
 
-        $headers->addHeaderLine('Access-Control-Allow-Origin', 'http://grid-dev.dev:8080');
+		$origin = $this->getOrigin($headers);
+
+		if (!in_array($origin, $this->allowedURI)) {
+			$response->setStatusCode(401);
+			return $response;
+		}
+
+        $headers->addHeaderLine('Access-Control-Allow-Origin', $origin);
+        $headers->addHeaderLine('Access-Control-Allow-Credentials', 'true');
         $headers->addHeaderLine('Access-Control-Allow-Methods', implode(
             ',',
-            $this->allowedResourceMethods
+            $this->allowedMethods
         ));
-        $headers->addHeaderLine('Access-Control-Allow-Credentials', 'true');
         $headers->addHeaderLine('Access-Control-Allow-Headers', implode(
             ',',
-            $this->allowedRequestHeaders
+            $this->allowedHeaders
         ));
-
-		$this->injectLinkHeader($e);
 
         (strcasecmp($request->getMethod(), 'options') == 0) ?
             $response->setStatusCode(204) : $response->setStatusCode(200);
 
         return;
+	}
+
+	private function getOrigin($headers)
+	{
+		$origin = false;
+
+		if ($headers->get('origin')) {
+			$origin = $headers->get('origin');
+		}
+		
+		if (getenv('HTTP_ORIGIN')) {
+			$origin = getenv('HTTP_ORIGIN');
+		}
+		return $origin;
+	}
+
+	private function extractURL($array)
+	{
+		if (is_array($array)) {
+			foreach($array as $key => $value) {
+				$array[$key] = $value['url'];
+			}
+		}
+		return $array;
 	}
 }

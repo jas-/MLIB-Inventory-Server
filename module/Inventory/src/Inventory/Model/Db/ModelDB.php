@@ -13,7 +13,7 @@ class ModelDB extends AbstractDB
 
 	public function view()
 	{
-		$sql = sprintf('CALL ModelList(0)');
+		$sql = sprintf('CALL ModelList()');
 		return parent::query($sql);
 	}
 
