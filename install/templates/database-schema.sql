@@ -118,3 +118,8 @@ CREATE OR REPLACE DEFINER='{RO}'@'{SERVER}'
  SQL SECURITY INVOKER
 VIEW viewInventoryMonitors AS
  SELECT m.id AS Id, m.hostname AS Hostname, m.model AS Model, m.sku AS SKU, m.serial AS Serial, mo.eowd AS EOWD, mo.opd AS OPD, mo.notes AS Notes, mo.description AS Description FROM monitors m LEFT JOIN models mo ON m.model = mo.model ORDER BY `hostname`;
+
+CREATE OR REPLACE DEFINER='{RO}'@'{SERVER}'
+ SQL SECURITY INVOKER
+VIEW viewInventoryModels AS
+ SELECT id AS Id, model AS Model, eowd AS EOWD, opd AS OPD, notes AS Notes, description AS Description FROM models `model`;

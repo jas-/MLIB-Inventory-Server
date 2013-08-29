@@ -6,7 +6,7 @@ CREATE DEFINER=`{RO}`@`{SERVER}` PROCEDURE `ModelList`()
  SQL SECURITY INVOKER
  COMMENT 'Returns models'
 BEGIN
- SELECT * FROM `models` ORDER BY `model`;
+ SELECT * FROM `viewInventoryModels`;
 END//
 
 DROP PROCEDURE IF EXISTS `ModelSearch`;
