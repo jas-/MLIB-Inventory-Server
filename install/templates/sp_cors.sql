@@ -6,7 +6,7 @@ CREATE DEFINER=`{RO}`@`{SERVER}` PROCEDURE `CorsList`()
  SQL SECURITY INVOKER
  COMMENT 'Returns Cors list'
 BEGIN
- SELECT * FROM `cors` ORDER BY `application`;
+ SELECT * FROM `viewInventoryCORS`;
 END//
 
 DROP PROCEDURE IF EXISTS `CorsSearch`;

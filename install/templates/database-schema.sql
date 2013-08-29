@@ -122,4 +122,14 @@ VIEW viewInventoryMonitors AS
 CREATE OR REPLACE DEFINER='{RO}'@'{SERVER}'
  SQL SECURITY INVOKER
 VIEW viewInventoryModels AS
- SELECT id AS Id, model AS Model, eowd AS EOWD, opd AS OPD, notes AS Notes, description AS Description FROM models `model`;
+ SELECT id AS Id, model AS Model, eowd AS EOWD, opd AS OPD, notes AS Notes, description AS Description FROM models ORDER BY `model`;
+
+CREATE OR REPLACE DEFINER='{RO}'@'{SERVER}'
+ SQL SECURITY INVOKER
+VIEW viewInventoryRMA AS
+ SELECT id AS Id, incorrect AS Problem, date AS Date, hostname AS Hostname, model AS Model, sku AS SKU, uuic AS UUIC, serial AS Serial, part AS Part, notes AS Notes FROM rma ORDER BY `date`;
+
+CREATE OR REPLACE DEFINER='{RO}'@'{SERVER}'
+ SQL SECURITY INVOKER
+VIEW viewInventoryCORS AS
+ SELECT id AS Id, application AS Application, url AS URL, ip AS IP FROM cors ORDER BY `application`;
