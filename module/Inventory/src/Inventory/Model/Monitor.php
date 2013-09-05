@@ -20,11 +20,11 @@ class Monitor
 
     public function exchangeArray($data)
     {
-        $this->id = (isset($data->id)) ? $data->id : null;
-        $this->hostname = (isset($data->hostname)) ? $data->hostname : (isset($data['hostname'])) ? $data['hostname'] : null;
-        $this->model = (isset($data->model))  ? $data->model : (isset($data['model'])) ? $data['model'] : null;
-        $this->sku = (isset($data->sku)) ? $data->sku : (isset($data['sku'])) ? $data['sku'] : null;
-        $this->serial = (isset($data->serial))  ? $data->serial : (isset($data['serial'])) ? $data['serial'] : null;
+        $this->id = (isset($data->Id)) ? $data->Id : null;
+        $this->hostname = (isset($data->Hostname)) ? $data->Hostname : (isset($data['Hostname'])) ? $data['Hostname'] : null;
+        $this->model = (isset($data->Model))  ? $data->Model : (isset($data['Model'])) ? $data['Model'] : null;
+        $this->sku = (isset($data->SKU)) ? $data->SKU : (isset($data['SKU'])) ? $data['SKU'] : null;
+        $this->serial = (isset($data->Serial))  ? $data->Serial : (isset($data['Serial'])) ? $data['Serial'] : null;
     }
 
 	public function isValid()

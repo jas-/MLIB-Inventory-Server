@@ -48,10 +48,10 @@ class Cors
 
     public function exchangeArray($data)
     {
-        $this->id = (isset($data->id)) ? $data->id : null;
-        $this->application = (isset($data->application)) ? $data->application : (isset($data['application'])) ? $data['application'] : null;
-        $this->url = (isset($data->url))  ? $data->url : (isset($data['url'])) ? $data['url'] : null;
-        $this->ip = (isset($data->ip)) ? $data->ip : (isset($data['ip'])) ? $data['ip'] : null;
+        $this->id = (isset($data->Id)) ? $data->Id : null;
+        $this->application = (isset($data->Application)) ? $data->Application : (isset($data['Application'])) ? $data['Application'] : null;
+        $this->url = (isset($data->URL))  ? $data->URL : (isset($data['URL'])) ? $data['URL'] : null;
+        $this->ip = (isset($data->IP)) ? $data->IP : (isset($data['IP'])) ? $data['IP'] : null;
     }
 
 	public function isValid()
@@ -134,7 +134,7 @@ class Cors
 		if ($headers->get('origin')) {
 			$origin = $headers->get('origin');
 		}
-		
+
 		if (getenv('HTTP_ORIGIN')) {
 			$origin = getenv('HTTP_ORIGIN');
 		}

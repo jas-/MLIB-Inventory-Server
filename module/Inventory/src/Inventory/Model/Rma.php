@@ -18,14 +18,14 @@ class Rmas
 
     public function exchangeArray($data)
     {
-        $this->id = (isset($data->id)) ? $data->id : null;
-        $this->hostname = (isset($data->hostname)) ? $data->hostname : (isset($data['hostname'])) ? $data['hostname'] : null;
-        $this->sku = (isset($data->sku))  ? $data->sku : (isset($data['sku'])) ? $data['sku'] : null;
-        $this->uuic = (isset($data->uuic)) ? $data->uuic : (isset($data['uuic'])) ? $data['uuic'] : null;
-        $this->serial = (isset($data->serial))  ? $data->serial : (isset($data['serial'])) ? $data['serial'] : null;
-		$this->model = (isset($data->model))  ? $data->model : (isset($data['model'])) ? $data['model'] : null;
-		$this->part = (isset($data->part))  ? $data->part : (isset($data['part'])) ? $data['part'] : null;
-		$this->notes = (isset($data->notes))  ? $data->notes : (isset($data['notes'])) ? $data['notes'] : null;
+        $this->id = (isset($data->Id)) ? $data->Id : null;
+        $this->hostname = (isset($data->Hostname)) ? $data->Hostname : (isset($data['Hostname'])) ? $data['Hostname'] : null;
+        $this->sku = (isset($data->SKU))  ? $data->SKU : (isset($data['SKU'])) ? $data['SKU'] : null;
+        $this->uuic = (isset($data->UUIC)) ? $data->UUIC : (isset($data['UUIC'])) ? $data['UUIC'] : null;
+        $this->serial = (isset($data->Serial))  ? $data->Serial : (isset($data['Serial'])) ? $data['Serial'] : null;
+		$this->model = (isset($data->Model))  ? $data->Model : (isset($data['Model'])) ? $data['Model'] : null;
+		$this->part = (isset($data->Part))  ? $data->Part : (isset($data['Part'])) ? $data['Part'] : null;
+		$this->notes = (isset($data->Notes))  ? $data->Notes : (isset($data['Notes'])) ? $data['Notes'] : null;
     }
 
 	public function isValid()
