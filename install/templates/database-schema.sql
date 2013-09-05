@@ -112,9 +112,24 @@ CREATE TABLE IF NOT EXISTS `cors` (
 CREATE OR REPLACE DEFINER='{RO}'@'{SERVER}'
  SQL SECURITY INVOKER
 VIEW viewInventoryComputers AS
- SELECT c.id AS Id, c.hostname AS Hostname, c.model AS Model, c.sku AS SKU, c.uuic AS UUIC, c.serial AS Serial, c.notes AS Notes, m.eowd AS EOWD, m.opd AS OPD, m.description AS Description FROM computers c LEFT JOIN models m ON c.model = m.model ORDER BY c.hostname;
+ SELECT c.id AS Id, c.hostname AS Hostname, c.model AS Model, c.sku AS SKU, c.uuic AS UUIC, c.serial AS Serial, m.eowd AS EOWD, m.opd AS OPD, m.notes AS Notes, m.description AS Description FROM computers c LEFT JOIN models m ON c.model = m.model ORDER BY c.hostname;
 
 CREATE OR REPLACE DEFINER='{RO}'@'{SERVER}'
  SQL SECURITY INVOKER
 VIEW viewInventoryMonitors AS
- SELECT `id` AS Id, `hostname` AS Hostname, `model` AS Model, `sku` AS SKU, `serial` AS Serial FROM `monitors` ORDER BY `hostname`;
+ SELECT m.id AS Id, m.hostname AS Hostname, m.model AS Model, m.sku AS SKU, m.serial AS Serial, mo.eowd AS EOWD, mo.opd AS OPD, mo.notes AS Notes, mo.description AS Description FROM monitors m LEFT JOIN models mo ON m.model = mo.model ORDER BY `hostname`;
+
+CREATE OR REPLACE DEFINER='{RO}'@'{SERVER}'
+ SQL SECURITY INVOKER
+VIEW viewInventoryModels AS
+ SELECT id AS Id, model AS Model, eowd AS EOWD, opd AS OPD, notes AS Notes, description AS Description FROM models ORDER BY `model`;
+
+CREATE OR REPLACE DEFINER='{RO}'@'{SERVER}'
+ SQL SECURITY INVOKER
+VIEW viewInventoryRMA AS
+ SELECT id AS Id, incorrect AS Problem, date AS Date, hostname AS Hostname, model AS Model, sku AS SKU, uuic AS UUIC, serial AS Serial, part AS Part, notes AS Notes FROM rma ORDER BY `date`;
+
+CREATE OR REPLACE DEFINER='{RO}'@'{SERVER}'
+ SQL SECURITY INVOKER
+VIEW viewInventoryCORS AS
+ SELECT id AS Id, application AS Application, url AS URL, ip AS IP FROM cors ORDER BY `application`;
