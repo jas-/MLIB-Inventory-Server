@@ -9,7 +9,7 @@ class Serial extends AbstractValidator
 {
     public function isValid($value)
     {
-		$val = new Regex(array('pattern'=>'/^[\w+\-]{3,15}$/i'));
+		$val = new Regex(array('pattern'=>'/^[\w+\-]{3,128}$/i'));
 		if (!$val->isValid($value)) {
 			return false;
 		}

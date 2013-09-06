@@ -34,7 +34,7 @@ CREATE DEFINER=`{ADMIN}`@`{SERVER}` PROCEDURE `CorsUpdate`(IN `i` BIGINT, IN `a`
  SQL SECURITY INVOKER
  COMMENT 'Add/Update cors'
 BEGIN
- UPDATE `cors` SET `application`=a, `url`=u, `ip`=ip WHERE `id` = i;
+ UPDATE `cors` SET `application`=a, `url`=u, `ip`=ip WHERE `id` = i LIMIT 1;
  SELECT ROW_COUNT() AS affected;
 END//
 

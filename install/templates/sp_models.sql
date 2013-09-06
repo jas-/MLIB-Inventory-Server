@@ -34,7 +34,7 @@ CREATE DEFINER=`{ADMIN}`@`{SERVER}` PROCEDURE `ModelUpdate`(IN `i` BIGINT, IN `m
  SQL SECURITY INVOKER
  COMMENT 'Update model'
 BEGIN
- UPDATE `models` SET `model` = m, `eowd` = UNIX_TIMESTAMP(e), `opd` = UNIX_TIMESTAMP(o), `description` = d, `notes` = n WHERE `id` = i;
+ UPDATE `models` SET `model` = m, `eowd` = UNIX_TIMESTAMP(e), `opd` = UNIX_TIMESTAMP(o), `description` = d, `notes` = n WHERE `id` = i LIMIT 1;
  SELECT ROW_COUNT() AS affected;
 END//
 
