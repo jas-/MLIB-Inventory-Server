@@ -56,8 +56,10 @@ CREATE DEFINER=`{ADMIN}`@`{SERVER}` PROCEDURE `ComputerUpdate`(IN `i` BIGINT, IN
 BEGIN
  SELECT `hostname` INTO @Hostname FROM `computers` WHERE `id` = i;
  UPDATE `hostnames` SET `hostname` = h WHERE `hostname` = @Hostname LIMIT 1;
+ SELECT ROW_COUNT() INTO @hostname_affected;
  UPDATE `computers` SET `hostname` = h, `model` = m, `sku` = s, `uuic` = u, `serial` = sl, `notes` = n WHERE `id` = i;
- SELECT ROW_COUNT() AS affected;
+ SELECT ROW_COUNT() INTO @computer_affected;
+ SELECT @hostname_affected AS hostname_affected, @computer_affected AS computer_affected;
 END//
 
 DROP PROCEDURE IF EXISTS `ComputerDelete`;

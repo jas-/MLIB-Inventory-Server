@@ -20,8 +20,8 @@ class ComputerDB extends AbstractDB
 	public function add($obj)
 	{
 		$sql = sprintf('CALL ComputerAddUpdate("%s", "%s", "%s", "%s", "%s", "%s")',
-					   $obj['hostname'], $obj['model'], $obj['sku'], $obj['uuic'],
-					   $obj['serial'], $obj['notes']);
+					   $obj['Hostname'], $obj['Model'], $obj['SKU'], $obj['UUIC'],
+					   $obj['Serial'], $obj['Notes']);
 
 		$result = parent::query($sql);
 
@@ -35,16 +35,17 @@ class ComputerDB extends AbstractDB
 
 	public function update($id, $obj)
 	{
-		$sql = sprintf('CALL ComputerUpdate("%d", "%s", "%s", "%s", "%s", "%s", "%s")',
-					   $id, $obj['hostname'], $obj['model'], $obj['sku'], $obj['uuic'],
-					   $obj['serial'], $obj['notes']);
+		$sql = sprintf('CALL ComputerUpdate(%d, "%s", "%s", "%s", "%s", "%s", "%s")',
+					   $id, $obj['Hostname'], $obj['Model'], $obj['SKU'], $obj['UUIC'],
+					   $obj['Serial'], $obj['Notes']);
+
 		$result = parent::query($sql);
 
-		if ((int)$result[0]['affected'] > 0) {
+		if (((int)$result[0]['hostname_affected'] > 0) || ((int)$result[0]['computer_affected'] > 0)) {
 			return array('success'=>'Successfully updated record');
 		}
 
-		if ((int)$result[0]['affected'] == 0) {
+		if (((int)$result[0]['hostname_affected'] == 0) && ((int)$result[0]['computer_affected'] == 0)) {
 			return array('warning'=>'No changes to computer record occured');
 		}
 		return array('error'=>'Whoops, an error occured while updating computer record');

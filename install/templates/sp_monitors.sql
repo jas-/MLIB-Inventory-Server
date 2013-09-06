@@ -52,12 +52,14 @@ DROP PROCEDURE IF EXISTS `MonitorUpdate`;
 CREATE DEFINER=`{ADMIN}`@`{SERVER}` PROCEDURE `MonitorUpdate`(IN `i` BIGINT, IN `h` CHAR(128), IN `m` CHAR(128), IN `s` CHAR(128), IN `sl` CHAR(128))
  DETERMINISTIC
  SQL SECURITY INVOKER
- COMMENT 'Update computer record'
+ COMMENT 'Update monitor record'
 BEGIN
  SELECT `hostname` INTO @Hostname FROM `monitors` WHERE `id` = i;
  UPDATE `hostnames` SET `hostname` = h WHERE `hostname` = @Hostname LIMIT 1;
+ SELECT ROW_COUNT() INTO @hostname_affected;
  UPDATE `monitors` SET `hostname` = h, `model` = m, `sku` = s, `serial` = sl WHERE `id` = i;
- SELECT ROW_COUNT() AS affected;
+ SELECT ROW_COUNT() INTO @monitor_affected;
+ SELECT @hostname_affected AS hostname_affected, @monitor_affected AS monitor_affected;
 END//
 
 DROP PROCEDURE IF EXISTS `MonitorDelete`;
