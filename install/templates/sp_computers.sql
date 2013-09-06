@@ -55,7 +55,7 @@ CREATE DEFINER=`{ADMIN}`@`{SERVER}` PROCEDURE `ComputerUpdate`(IN `i` BIGINT, IN
  COMMENT 'Update computer record'
 BEGIN
  SELECT `hostname` INTO @Hostname FROM `computers` WHERE `id` = i;
- UPDATE `hostnames` SET `hostname` = h WHERE `hostname` = @Hostname;
+ UPDATE `hostnames` SET `hostname` = h WHERE `hostname` = @Hostname LIMIT 1;
  UPDATE `computers` SET `hostname` = h, `model` = m, `sku` = s, `uuic` = u, `serial` = sl, `notes` = n WHERE `id` = i;
  SELECT ROW_COUNT() AS affected;
 END//

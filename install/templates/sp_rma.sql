@@ -34,7 +34,7 @@ CREATE DEFINER=`{ADMIN}`@`{SERVER}` PROCEDURE `RMAUpdate`(IN `i` BIGINT, IN `d` 
  SQL SECURITY INVOKER
  COMMENT 'Add/Update rma'
 BEGIN
- UPDATE `rma` SET `date`=UNIX_TIMESTAMP(d), `hostname`=h, `sku`=s, `uuic`=u, `serial`=sl, `model`=m, `part`=p, `notes`=n WHERE `id` = i;
+ UPDATE `rma` SET `date`=UNIX_TIMESTAMP(d), `hostname`=h, `sku`=s, `uuic`=u, `serial`=sl, `model`=m, `part`=p, `notes`=n WHERE `id` = i LIMIT 1;
  SELECT ROW_COUNT() AS affected;
 END//
 
