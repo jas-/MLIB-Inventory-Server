@@ -17,20 +17,20 @@ class Rmas
 
 	function __construct($data)
 	{
-		$this->exchangeArray($data);
+		$this->exchangeArray(array_change_key_case((array)$data, CASE_LOWER));
 	}
 
     public function exchangeArray($data)
     {
-        $this->id = (isset($data->Id)) ? $data->Id : null;
-        $this->date = (isset($data->Date)) ? $data->Date : (isset($data['Date'])) ? $data['Date'] : null;
-        $this->hostname = (isset($data->Hostname)) ? $data->Hostname : (isset($data['Hostname'])) ? $data['Hostname'] : null;
-        $this->sku = (isset($data->SKU))  ? $data->SKU : (isset($data['SKU'])) ? $data['SKU'] : null;
-        $this->uuic = (isset($data->UUIC)) ? $data->UUIC : (isset($data['UUIC'])) ? $data['UUIC'] : null;
-        $this->serial = (isset($data->Serial))  ? $data->Serial : (isset($data['Serial'])) ? $data['Serial'] : null;
-		$this->model = (isset($data->Model))  ? $data->Model : (isset($data['Model'])) ? $data['Model'] : null;
-		$this->part = (isset($data->Part))  ? $data->Part : (isset($data['Part'])) ? $data['Part'] : null;
-		$this->notes = (isset($data->Notes))  ? $data->Notes : (isset($data['Notes'])) ? $data['Notes'] : null;
+        $this->id = (isset($data['id'])) ? $data['id'] : null;
+        $this->date = (isset($data['date'])) ? $data['date'] : null;
+        $this->hostname = (isset($data['hostname'])) ? $data['hostname'] : null;
+        $this->sku = (isset($data['sku'])) ? $data['sku'] : null;
+        $this->uuic = (isset($data['uuic'])) ? $data['uuic'] : null;
+        $this->serial = (isset($data['serial'])) ? $data['serial'] : null;
+		$this->model = (isset($data['model'])) ? $data['model'] : null;
+		$this->part = (isset($data['part'])) ? $data['part'] : null;
+		$this->notes = (isset($data['notes'])) ? $data['notes'] : null;
     }
 
 	public function isValid()

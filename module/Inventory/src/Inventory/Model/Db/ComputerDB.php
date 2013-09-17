@@ -20,8 +20,8 @@ class ComputerDB extends AbstractDB
 	public function add($obj)
 	{
 		$sql = sprintf('CALL ComputerAddUpdate("%s", "%s", "%s", "%s", "%s", "%s")',
-					   $obj['Hostname'], $obj['Model'], $obj['SKU'], $obj['UUIC'],
-					   $obj['Serial'], $obj['Notes']);
+					   $obj['hostname'], $obj['model'], $obj['sku'], $obj['uuic'],
+					   $obj['serial'], $obj['notes']);
 
 		$result = parent::query($sql);
 
@@ -36,8 +36,8 @@ class ComputerDB extends AbstractDB
 	public function update($id, $obj)
 	{
 		$sql = sprintf('CALL ComputerUpdate(%d, "%s", "%s", "%s", "%s", "%s", "%s")',
-					   $id, $obj['Hostname'], $obj['Model'], $obj['SKU'], $obj['UUIC'],
-					   $obj['Serial'], $obj['Notes']);
+					   $id, $obj['hostname'], $obj['model'], $obj['sku'], $obj['uuic'],
+					   $obj['serial'], $obj['notes']);
 
 		$result = parent::query($sql);
 

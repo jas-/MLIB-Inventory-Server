@@ -2,7 +2,7 @@
 
 namespace Inventory\Model;
 
-use Inventory\Model\Validate\Hostname;
+use Inventory\Model\Validate\Hostnames;
 use Inventory\Model\Validate\Model;
 use Inventory\Model\Validate\SKU;
 use Inventory\Model\Validate\UUIC;
@@ -15,23 +15,24 @@ class Computer
 
 	function __construct($data)
 	{
-		$this->exchangeArray($data);
+		$this->exchangeArray(array_change_key_case((array)$data, CASE_LOWER));
 	}
 
     public function exchangeArray($data)
     {
-        $this->id = (isset($data->Id)) ? $data->Id : null;
-        $this->hostname = (isset($data->Hostname)) ? $data->Hostname : (isset($data['Hostname'])) ? $data['Hostname'] : null;
-        $this->model = (isset($data->Model))  ? $data->Model : (isset($data['Model'])) ? $data['Model'] : null;
-        $this->sku = (isset($data->SKU)) ? $data->SKU : (isset($data['SKU'])) ? $data['SKU'] : null;
-        $this->uuic = (isset($data->UUIC)) ? $data->UUIC : (isset($data['UUIC'])) ? $data['UUIC'] : null;
-        $this->serial = (isset($data->Serial))  ? $data->Serial : (isset($data['Serial'])) ? $data['Serial'] : null;
-        $this->notes = (isset($data->Notes)) ? $data->Notes : (isset($data['Notes'])) ? $data['Notes'] : null;
+        $this->id = (isset($data['id'])) ? $data['id'] : null;
+        $this->hostname = (isset($data['hostname'])) ? $data['hostname'] : null;
+        $this->model = (isset($data['model'])) ? $data['model'] : null;
+        $this->sku = (isset($data['sku'])) ? $data['sku'] : null;
+        $this->uuic = (isset($data['uuic'])) ? $data['uuic'] : null;
+        $this->serial = (isset($data['serial'])) ? $data['serial'] : null;
+		$this->description = (isset($data['description'])) ? $data['description'] : null;
+		$this->notes = (isset($data['notes'])) ? $data['notes'] : null;
     }
 
 	public function isValid()
     {
-		if (!Hostname::isValid($this->hostname)) {
+		if (!Hostnames::isValid($this->hostname)) {
 			return false;
 		}
 

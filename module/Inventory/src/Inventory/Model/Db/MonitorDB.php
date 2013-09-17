@@ -20,7 +20,7 @@ class MonitorDB extends AbstractDB
 	public function add($obj)
 	{
 		$sql = sprintf('CALL MonitorAddUpdate("%s", "%s", "%s", "%s")',
-					   $obj['Hostname'], $obj['Model'], $obj['SKU'], $obj['Serial']);
+					   $obj['hostname'], $obj['model'], $obj['sku'], $obj['serial']);
 
 		$result = parent::query($sql);
 
@@ -35,7 +35,7 @@ class MonitorDB extends AbstractDB
 	public function update($id, $obj)
 	{
 		$sql = sprintf('CALL MonitorUpdate("%d", "%s", "%s", "%s", "%s")',
-					   $id, $obj['Hostname'], $obj['Model'], $obj['SKU'], $obj['Serial']);
+					   $id, $obj['hostname'], $obj['model'], $obj['sku'], $obj['serial']);
 
 		$result = parent::query($sql);
 

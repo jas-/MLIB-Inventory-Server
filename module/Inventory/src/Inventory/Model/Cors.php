@@ -37,7 +37,7 @@ class Cors
 	function __construct($data = false, $svc = false)
 	{
 		if (isset($data)) {
-			$this->exchangeArray($data);
+			$this->exchangeArray(array_change_key_case((array)$data, CASE_LOWER));
 		}
 
 		if (isset($svc)) {
@@ -48,10 +48,10 @@ class Cors
 
     public function exchangeArray($data)
     {
-        $this->id = (isset($data->Id)) ? $data->Id : null;
-        $this->application = (isset($data->Application)) ? $data->Application : (isset($data['Application'])) ? $data['Application'] : null;
-        $this->url = (isset($data->URL))  ? $data->URL : (isset($data['URL'])) ? $data['URL'] : null;
-        $this->ip = (isset($data->IP)) ? $data->IP : (isset($data['IP'])) ? $data['IP'] : null;
+        $this->id = (isset($data['id'])) ? $data['id'] : null;
+        $this->application = (isset($data['application'])) ? $data['application'] : null;
+        $this->url = (isset($data['url'])) ? $data['url'] : null;
+        $this->ip = (isset($data['ip'])) ? $data['ip'] : null;
     }
 
 	public function isValid()

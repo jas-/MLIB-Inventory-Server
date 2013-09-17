@@ -18,12 +18,12 @@ class Models
 
     public function exchangeArray($data)
     {
-        $this->id = (isset($data->Id)) ? $data->Id : null;
-        $this->model = (isset($data->Model)) ? $data->Model : (isset($data['Model'])) ? $data['Model'] : null;
-        $this->eowd = (isset($data->EOWD))  ? $data->EOWD : (isset($data['EOWD'])) ? $data['EOWD'] : null;
-        $this->opd = (isset($data->OPD)) ? $data->OPD : (isset($data['OPD'])) ? $data['OPD'] : null;
-        $this->description = (isset($data->Description))  ? $data->Description : (isset($data['Description'])) ? $data['Description'] : null;
-		$this->notes = (isset($data->Notes))  ? $data->Notes : (isset($data['Notes'])) ? $data['Notes'] : null;
+        $this->id = (isset($data['id'])) ? $data['id'] : null;
+        $this->model = (isset($data['model'])) ? $data['model'] : null;
+        $this->eowd = (isset($data['eowd'])) ? $data['eowd'] : null;
+        $this->opd = (isset($data['opd'])) ? $data['opd'] : null;
+        $this->description = (isset($data['description'])) ? $data['description'] : null;
+		$this->notes = (isset($data['notes'])) ? $data['notes'] : null;
     }
 
 	public function isValid()
