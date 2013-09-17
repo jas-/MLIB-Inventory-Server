@@ -28,6 +28,7 @@ class Models
 
 	public function isValid()
     {
+print_r($this);
 		if (!Model::isValid($this->model)) {
 			return false;
 		}

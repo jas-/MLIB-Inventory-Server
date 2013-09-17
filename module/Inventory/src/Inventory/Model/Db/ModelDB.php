@@ -20,7 +20,7 @@ class ModelDB extends AbstractDB
 	public function add($obj)
 	{
 		$sql = sprintf('CALL ModelAddUpdate("%s", "%s", "%s", "%s", "%s")',
-					   $obj['model'], $obj['eowd'], $obj['opd'], $obj['description'],
+					   $obj['modelname'], $obj['eowd'], $obj['opd'], $obj['description'],
 					   $obj['notes']);
 
 		$result = parent::query($sql);
