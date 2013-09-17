@@ -25,6 +25,10 @@ class Monitor
         $this->model = (isset($data['model'])) ? $data['model'] : null;
         $this->sku = (isset($data['sku'])) ? $data['sku'] : null;
         $this->serial = (isset($data['serial'])) ? $data['serial'] : null;
+        $this->eowd = (isset($data['eowd'])) ? $data['eowd'] : null;
+        $this->opd = (isset($data['opd'])) ? $data['opd'] : null;
+        $this->description = (isset($data['description'])) ? $data['description'] : null;
+		$this->notes = (isset($data['notes'])) ? $data['notes'] : null;
     }
 
 	public function isValid()
@@ -43,6 +47,26 @@ class Monitor
 
 		if (!Serial::isValid($this->serial)) {
 			return false;
+		}
+
+		if (!Date::isValid($this->eowd)) {
+			return false;
+		}
+
+		if (!Date::isValid($this->opd)) {
+			return false;
+		}
+
+		if (!empty($this->description)) {
+			if (!Paragraph::isValid($this->description)) {
+				return false;
+			}
+		}
+
+		if (!empty($this->notes)) {
+			if (!Paragraph::isValid($this->notes)) {
+				return false;
+			}
 		}
 
 		return true;

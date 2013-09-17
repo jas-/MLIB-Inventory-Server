@@ -13,13 +13,13 @@ class Models
 
 	function __construct($data)
 	{
-		$this->exchangeArray($data);
+		$this->exchangeArray(array_change_key_case((array)$data, CASE_LOWER));
 	}
 
     public function exchangeArray($data)
     {
         $this->id = (isset($data['id'])) ? $data['id'] : null;
-        $this->model = (isset($data['model'])) ? $data['model'] : null;
+        $this->model = (isset($data['model'])) ? $data['model'] : (isset($data['modelname'])) ? $data['modelname'] : null;
         $this->eowd = (isset($data['eowd'])) ? $data['eowd'] : null;
         $this->opd = (isset($data['opd'])) ? $data['opd'] : null;
         $this->description = (isset($data['description'])) ? $data['description'] : null;
@@ -40,12 +40,16 @@ class Models
 			return false;
 		}
 
-		if (!Paragraph::isValid($this->description)) {
-			return false;
+		if (!empty($this->description)) {
+			if (!Paragraph::isValid($this->description)) {
+				return false;
+			}
 		}
 
-		if (!Paragraph::isValid($this->notes)) {
-			return false;
+		if (!empty($this->notes)) {
+			if (!Paragraph::isValid($this->notes)) {
+				return false;
+			}
 		}
 
 		return true;
