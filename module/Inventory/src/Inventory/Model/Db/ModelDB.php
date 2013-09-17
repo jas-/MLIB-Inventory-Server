@@ -38,6 +38,7 @@ class ModelDB extends AbstractDB
 		$sql = sprintf('CALL ModelUpdate("%d", "%s", "%s", "%s", "%s", "%s")',
 					   $id, $obj['model'], $obj['eowd'], $obj['opd'], $obj['description'],
 					   $obj['notes']);
+
 		$result = parent::query($sql);
 
 		if ((int)$result[0]['affected'] > 0) {

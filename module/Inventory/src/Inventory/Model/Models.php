@@ -18,9 +18,11 @@ class Models
 
     public function exchangeArray($data)
     {
-        $this->id = (isset($data['id'])) ? $data['id'] : null;
-        $this->model = (isset($data['model'])) ? $data['model'] : (isset($data['modelname'])) ? $data['modelname'] : null;
-        $this->eowd = (isset($data['eowd'])) ? $data['eowd'] : null;
+		$data['model'] = (isset($data['modelname'])) ? $data['modelname'] : $data['model'];
+
+		$this->id = (isset($data['id'])) ? $data['id'] : null;
+        $this->model = (isset($data['model'])) ? $data['model'] : null;
+		$this->eowd = (isset($data['eowd'])) ? $data['eowd'] : null;
         $this->opd = (isset($data['opd'])) ? $data['opd'] : null;
         $this->description = (isset($data['description'])) ? $data['description'] : null;
 		$this->notes = (isset($data['notes'])) ? $data['notes'] : null;
@@ -28,7 +30,6 @@ class Models
 
 	public function isValid()
     {
-print_r($this);
 		if (!Model::isValid($this->model)) {
 			return false;
 		}
