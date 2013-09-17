@@ -59,7 +59,7 @@ class RmaController extends AbstractRestfulController
 
         if ($request->isPost()) {
             $rma = new Rmas($data);
-            $post = $rma->doClean($data);
+            $post = array_change_key_case($rma->doClean($data), CASE_LOWER);
 
             $db = new RmaDB('RW', $this->getServiceLocator());
 
@@ -80,7 +80,7 @@ class RmaController extends AbstractRestfulController
 
         if ($rma->isValid()) {
             $id = $rma->doClean($id);
-            $post = $rma->doClean($data);
+            $post = array_change_key_case($rma->doClean($data), CASE_LOWER);
 
             return $db->response($db->update($id, $post));
         } else {

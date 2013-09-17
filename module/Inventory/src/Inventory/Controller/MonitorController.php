@@ -59,7 +59,7 @@ class MonitorController extends AbstractRestfulController
 
         if ($request->isPost()) {
             $monitor = new Monitor($request->getPost());
-            $post = $monitor->doClean($data);
+            $post = array_change_key_case($monitor->doClean($data), CASE_LOWER);
 
             $db = new MonitorDB('RW', $this->getServiceLocator());
 
@@ -80,7 +80,7 @@ class MonitorController extends AbstractRestfulController
 
         if ($monitor->isValid()) {
             $id = $monitor->doClean($id);
-            $post = $monitor->doClean($data);
+            $post = array_change_key_case($monitor->doClean($data), CASE_LOWER);
 
             return $db->response($db->update($id, $post));
         } else {

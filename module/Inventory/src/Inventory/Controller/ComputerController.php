@@ -59,7 +59,7 @@ class ComputerController extends AbstractRestfulController
 
         if ($request->isPost()) {
             $computer = new Computer($data);
-            $post = $computer->doClean($data);
+            $post = array_change_key_case($computer->doClean($data), CASE_LOWER);
 
             $db = new ComputerDB('RW', $this->getServiceLocator());
 
@@ -80,7 +80,7 @@ class ComputerController extends AbstractRestfulController
 
         if ($computer->isValid()) {
             $id = $computer->doClean($id);
-            $post = $computer->doClean($data);
+            $post = array_change_key_case($computer->doClean($data), CASE_LOWER);
 
             return $db->response($db->update($id, $post));
         } else {

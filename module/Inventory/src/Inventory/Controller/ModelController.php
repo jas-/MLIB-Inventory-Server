@@ -59,7 +59,7 @@ class ModelController extends AbstractRestfulController
 
         if ($request->isPost()) {
             $model = new Models($data);
-            $post = $model->doClean($data);
+            $post = array_change_key_case($model->doClean($data), CASE_LOWER);
 
             $db = new ModelDB('RW', $this->getServiceLocator());
 
@@ -80,7 +80,7 @@ class ModelController extends AbstractRestfulController
 
         if ($model->isValid()) {
             $id = $model->doClean($id);
-            $post = $model->doClean($data);
+            $post = array_change_key_case($model->doClean($data), CASE_LOWER);
 
             return $db->response($db->update($id, $post));
         } else {

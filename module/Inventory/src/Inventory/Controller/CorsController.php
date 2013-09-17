@@ -58,7 +58,7 @@ class CorsController extends AbstractRestfulController
 
         if ($request->isPost()) {
             $cors = new Cors($data);
-            $post = $cors->doClean($data);
+            $post = array_change_key_case($cors->doClean($data), CASE_LOWER);
 
             $db = new CorsDB('RW', $this->getServiceLocator());
 
@@ -79,7 +79,7 @@ class CorsController extends AbstractRestfulController
 
         if ($cors->isValid()) {
             $id = $cors->doClean($id);
-            $post = $cors->doClean($data);
+            $post = array_change_key_case($cors->doClean($data), CASE_LOWER);
 
             return $db->response($db->update($id, $post));
         } else {
