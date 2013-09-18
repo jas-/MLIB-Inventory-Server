@@ -7,6 +7,8 @@ use Inventory\Model\Validate\Model;
 use Inventory\Model\Validate\SKU;
 use Inventory\Model\Validate\UUIC;
 use Inventory\Model\Validate\Serial;
+use Inventory\Model\Validate\Date;
+use Inventory\Model\Validate\Paragraph;
 use Inventory\Model\Sanitize\StripTags;
 
 class Monitor
