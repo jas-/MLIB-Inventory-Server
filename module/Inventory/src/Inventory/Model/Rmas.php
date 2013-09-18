@@ -63,8 +63,10 @@ class Rmas
 			return false;
 		}
 
-		if (!Paragraph::isValid($this->notes)) {
-			return false;
+		if (!empty($this->notes)) {
+			if (!Paragraph::isValid($this->notes)) {
+				return false;
+			}
 		}
 
 		return true;
