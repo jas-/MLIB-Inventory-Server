@@ -3,7 +3,7 @@
 namespace Inventory\Model;
 
 use Inventory\Model\Validate\Date;
-use Inventory\Model\Validate\Hostname;
+use Inventory\Model\Validate\Hostnames;
 use Inventory\Model\Validate\Model;
 use Inventory\Model\Validate\SKU;
 use Inventory\Model\Validate\UUIC;
@@ -39,7 +39,7 @@ class Rmas
 			return false;
 		}
 
-		if (!Hostname::isValid($this->hostname)) {
+		if (!Hostnames::isValid($this->hostname)) {
 			return false;
 		}
 
