@@ -24,28 +24,34 @@ read -p "Read-Write username [Administrator]: " admin
 sed -i "s/{ADMIN}/${admin:=Administrator}/g" *.sql
 sed -i "s/{ADMIN}/${admin:=Administrator}/g" ../module/Inventory/config/module.config.php
 
-read -sp "Enter Read-Write password: " admin_pass
-sed -i "s/{ADMIN_PW}/${admin_pass:=}/g" *.sql
-sed -i "s/{ADMIN_PW}/${admin_pass:=localhost}/g" ../module/Inventory/config/module.config.php
+read -sp "Enter Read-Write password [Random]: " admin_pass
+tap="$(tr -cd '[:alnum:]' < /dev/urandom | fold -w25 | head -n1)";
+sed -i "s/{ADMIN_PW}/${admin_pass:=${tap}}/g" *.sql
+sed -i "s/{ADMIN_PW}/${admin_pass:=${tap}}/g" ../module/Inventory/config/module.config.php
 
 echo ""
 read -p "Read-Only username [Read_Only]: " ro
 sed -i "s/{RO}/${ro:=Read_Only}/g" *.sql
 sed -i "s/{RO}/${ro:=Read_Only}/g" ../module/Inventory/config/module.config.php
 
-read -sp "Read-Only password: " ro_pass
-sed -i "s/{RO_PW}/${ro_pass:=}/g" *.sql
-sed -i "s/{RO_PW}/${ro_pass:=localhost}/g" ../module/Inventory/config/module.config.php
+read -sp "Read-Only password [Random]: " ro_pass
+tup="$(tr -cd '[:alnum:]' < /dev/urandom | fold -w25 | head -n1)";
+sed -i "s/{RO_PW}/${ro_pass:=${tup}}/g" *.sql
+sed -i "s/{RO_PW}/${ro_pass:=${tup}}/g" ../module/Inventory/config/module.config.php
 
 echo ""
 echo ""
+
+read -p "Enter MySQL username: " mu;
+
+echo "";
 
 read -sp "Enter root MySQL password: " pass;
 
 echo "";
 
 echo "Creating database, users & permissions..."
-mysql -u root --password=${pass} < database-schema.sql
+mysql -u ${mu} --password=${pass} < database-schema.sql
 
 echo ""
 
@@ -54,22 +60,22 @@ echo "Importing stored procedures..."
 echo ""
 
 echo "Creating computer record management procedures"
-mysql -u root --password=${pass} ${name} < sp_computers.sql
+mysql -u ${mu} --password=${pass} ${name} < sp_computers.sql
 
 echo "Creating monitor record management procedures"
-mysql -u root --password=${pass} ${name} < sp_monitors.sql
+mysql -u ${mu} --password=${pass} ${name} < sp_monitors.sql
 
 echo "Creating model record management procedures"
-mysql -u root --password=${pass} ${name} < sp_models.sql
+mysql -u ${mu} --password=${pass} ${name} < sp_models.sql
 
 echo "Creating rma record management procedures"
-mysql -u root --password=${pass} ${name} < sp_rma.sql
+mysql -u ${mu} --password=${pass} ${name} < sp_rma.sql
 
 echo "Creating cors record management procedures"
-mysql -u root --password=${pass} ${name} < sp_cors.sql
+mysql -u ${mu} --password=${pass} ${name} < sp_cors.sql
 
 echo "Creating shared management procedures"
-mysql -u root --password=${pass} ${name} < sp_shared.sql
+mysql -u ${mu} --password=${pass} ${name} < sp_shared.sql
 
 echo "Cleaning up..."
 rm *.sql
