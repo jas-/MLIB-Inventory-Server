@@ -1,26 +1,462 @@
-<div class="hero-unit">
-    <h1><?php echo sprintf($this->translate('Welcome to %sZend Framework 2%s'), '<span class="zf-green">', '</span>') ?></h1>
-    <p><?php echo sprintf($this->translate('Congratulations! You have successfully installed the %sZF2 Skeleton Application%s. You are currently running Zend Framework version %s. This skeleton can serve as a simple starting point for you to begin building your application on ZF2.'), '<a href="https://github.com/zendframework/ZendSkeletonApplication" target="_blank">', '</a>', \Zend\Version\Version::VERSION) ?></p>
-    <p><a class="btn btn-success btn-large" href="https://github.com/zendframework/zf2" target="_blank"><?php echo $this->translate('Fork Zend Framework 2 on GitHub') ?> &raquo;</a></p>
+<div id="overview">
+  <h1>MLIB-Inventory-Server RESTFul API</h1>
+
+  <p>
+    This document serves as a guide during installation, configuration
+    and implementation of the provided API for all asset record management
+    functionality.
+  </p>
+
+  <p>
+    This project works as the server component to the Marriott Library
+    Information Services inventory management service. The offical project
+    page can be found @ <a href="https://github.com/jas-/MLIB-Inventory-Server" target="_blank">github.com/jas-/MLIB-Inventory-Server</a>
+  </p>
+
 </div>
 
-<div class="row">
+<div id="toc">
+  <h2>Table of contents</h2>
 
-    <div class="span4">
-        <h2><?php echo $this->translate('Follow Development') ?></h2>
-        <p><?php echo sprintf($this->translate('Zend Framework 2 is under active development. If you are interested in following the development of ZF2, there is a special ZF2 portal on the official Zend Framework website which provides links to the ZF2 %swiki%s, %sdev blog%s, %sissue tracker%s, and much more. This is a great resource for staying up to date with the latest developments!'), '<a href="http://framework.zend.com/wiki/display/ZFDEV2/Home">', '</a>', '<a href="http://framework.zend.com/zf2/blog">', '</a>', '<a href="https://github.com/zendframework/zf2/issues">', '</a>') ?></p>
-        <p><a class="btn btn-success" href="http://framework.zend.com/zf2" target="_blank"><?php echo $this->translate('ZF2 Development Portal') ?> &raquo;</a></p>
+  <p>
+    <ol>
+      <li><a href="#project"><i>Project details</i></a></li>
+      <li><a href="#download"><i>Download</i></a>
+        <ol>
+          <li><a href="#download-git"><i>Using GIT</i></a></li>
+          <li><a href="#download-git"><i>Manual</i></a></li>
+        </ol>
+      </li>
+      <li><a href="#installation"><i>Installation</i></a>
+        <ol>
+          <li><a href="#installation-details"><i>Details</i></a></li>
+          <li><a href="#installation-tools"><i>Installation tool</i></a></li>
+        </ol>
+      </li>
+      <li><a href="#api"><i>API</i></a>
+        <ol>
+          <li><a href="#api-models"><i>Manage Model records</i></a>
+            <ol>
+              <li><a href="#api-models-search"><i>Search model records</i></a>
+              <li><a href="#api-models-add"><i>Add model records</i></a>
+              <li><a href="#api-models-update"><i>Update model records</i></a>
+              <li><a href="#api-models-delete"><i>Delete model records</i></a>
+            </ol>
+          </li>
+          <li><a href="#api-computers"><i>Manage Computer records</i></a>
+            <ol>
+              <li><a href="#api-computers-search"><i>Search computer records</i></a>
+              <li><a href="#api-computers-add"><i>Add computer records</i></a>
+              <li><a href="#api-computers-update"><i>Update computer records</i></a>
+              <li><a href="#api-computers-delete"><i>Delete computer records</i></a>
+            </ol>
+          </li>
+          <li><a href="#api-monitors"><i>Manage Monitor records</i></a>
+            <ol>
+              <li><a href="#api-monitors-search"><i>Search monitor records</i></a>
+              <li><a href="#api-monitors-add"><i>Add monitor records</i></a>
+              <li><a href="#api-monitors-update"><i>Update monitor records</i></a>
+              <li><a href="#api-monitors-delete"><i>Delete monitor records</i></a>
+            </ol>
+          </li>
+          <li><a href="#api-rma"><i>Manage RMA records</i></a>
+            <ol>
+              <li><a href="#api-rma-search"><i>Search RMA records</i></a>
+              <li><a href="#api-rma-add"><i>Add RMA records</i></a>
+              <li><a href="#api-rma-update"><i>Update RMA records</i></a>
+              <li><a href="#api-rma-delete"><i>Delete RMA records</i></a>
+            </ol>
+          </li>
+          <li><a href="#api-cors"><i>Manage CORS records</i></a>
+            <ol>
+              <li><a href="#api-cors-search"><i>Search CORS records</i></a>
+              <li><a href="#api-cors-add"><i>Add CORS records</i></a>
+              <li><a href="#api-cors-update"><i>Update CORS records</i></a>
+              <li><a href="#api-cors-delete"><i>Delete CORs records</i></a>
+            </ol>
+          </li>
+        </ol>
+      </li>
+    </ol>
+  </p>
+</div>
+
+<div id="project">
+  <h2>Project details <span><a href="#toc">&#8593;</a></span></h2>
+
+  <p>
+    The MLIB-Inventory-Server RESTFul API was developed to provide an
+    easy to use inventory asset management service. It does this by
+    providing an easy to implement API for any programming language
+    that supports the HTTP protocol.
+  </p>
+</div>
+
+<div id="download">
+  <h2>Download <span><a href="#toc">&#8593;</a></span></h2>
+
+  <p>
+    This project allows for two methods of downloading, the GIT method
+    (recommended) or the manual method. Please read on for details of each.
+  </p>
+
+  <div id="download-git">
+    <h3>Using GIT <span><a href="#toc">&#8593;</a></span></h3>
+
+    <p>
+      A <a href="" target="_blank">git</a> client is the prefered method of
+      installation as all dependencies will be setup and installed.
+
+      <pre class="prettyprint lang-sh linenums prettyprinted">
+        <code class="language-sh">
+          shell> git clone --recursive https://github.com/jas-/MLIB-Inventory-Server.git
+        </code>
+      </pre>
+    </p>
+  </div>
+
+  <div id="download-manual">
+    <h3>Manual Installation <span><a href="#toc">&#8593;</a></span></h3>
+
+    <p>
+      Installing manually is not recommended however can be accomplished fairly
+      easily by downloading the source of this project @
+      <a href="https://github.com/jas-/MLIB-Inventory-Server/archive/master.zip" target="_blank">
+      MLIB-Inventory-Server.zip</a>.
+
+      <pre class="prettyprint lang-sh linenums prettyprinted">
+        <code class="language-sh">
+          shell> unzip2 master.zip
+        </code>
+      </pre>
+    </p>
+
+    <p>
+      Once you have downloaded the project you must extract it in a publicly
+      accessible area of your web server.
+    </p>
+
+    <p>
+      This project uses the Zend Framework which will need to be downloaded and
+      installed into the <i>/path/to/MLIB-Inventory-Server/vendor/ZF2</i>
+      folder. You can download the framework @
+      <a href="https://github.com/zendframework/zf2/archive/master.zip" target="_blank">Zend Framework 2</a>
+    </p>
+  </div>
+</div>
+
+<div id="installation">
+  <h2>Installation <span><a href="#toc">&#8593;</a></span></h2>
+
+  <p>
+    Once you have downloaded or used git to install the base files we will now
+    need to install the project.
+  </p>
+    
+  <div id="installation-details">
+    <h3>Details <span><a href="#toc">&#8593;</a></span></h3>
+
+    <p>
+      Installation performs the following operations:
+      <ol>
+        <li>New database creation</li>
+        <li>New accounts:
+          <ul>
+            <li>Administrative account (Read & Write privileges)</li>
+            <li>Read Only account (Read only privileges)</li>
+          </ul>
+        </li>
+        <li>Database table creation</li>
+        <li>Foreign key constraints for relational tables</li>
+        <li>Views for non-authenticated use</li>
+        <li>Stored procedures for all database operations</li>
+        <li>Application configuration based on user input</li>
+      </ol>
+    </p>
+  </div>
+
+  <div id="installation-tools">
+    <h3>Installation tool <span><a href="#toc">&#8593;</a></span></h3>
+
+    <p>
+      In order for the installation to be quite painless an installer is
+      included with the project. Please note that currently, becuase there is
+      only one version released that should be considered 'beta' no method
+      for updating database schema objects exists so you will want to ensure
+      a good working backup has been created prior to running the installer.
+  
+      <pre class="prettyprint lang-sh linenums prettyprinted">
+        <code class="language-sh">
+          shell> bash install/install
+        </code>
+      </pre>
+    </p>
+  </div>
+</div>
+
+<div id="api">
+  <h2>API <span><a href="#toc">&#8593;</a></span></h2>
+
+  <p>
+    This API will allow management of records through a common end point per
+    record type.
+  </p>
+
+  <p>
+    Below is a list of the available end points and a description
+    of the record type.
+  </p>
+
+  <div id="#api-models">
+    <h3>Models <span><a href="#toc">&#8593;</a></span></h3>
+
+    <p>
+      The model of computer/monitor record. Below are the available
+      fields per model record.
+
+      <ol>
+        <li><i>Model</i> - The unique identifier associated with the
+          record</li>
+        <li><i>EOWD</i> - End of warranty date</li>
+        <li><i>OPD</i> - Original purchase date</li>
+        <li><i>Description</i> - A description of the model</li>
+      </ol>
+    </p>
+
+    <div id="#api-models-search">
+      <h3>Search models <span><a href="#toc">&#8593;</a></span></h3>
+
+      <p>
+        
+      </p>
     </div>
 
-    <div class="span4">
-        <h2><?php echo $this->translate('Discover Modules') ?></h2>
-        <p><?php echo sprintf($this->translate('The community is working on developing a community site to serve as a repository and gallery for ZF2 modules. The project is available %son GitHub%s. The site is currently live and currently contains a list of some of the modules already available for ZF2.'), '<a href="https://github.com/zendframework/modules.zendframework.com">', '</a>') ?></p>
-        <p><a class="btn btn-success" href="http://modules.zendframework.com/" target="_blank"><?php echo $this->translate('Explore ZF2 Modules') ?> &raquo;</a></p>
-   </div>
+    <div id="#api-models-add">
+      <h3>Add models <span><a href="#toc">&#8593;</a></span></h3>
 
-   <div class="span4">
-       <h2><?php echo $this->translate('Help &amp; Support') ?></h2>
-       <p><?php echo sprintf($this->translate('If you need any help or support while developing with ZF2, you may reach us via IRC: %s#zftalk on Freenode%s. We\'d love to hear any questions or feedback you may have regarding the beta releases. Alternatively, you may subscribe and post questions to the %smailing lists%s.'), '<a href="irc://irc.freenode.net/zftalk">', '</a>', '<a href="http://framework.zend.com/wiki/display/ZFDEV/Mailing+Lists">', '</a>') ?></p>
-       <p><a class="btn btn-success" href="http://webchat.freenode.net?channels=zftalk" target="_blank"><?php echo $this->translate('Ping us on IRC') ?> &raquo;</a></p>
-   </div>
+      <p>
+        
+      </p>
+    </div>
+
+    <div id="#api-models-update">
+      <h3>Update models <span><a href="#toc">&#8593;</a></span></h3>
+
+      <p>
+        
+      </p>
+    </div>
+
+    <div id="#api-models-delete">
+      <h3>Delete models <span><a href="#toc">&#8593;</a></span></h3>
+
+      <p>
+        
+      </p>
+    </div>
+  </div>  
+
+  <div id="#api-computers">
+    <h3>Computers <span><a href="#toc">&#8593;</a></span></h3>
+
+    <p>
+      Manage computer asset records. Below are the available fields
+      per computer record.
+
+      <ol>
+        <li><i>Hostname</i> - The hostname associated with the computer
+          record</li>
+        <li><i>Model</i> - The model type (linked to 'models' table)</li>
+        <li><i>SKU</i> - The SKU number associated with the computer
+          record</li>
+        <li><i>UUIC</i> - The UUIC number associated with the computer
+          record</li>
+        <li><i>Serial</i> - The serial number associated with the computer
+          record</li>
+        <li><i>Notes</i> - Any notes to be associated with the computer
+          record</li>
+      </ol>
+    </p>
+
+    <div id="#api-computers-search">
+      <h3>Search computers <span><a href="#toc">&#8593;</a></span></h3>
+
+      <p>
+        
+      </p>
+    </div>
+
+    <div id="#api-computers-add">
+      <h3>Add computers <span><a href="#toc">&#8593;</a></span></h3>
+
+      <p>
+        
+      </p>
+    </div>
+
+    <div id="#api-computers-update">
+      <h3>Update computers <span><a href="#toc">&#8593;</a></span></h3>
+
+      <p>
+        
+      </p>
+    </div>
+
+    <div id="#api-computers-delete">
+      <h3>Delete computers <span><a href="#toc">&#8593;</a></span></h3>
+
+      <p>
+        
+      </p>
+    </div>
+  </div>
+
+  <div id="#api-monitors">
+    <h3>Monitors <span><a href="#toc">&#8593;</a></span></h3>
+
+    <p>
+      Mange monitor asset records. Below are the available fields per
+      monitor record.
+
+      <ol>
+        <li><i>Hostname</i> - The hostname associated with the monitor
+          record</li>
+        <li><i>Model</i> - The model type (linked to 'models' table)</li>
+        <li><i>SKU</i> - The SKU number associated with the monitor record</li>
+        <li><i>Serial</i> - The serial number associated with the monitor
+          record</li>
+      </ol>
+    </p>
+
+    <div id="#api-monitors-search">
+      <h3>Search monitors <span><a href="#toc">&#8593;</a></span></h3>
+
+      <p>
+        
+      </p>
+    </div>
+
+    <div id="#api-monitors-add">
+      <h3>Add monitors <span><a href="#toc">&#8593;</a></span></h3>
+
+      <p>
+        
+      </p>
+    </div>
+
+    <div id="#api-monitors-update">
+      <h3>Update monitors <span><a href="#toc">&#8593;</a></span></h3>
+
+      <p>
+        
+      </p>
+    </div>
+
+    <div id="#api-monitors-delete">
+      <h3>Delete monitors <span><a href="#toc">&#8593;</a></span></h3>
+
+      <p>
+        
+      </p>
+    </div>
+  </div>
+
+  <div id="#api-rma">
+    <h3>RMA <span><a href="#toc">&#8593;</a></span></h3>
+
+    <p>
+      Manage RMA records. Below are the details of the available fields per
+      RMA record.
+
+      <ol>
+        <li><i>Hostname</i> - The hostname associated with the monitor
+          record</li>
+        <li><i>Model</i> - The model type (linked to 'models' table)</li>
+        <li><i>SKU</i> - The SKU number associated with the monitor record</li>
+        <li><i>Serial</i> - The serial number associated with the monitor
+          record</li>
+      </ol>
+    </p>
+
+    <div id="#api-rma-search">
+      <h3>Search rma <span><a href="#toc">&#8593;</a></span></h3>
+
+      <p>
+        
+      </p>
+    </div>
+
+    <div id="#api-rma-add">
+      <h3>Add rma <span><a href="#toc">&#8593;</a></span></h3>
+
+      <p>
+        
+      </p>
+    </div>
+
+    <div id="#api-rma-update">
+      <h3>Update rma <span><a href="#toc">&#8593;</a></span></h3>
+
+      <p>
+        
+      </p>
+    </div>
+
+    <div id="#api-rma-delete">
+      <h3>Delete rma <span><a href="#toc">&#8593;</a></span></h3>
+
+      <p>
+        
+      </p>
+    </div>
+  </div>
+
+  <div id="#api-cors">
+    <h3>CORS <span><a href="#toc">&#8593;</a></span></h3>
+
+    <p>
+      Manage CORS records. Below are the details of the available fields
+      per CORS record.
+
+      <ol>
+        <li><i>Application</i> - The unique identifier associated with the
+          allowed application</li>
+        <li><i>URL</i> - The FQDN of the referring application</li>
+        <li><i>IP</i> - The IP of the referring application</li>
+      </ol>
+    </p>
+
+    <div id="#api-cors-search">
+      <h3>Search cors <span><a href="#toc">&#8593;</a></span></h3>
+
+      <p>
+        
+      </p>
+    </div>
+
+    <div id="#api-cors-add">
+      <h3>Add cors <span><a href="#toc">&#8593;</a></span></h3>
+
+      <p>
+        
+      </p>
+    </div>
+
+    <div id="#api-cors-update">
+      <h3>Update cors <span><a href="#toc">&#8593;</a></span></h3>
+
+      <p>
+        
+      </p>
+    </div>
+
+    <div id="#api-cors-delete">
+      <h3>Delete cors <span><a href="#toc">&#8593;</a></span></h3>
+
+      <p>
+        
+      </p>
+    </div>
+  </div>
 </div>
+
