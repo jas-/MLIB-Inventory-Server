@@ -31,12 +31,14 @@
         <ol>
           <li><a href="#installation-details"><i>Details</i></a></li>
           <li><a href="#installation-tools"><i>Installation tool</i></a></li>
+          <li><a href="#installation-post"><i>Post installation</i></a></li>
         </ol>
       </li>
       <li><a href="#api"><i>API</i></a>
         <ol>
           <li><a href="#api-models"><i>Manage Model records</i></a>
             <ol>
+              <li><a href="#api-models-list"><i>List all model records</i></a>
               <li><a href="#api-models-search"><i>Search model records</i></a>
               <li><a href="#api-models-add"><i>Add model records</i></a>
               <li><a href="#api-models-update"><i>Update model records</i></a>
@@ -45,6 +47,7 @@
           </li>
           <li><a href="#api-computers"><i>Manage Computer records</i></a>
             <ol>
+              <li><a href="#api-computers-list"><i>List all computer records</i></a>
               <li><a href="#api-computers-search"><i>Search computer records</i></a>
               <li><a href="#api-computers-add"><i>Add computer records</i></a>
               <li><a href="#api-computers-update"><i>Update computer records</i></a>
@@ -53,6 +56,7 @@
           </li>
           <li><a href="#api-monitors"><i>Manage Monitor records</i></a>
             <ol>
+              <li><a href="#api-monitors-list"><i>List all monitors records</i></a>
               <li><a href="#api-monitors-search"><i>Search monitor records</i></a>
               <li><a href="#api-monitors-add"><i>Add monitor records</i></a>
               <li><a href="#api-monitors-update"><i>Update monitor records</i></a>
@@ -61,6 +65,7 @@
           </li>
           <li><a href="#api-rma"><i>Manage RMA records</i></a>
             <ol>
+              <li><a href="#api-rma-list"><i>List all RMA records</i></a>
               <li><a href="#api-rma-search"><i>Search RMA records</i></a>
               <li><a href="#api-rma-add"><i>Add RMA records</i></a>
               <li><a href="#api-rma-update"><i>Update RMA records</i></a>
@@ -69,6 +74,7 @@
           </li>
           <li><a href="#api-cors"><i>Manage CORS records</i></a>
             <ol>
+              <li><a href="#api-cors-list"><i>List all CORS records</i></a>
               <li><a href="#api-cors-search"><i>Search CORS records</i></a>
               <li><a href="#api-cors-add"><i>Add CORS records</i></a>
               <li><a href="#api-cors-update"><i>Update CORS records</i></a>
@@ -109,7 +115,7 @@
 
       <pre class="prettyprint lang-sh linenums prettyprinted">
         <code class="language-sh">
-          shell> git clone --recursive https://github.com/jas-/MLIB-Inventory-Server.git
+shell> git clone --recursive https://github.com/jas-/MLIB-Inventory-Server.git
         </code>
       </pre>
     </p>
@@ -126,7 +132,7 @@
 
       <pre class="prettyprint lang-sh linenums prettyprinted">
         <code class="language-sh">
-          shell> unzip2 master.zip
+shell> unzip2 master.zip
         </code>
       </pre>
     </p>
@@ -187,11 +193,32 @@
   
       <pre class="prettyprint lang-sh linenums prettyprinted">
         <code class="language-sh">
-          shell> bash install/install
+shell> bash install/install
         </code>
       </pre>
     </p>
   </div>
+
+  <div id="installation-post">
+    <h3>Post installation <span><a href="#toc">&#8593;</a></span></h3>
+
+    <p>
+      Due to the cross origin resource sharing same origin restrictions if you
+      have setup the MLIB-Inventory (mobile web client) to access this
+      service you must add that URL to the whitelist (if installed on a
+      separate domain) to ensure proper functionality.
+    </p>
+
+    <p>
+      Using a stored procedure (created during the installation process), simply
+      issue the following command on the database.
+
+      <pre class="prettyprint lang-sh linenums prettyprinted">
+        <code class="language-sh">
+shell> mysql -u &lt;username&gt; -p &lt;dbname&gt; -e 'CALL CorsAddUpdate("&lt;appName&gt;", "&lt;FQDN&gt;", "&lt;IP&gt;")'
+        </code>
+      </pre>
+    </p>
 </div>
 
 <div id="api">
@@ -215,19 +242,85 @@
       fields per model record.
 
       <ol>
-        <li><i>Model</i> - The unique identifier associated with the
-          record</li>
+        <li><i>Model</i> - The unique identifier associated with the record</li>
         <li><i>EOWD</i> - End of warranty date</li>
         <li><i>OPD</i> - Original purchase date</li>
         <li><i>Description</i> - A description of the model</li>
       </ol>
     </p>
 
+    <div id="api-models-list">
+      <h3>List models <span><a href="#toc">&#8593;</a></span></h3>
+
+      <p>
+        To list all available models:
+
+        <pre class="prettyprint lang-sh linenums prettyprinted">
+          <code class="language-sh">
+GET /models
+          </code>
+        </pre>
+      </p>
+
+      <p>
+        Response example:
+
+        <pre class="prettyprint lang-sh linenums prettyprinted">
+          <code class="language-js">
+[
+    {
+        "Id": "591",
+        "Model": "6200",
+        "EOWD": "2013-06-02",
+        "OPD": "2009-06-02",
+        "Notes": "",
+        "Description": ""
+    },
+    {
+        "Id": "734",
+        "Model": "6350",
+        "EOWD": "1969-12-31",
+        "OPD": "1969-12-31",
+        "Notes": "",
+        "Description": ""
+    }
+    /* ... */
+]
+          </code>
+        </pre>
+      </p>
+    </div>
+
     <div id="api-models-search">
       <h3>Search models <span><a href="#toc">&#8593;</a></span></h3>
 
       <p>
-        
+        To search all available models (* is the wildcard):
+
+        <pre class="prettyprint lang-sh linenums prettyprinted">
+          <code class="language-sh">
+GET /models/73*
+          </code>
+        </pre>
+      </p>
+
+      <p>
+        Response example:
+
+        <pre class="prettyprint lang-sh linenums prettyprinted">
+          <code class="language-js">
+[
+    {
+        "Id": "734",
+        "Model": "6350",
+        "EOWD": "1969-12-31",
+        "OPD": "1969-12-31",
+        "Notes": "",
+        "Description": ""
+    }
+]
+          </code>
+        </pre>
       </p>
     </div>
 
@@ -235,7 +328,35 @@
       <h3>Add models <span><a href="#toc">&#8593;</a></span></h3>
 
       <p>
-        
+        To add a new model:
+
+        <pre class="prettyprint lang-sh linenums prettyprinted">
+          <code class="language-sh">
+POST /model
+          </code>
+        </pre>
+      </p>
+
+      <p>
+        Serialized data (required fields):
+
+        <pre class="prettyprint lang-sh linenums prettyprinted">
+          <code class="language-sh">
+?model=&lt;model-number&gt;&eowd=&lt;YYYY-MM-DD&gt;&opd=&lt;YYYY-MM-DD&gt;&description=&lt;machine-description&gt;&notes=&lt;machine-notes&gt;
+          </code>
+        </pre>
+      </p>
+
+      <p>
+        Response example(s):
+
+        <pre class="prettyprint lang-sh linenums prettyprinted">
+          <code class="language-js">
+{
+  success: 'Record saved sucessfully'
+}
+          </code>
+        </pre>
       </p>
     </div>
 
@@ -243,7 +364,35 @@
       <h3>Update models <span><a href="#toc">&#8593;</a></span></h3>
 
       <p>
-        
+        To update an existing model:
+
+        <pre class="prettyprint lang-sh linenums prettyprinted">
+          <code class="language-sh">
+PUT /model/&lt;record-id&gt;
+          </code>
+        </pre>
+      </p>
+
+      <p>
+        Serialized data (required fields):
+
+        <pre class="prettyprint lang-sh linenums prettyprinted">
+          <code class="language-sh">
+?model=&lt;model-number&gt;&eowd=&lt;YYYY-MM-DD&gt;&opd=&lt;YYYY-MM-DD&gt;&description=&lt;machine-description&gt;&notes=&lt;machine-notes&gt;
+          </code>
+        </pre>
+      </p>
+
+      <p>
+        Response example(s):
+
+        <pre class="prettyprint lang-sh linenums prettyprinted">
+          <code class="language-js">
+{
+  success: 'Record updated sucessfully'
+}
+          </code>
+        </pre>
       </p>
     </div>
 
@@ -251,7 +400,25 @@
       <h3>Delete models <span><a href="#toc">&#8593;</a></span></h3>
 
       <p>
-        
+        To remove an existing model:
+
+        <pre class="prettyprint lang-sh linenums prettyprinted">
+          <code class="language-sh">
+DELETE /model/&lt;record-id&gt;
+          </code>
+        </pre>
+      </p>
+
+      <p>
+        Response example(s):
+
+        <pre class="prettyprint lang-sh linenums prettyprinted">
+          <code class="language-js">
+{
+  success: 'Record deleted sucessfully'
+}
+          </code>
+        </pre>
       </p>
     </div>
   </div>  
@@ -278,11 +445,103 @@
       </ol>
     </p>
 
+    <div id="api-computers-list">
+      <h3>List computers <span><a href="#toc">&#8593;</a></span></h3>
+
+      <p>
+        To list all available computers:
+
+        <pre class="prettyprint lang-sh linenums prettyprinted">
+          <code class="language-sh">
+GET /computer
+          </code>
+        </pre>
+      </p>
+
+      <p>
+        Response example:
+
+        <pre class="prettyprint lang-sh linenums prettyprinted">
+          <code class="language-js">
+[
+    {
+        "Id": "1572",
+        "Hostname": "ACQ-01",
+        "Model": "6200",
+        "SKU": "017043",
+        "UUIC": "034755",
+        "Serial": "090705",
+        "EOWD": "2013-06-02",
+        "OPD": "2009-06-02",
+        "Notes": "",
+        "Description": ""
+    },
+    {
+        "Id": "1573",
+        "Hostname": "ACQ-07",
+        "Model": "6200",
+        "SKU": "017056",
+        "UUIC": "034768",
+        "Serial": "090732",
+        "EOWD": "2013-06-02",
+        "OPD": "2009-06-02",
+        "Notes": "",
+        "Description": ""
+    },
+    /* ... */
+]
+          </code>
+        </pre>
+      </p>
+    </div>
+
     <div id="api-computers-search">
       <h3>Search computers <span><a href="#toc">&#8593;</a></span></h3>
 
       <p>
-        
+        To search all available computers (* is the wildcard):
+
+        <pre class="prettyprint lang-sh linenums prettyprinted">
+          <code class="language-sh">
+GET /computer/034*
+          </code>
+        </pre>
+      </p>
+
+      <p>
+        Response example:
+
+        <pre class="prettyprint lang-sh linenums prettyprinted">
+          <code class="language-js">
+[
+    {
+        "Id": "1572",
+        "Hostname": "ACQ-01",
+        "Model": "6200",
+        "SKU": "017043",
+        "UUIC": "034755",
+        "Serial": "090705",
+        "EOWD": "2013-06-02",
+        "OPD": "2009-06-02",
+        "Notes": "",
+        "Description": ""
+    },
+    {
+        "Id": "1573",
+        "Hostname": "ACQ-07",
+        "Model": "6200",
+        "SKU": "017056",
+        "UUIC": "034768",
+        "Serial": "090732",
+        "EOWD": "2013-06-02",
+        "OPD": "2009-06-02",
+        "Notes": "",
+        "Description": ""
+    },
+    /* ... */
+]
+          </code>
+        </pre>
       </p>
     </div>
 
@@ -290,7 +549,35 @@
       <h3>Add computers <span><a href="#toc">&#8593;</a></span></h3>
 
       <p>
-        
+        To add a new computer:
+
+        <pre class="prettyprint lang-sh linenums prettyprinted">
+          <code class="language-sh">
+POST /computer
+          </code>
+        </pre>
+      </p>
+
+      <p>
+        Serialized data (required fields):
+
+        <pre class="prettyprint lang-sh linenums prettyprinted">
+          <code class="language-sh">
+?hostname=&lt;machine-name&gt;&model=&lt;model-number&gt;&sku=&lt;machine-sku&gt;&uuic=&lt;machine-uuic&gt;&serial=&lt;machine-serial&gt;
+          </code>
+        </pre>
+      </p>
+
+      <p>
+        Response example:
+
+        <pre class="prettyprint lang-sh linenums prettyprinted">
+          <code class="language-js">
+{
+  success: 'Computer record saved successfully'
+}
+          </code>
+        </pre>
       </p>
     </div>
 
@@ -298,7 +585,35 @@
       <h3>Update computers <span><a href="#toc">&#8593;</a></span></h3>
 
       <p>
-        
+        To update an existing computer:
+
+        <pre class="prettyprint lang-sh linenums prettyprinted">
+          <code class="language-sh">
+PUT /computer/&lt;record-id&gt;
+          </code>
+        </pre>
+      </p>
+
+      <p>
+        Serialized data (required fields):
+
+        <pre class="prettyprint lang-sh linenums prettyprinted">
+          <code class="language-sh">
+?hostname=&lt;machine-name&gt;&model=&lt;model-number&gt;&sku=&lt;machine-sku&gt;&uuic=&lt;machine-uuic&gt;&serial=&lt;machine-serial&gt;
+          </code>
+        </pre>
+      </p>
+
+      <p>
+        Response example(s):
+
+        <pre class="prettyprint lang-sh linenums prettyprinted">
+          <code class="language-js">
+{
+  success: 'Computer record updated sucessfully'
+}
+          </code>
+        </pre>
       </p>
     </div>
 
@@ -306,7 +621,25 @@
       <h3>Delete computers <span><a href="#toc">&#8593;</a></span></h3>
 
       <p>
-        
+        To remove an existing computer:
+
+        <pre class="prettyprint lang-sh linenums prettyprinted">
+          <code class="language-sh">
+DELETE /computer/&lt;record-id&gt;
+          </code>
+        </pre>
+      </p>
+
+      <p>
+        Response example(s):
+
+        <pre class="prettyprint lang-sh linenums prettyprinted">
+          <code class="language-js">
+{
+  success: 'Computer record deleted sucessfully'
+}
+          </code>
+        </pre>
       </p>
     </div>
   </div>
@@ -328,11 +661,103 @@
       </ol>
     </p>
 
+    <div id="api-monitors-list">
+      <h3>List monitors <span><a href="#toc">&#8593;</a></span></h3>
+
+      <p>
+        To list all available monitors:
+
+        <pre class="prettyprint lang-sh linenums prettyprinted">
+          <code class="language-sh">
+GET /monitor
+          </code>
+        </pre>
+      </p>
+
+      <p>
+        Response example:
+
+        <pre class="prettyprint lang-sh linenums prettyprinted">
+          <code class="language-js">
+[
+    {
+        "Id": "1572",
+        "Hostname": "ACQ-01",
+        "Model": "6200",
+        "SKU": "017043",
+        "UUIC": "034755",
+        "Serial": "090705",
+        "EOWD": "2013-06-02",
+        "OPD": "2009-06-02",
+        "Notes": "",
+        "Description": ""
+    },
+    {
+        "Id": "1573",
+        "Hostname": "ACQ-07",
+        "Model": "6200",
+        "SKU": "017056",
+        "UUIC": "034768",
+        "Serial": "090732",
+        "EOWD": "2013-06-02",
+        "OPD": "2009-06-02",
+        "Notes": "",
+        "Description": ""
+    },
+    /* ... */
+]
+          </code>
+        </pre>
+      </p>
+    </div>
+
     <div id="api-monitors-search">
       <h3>Search monitors <span><a href="#toc">&#8593;</a></span></h3>
 
       <p>
-        
+        To search all available monitors (* is the wildcard):
+
+        <pre class="prettyprint lang-sh linenums prettyprinted">
+          <code class="language-sh">
+GET /monitor/034*
+          </code>
+        </pre>
+      </p>
+
+      <p>
+        Response example:
+
+        <pre class="prettyprint lang-sh linenums prettyprinted">
+          <code class="language-js">
+[
+    {
+        "Id": "1572",
+        "Hostname": "ACQ-01",
+        "Model": "6200",
+        "SKU": "017043",
+        "UUIC": "034755",
+        "Serial": "090705",
+        "EOWD": "2013-06-02",
+        "OPD": "2009-06-02",
+        "Notes": "",
+        "Description": ""
+    },
+    {
+        "Id": "1573",
+        "Hostname": "ACQ-07",
+        "Model": "6200",
+        "SKU": "017056",
+        "UUIC": "034768",
+        "Serial": "090732",
+        "EOWD": "2013-06-02",
+        "OPD": "2009-06-02",
+        "Notes": "",
+        "Description": ""
+    },
+    /* ... */
+]
+          </code>
+        </pre>
       </p>
     </div>
 
@@ -340,7 +765,35 @@
       <h3>Add monitors <span><a href="#toc">&#8593;</a></span></h3>
 
       <p>
-        
+        To add a new monitor:
+
+        <pre class="prettyprint lang-sh linenums prettyprinted">
+          <code class="language-sh">
+POST /monitor
+          </code>
+        </pre>
+      </p>
+
+      <p>
+        Serialized data (required fields):
+
+        <pre class="prettyprint lang-sh linenums prettyprinted">
+          <code class="language-sh">
+?hostname=&lt;machine-name&gt;&model=&lt;model-number&gt;&sku=&lt;machine-sku&gt;&uuic=&lt;machine-uuic&gt;&serial=&lt;machine-serial&gt;
+          </code>
+        </pre>
+      </p>
+
+      <p>
+        Response example:
+
+        <pre class="prettyprint lang-sh linenums prettyprinted">
+          <code class="language-js">
+{
+  success: 'Computer record saved successfully'
+}
+          </code>
+        </pre>
       </p>
     </div>
 
@@ -348,7 +801,35 @@
       <h3>Update monitors <span><a href="#toc">&#8593;</a></span></h3>
 
       <p>
-        
+        To update an existing monitor:
+
+        <pre class="prettyprint lang-sh linenums prettyprinted">
+          <code class="language-sh">
+PUT /monitor/&lt;record-id&gt;
+          </code>
+        </pre>
+      </p>
+
+      <p>
+        Serialized data (required fields):
+
+        <pre class="prettyprint lang-sh linenums prettyprinted">
+          <code class="language-sh">
+?hostname=&lt;machine-name&gt;&model=&lt;model-number&gt;&sku=&lt;machine-sku&gt;&uuic=&lt;machine-uuic&gt;&serial=&lt;machine-serial&gt;
+          </code>
+        </pre>
+      </p>
+
+      <p>
+        Response example(s):
+
+        <pre class="prettyprint lang-sh linenums prettyprinted">
+          <code class="language-js">
+{
+  success: 'Computer record updated sucessfully'
+}
+          </code>
+        </pre>
       </p>
     </div>
 
@@ -356,7 +837,25 @@
       <h3>Delete monitors <span><a href="#toc">&#8593;</a></span></h3>
 
       <p>
-        
+        To remove an existing monitor:
+
+        <pre class="prettyprint lang-sh linenums prettyprinted">
+          <code class="language-sh">
+DELETE /monitor/&lt;record-id&gt;
+          </code>
+        </pre>
+      </p>
+
+      <p>
+        Response example(s):
+
+        <pre class="prettyprint lang-sh linenums prettyprinted">
+          <code class="language-js">
+{
+  success: 'Computer record deleted sucessfully'
+}
+          </code>
+        </pre>
       </p>
     </div>
   </div>
@@ -378,11 +877,103 @@
       </ol>
     </p>
 
+    <div id="api-rma-list">
+      <h3>List rma <span><a href="#toc">&#8593;</a></span></h3>
+
+      <p>
+        To list all available rma:
+
+        <pre class="prettyprint lang-sh linenums prettyprinted">
+          <code class="language-sh">
+GET /rma
+          </code>
+        </pre>
+      </p>
+
+      <p>
+        Response example:
+
+        <pre class="prettyprint lang-sh linenums prettyprinted">
+          <code class="language-js">
+[
+    {
+        "Id": "1572",
+        "Hostname": "ACQ-01",
+        "Model": "6200",
+        "SKU": "017043",
+        "UUIC": "034755",
+        "Serial": "090705",
+        "EOWD": "2013-06-02",
+        "OPD": "2009-06-02",
+        "Notes": "",
+        "Description": ""
+    },
+    {
+        "Id": "1573",
+        "Hostname": "ACQ-07",
+        "Model": "6200",
+        "SKU": "017056",
+        "UUIC": "034768",
+        "Serial": "090732",
+        "EOWD": "2013-06-02",
+        "OPD": "2009-06-02",
+        "Notes": "",
+        "Description": ""
+    },
+    /* ... */
+]
+          </code>
+        </pre>
+      </p>
+    </div>
+
     <div id="api-rma-search">
       <h3>Search rma <span><a href="#toc">&#8593;</a></span></h3>
 
       <p>
-        
+        To search all available rma (* is the wildcard):
+
+        <pre class="prettyprint lang-sh linenums prettyprinted">
+          <code class="language-sh">
+GET /rma/034*
+          </code>
+        </pre>
+      </p>
+
+      <p>
+        Response example:
+
+        <pre class="prettyprint lang-sh linenums prettyprinted">
+          <code class="language-js">
+[
+    {
+        "Id": "1572",
+        "Hostname": "ACQ-01",
+        "Model": "6200",
+        "SKU": "017043",
+        "UUIC": "034755",
+        "Serial": "090705",
+        "EOWD": "2013-06-02",
+        "OPD": "2009-06-02",
+        "Notes": "",
+        "Description": ""
+    },
+    {
+        "Id": "1573",
+        "Hostname": "ACQ-07",
+        "Model": "6200",
+        "SKU": "017056",
+        "UUIC": "034768",
+        "Serial": "090732",
+        "EOWD": "2013-06-02",
+        "OPD": "2009-06-02",
+        "Notes": "",
+        "Description": ""
+    },
+    /* ... */
+]
+          </code>
+        </pre>
       </p>
     </div>
 
@@ -390,7 +981,35 @@
       <h3>Add rma <span><a href="#toc">&#8593;</a></span></h3>
 
       <p>
-        
+        To add a new rma:
+
+        <pre class="prettyprint lang-sh linenums prettyprinted">
+          <code class="language-sh">
+POST /rma
+          </code>
+        </pre>
+      </p>
+
+      <p>
+        Serialized data (required fields):
+
+        <pre class="prettyprint lang-sh linenums prettyprinted">
+          <code class="language-sh">
+?hostname=&lt;machine-name&gt;&model=&lt;model-number&gt;&sku=&lt;machine-sku&gt;&uuic=&lt;machine-uuic&gt;&serial=&lt;machine-serial&gt;
+          </code>
+        </pre>
+      </p>
+
+      <p>
+        Response example:
+
+        <pre class="prettyprint lang-sh linenums prettyprinted">
+          <code class="language-js">
+{
+  success: 'Computer record saved successfully'
+}
+          </code>
+        </pre>
       </p>
     </div>
 
@@ -398,7 +1017,35 @@
       <h3>Update rma <span><a href="#toc">&#8593;</a></span></h3>
 
       <p>
-        
+        To update an existing rma:
+
+        <pre class="prettyprint lang-sh linenums prettyprinted">
+          <code class="language-sh">
+PUT /rma/&lt;record-id&gt;
+          </code>
+        </pre>
+      </p>
+
+      <p>
+        Serialized data (required fields):
+
+        <pre class="prettyprint lang-sh linenums prettyprinted">
+          <code class="language-sh">
+?hostname=&lt;machine-name&gt;&model=&lt;model-number&gt;&sku=&lt;machine-sku&gt;&uuic=&lt;machine-uuic&gt;&serial=&lt;machine-serial&gt;
+          </code>
+        </pre>
+      </p>
+
+      <p>
+        Response example(s):
+
+        <pre class="prettyprint lang-sh linenums prettyprinted">
+          <code class="language-js">
+{
+  success: 'Computer record updated sucessfully'
+}
+          </code>
+        </pre>
       </p>
     </div>
 
@@ -406,7 +1053,25 @@
       <h3>Delete rma <span><a href="#toc">&#8593;</a></span></h3>
 
       <p>
-        
+        To remove an existing rma:
+
+        <pre class="prettyprint lang-sh linenums prettyprinted">
+          <code class="language-sh">
+DELETE /rma/&lt;record-id&gt;
+          </code>
+        </pre>
+      </p>
+
+      <p>
+        Response example(s):
+
+        <pre class="prettyprint lang-sh linenums prettyprinted">
+          <code class="language-js">
+{
+  success: 'Computer record deleted sucessfully'
+}
+          </code>
+        </pre>
       </p>
     </div>
   </div>
@@ -426,11 +1091,103 @@
       </ol>
     </p>
 
+    <div id="api-cors-list">
+      <h3>List cors <span><a href="#toc">&#8593;</a></span></h3>
+
+      <p>
+        To list all available cors:
+
+        <pre class="prettyprint lang-sh linenums prettyprinted">
+          <code class="language-sh">
+GET /cors
+          </code>
+        </pre>
+      </p>
+
+      <p>
+        Response example:
+
+        <pre class="prettyprint lang-sh linenums prettyprinted">
+          <code class="language-js">
+[
+    {
+        "Id": "1572",
+        "Hostname": "ACQ-01",
+        "Model": "6200",
+        "SKU": "017043",
+        "UUIC": "034755",
+        "Serial": "090705",
+        "EOWD": "2013-06-02",
+        "OPD": "2009-06-02",
+        "Notes": "",
+        "Description": ""
+    },
+    {
+        "Id": "1573",
+        "Hostname": "ACQ-07",
+        "Model": "6200",
+        "SKU": "017056",
+        "UUIC": "034768",
+        "Serial": "090732",
+        "EOWD": "2013-06-02",
+        "OPD": "2009-06-02",
+        "Notes": "",
+        "Description": ""
+    },
+    /* ... */
+]
+          </code>
+        </pre>
+      </p>
+    </div>
+
     <div id="api-cors-search">
       <h3>Search cors <span><a href="#toc">&#8593;</a></span></h3>
 
       <p>
-        
+        To search all available cors (* is the wildcard):
+
+        <pre class="prettyprint lang-sh linenums prettyprinted">
+          <code class="language-sh">
+GET /cors/034*
+          </code>
+        </pre>
+      </p>
+
+      <p>
+        Response example:
+
+        <pre class="prettyprint lang-sh linenums prettyprinted">
+          <code class="language-js">
+[
+    {
+        "Id": "1572",
+        "Hostname": "ACQ-01",
+        "Model": "6200",
+        "SKU": "017043",
+        "UUIC": "034755",
+        "Serial": "090705",
+        "EOWD": "2013-06-02",
+        "OPD": "2009-06-02",
+        "Notes": "",
+        "Description": ""
+    },
+    {
+        "Id": "1573",
+        "Hostname": "ACQ-07",
+        "Model": "6200",
+        "SKU": "017056",
+        "UUIC": "034768",
+        "Serial": "090732",
+        "EOWD": "2013-06-02",
+        "OPD": "2009-06-02",
+        "Notes": "",
+        "Description": ""
+    },
+    /* ... */
+]
+          </code>
+        </pre>
       </p>
     </div>
 
@@ -438,7 +1195,35 @@
       <h3>Add cors <span><a href="#toc">&#8593;</a></span></h3>
 
       <p>
-        
+        To add a new cors:
+
+        <pre class="prettyprint lang-sh linenums prettyprinted">
+          <code class="language-sh">
+POST /cors
+          </code>
+        </pre>
+      </p>
+
+      <p>
+        Serialized data (required fields):
+
+        <pre class="prettyprint lang-sh linenums prettyprinted">
+          <code class="language-sh">
+?hostname=&lt;machine-name&gt;&model=&lt;model-number&gt;&sku=&lt;machine-sku&gt;&uuic=&lt;machine-uuic&gt;&serial=&lt;machine-serial&gt;
+          </code>
+        </pre>
+      </p>
+
+      <p>
+        Response example:
+
+        <pre class="prettyprint lang-sh linenums prettyprinted">
+          <code class="language-js">
+{
+  success: 'Computer record saved successfully'
+}
+          </code>
+        </pre>
       </p>
     </div>
 
@@ -446,7 +1231,35 @@
       <h3>Update cors <span><a href="#toc">&#8593;</a></span></h3>
 
       <p>
-        
+        To update an existing cors:
+
+        <pre class="prettyprint lang-sh linenums prettyprinted">
+          <code class="language-sh">
+PUT /cors/&lt;record-id&gt;
+          </code>
+        </pre>
+      </p>
+
+      <p>
+        Serialized data (required fields):
+
+        <pre class="prettyprint lang-sh linenums prettyprinted">
+          <code class="language-sh">
+?hostname=&lt;machine-name&gt;&model=&lt;model-number&gt;&sku=&lt;machine-sku&gt;&uuic=&lt;machine-uuic&gt;&serial=&lt;machine-serial&gt;
+          </code>
+        </pre>
+      </p>
+
+      <p>
+        Response example(s):
+
+        <pre class="prettyprint lang-sh linenums prettyprinted">
+          <code class="language-js">
+{
+  success: 'Computer record updated sucessfully'
+}
+          </code>
+        </pre>
       </p>
     </div>
 
@@ -454,7 +1267,25 @@
       <h3>Delete cors <span><a href="#toc">&#8593;</a></span></h3>
 
       <p>
-        
+        To remove an existing cors:
+
+        <pre class="prettyprint lang-sh linenums prettyprinted">
+          <code class="language-sh">
+DELETE /cors/&lt;record-id&gt;
+          </code>
+        </pre>
+      </p>
+
+      <p>
+        Response example(s):
+
+        <pre class="prettyprint lang-sh linenums prettyprinted">
+          <code class="language-js">
+{
+  success: 'Computer record deleted sucessfully'
+}
+          </code>
+        </pre>
       </p>
     </div>
   </div>
