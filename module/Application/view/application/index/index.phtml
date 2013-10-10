@@ -681,26 +681,24 @@ GET /monitor
           <code class="language-js">
 [
     {
-        "Id": "1572",
-        "Hostname": "ACQ-01",
-        "Model": "6200",
-        "SKU": "017043",
-        "UUIC": "034755",
-        "Serial": "090705",
+        "Id": "478",
+        "Hostname": "GRPC-01",
+        "Model": "970",
+        "SKU": "16250",
+        "Serial": "ETLFA0W041115034C94323",
         "EOWD": "2013-06-02",
         "OPD": "2009-06-02",
         "Notes": "",
         "Description": ""
     },
     {
-        "Id": "1573",
-        "Hostname": "ACQ-07",
-        "Model": "6200",
-        "SKU": "017056",
-        "UUIC": "034768",
-        "Serial": "090732",
-        "EOWD": "2013-06-02",
-        "OPD": "2009-06-02",
+        "Id": "491",
+        "Hostname": "GRPC-02",
+        "Model": "980",
+        "SKU": "16720",
+        "Serial": "ETLGQ0D053205019898514",
+        "EOWD": "2015-07-01",
+        "OPD": "2012-07-01",
         "Notes": "",
         "Description": ""
     },
@@ -719,7 +717,7 @@ GET /monitor
 
         <pre class="prettyprint lang-sh linenums prettyprinted">
           <code class="language-sh">
-GET /monitor/034*
+GET /monitor/162*
           </code>
         </pre>
       </p>
@@ -731,26 +729,24 @@ GET /monitor/034*
           <code class="language-js">
 [
     {
-        "Id": "1572",
-        "Hostname": "ACQ-01",
-        "Model": "6200",
-        "SKU": "017043",
-        "UUIC": "034755",
-        "Serial": "090705",
-        "EOWD": "2013-06-02",
-        "OPD": "2009-06-02",
+        "Id": "491",
+        "Hostname": "GRPC-02",
+        "Model": "980",
+        "SKU": "16720",
+        "Serial": "ETLGQ0D053205019898514",
+        "EOWD": "2015-07-01",
+        "OPD": "2012-07-01",
         "Notes": "",
         "Description": ""
     },
     {
-        "Id": "1573",
-        "Hostname": "ACQ-07",
-        "Model": "6200",
-        "SKU": "017056",
-        "UUIC": "034768",
-        "Serial": "090732",
-        "EOWD": "2013-06-02",
-        "OPD": "2009-06-02",
+        "Id": "482",
+        "Hostname": "GRPC-17",
+        "Model": "980",
+        "SKU": "16726",
+        "Serial": "ETLGQ0D053210116068514",
+        "EOWD": "2015-07-01",
+        "OPD": "2012-07-01",
         "Notes": "",
         "Description": ""
     },
@@ -779,7 +775,7 @@ POST /monitor
 
         <pre class="prettyprint lang-sh linenums prettyprinted">
           <code class="language-sh">
-?hostname=&lt;machine-name&gt;&model=&lt;model-number&gt;&sku=&lt;machine-sku&gt;&uuic=&lt;machine-uuic&gt;&serial=&lt;machine-serial&gt;
+?hostname=&lt;monitor-name&gt;&model=&lt;model-number&gt;&sku=&lt;monitor-sku&gt;&serial=&lt;monitor-serial&gt;
           </code>
         </pre>
       </p>
@@ -790,7 +786,7 @@ POST /monitor
         <pre class="prettyprint lang-sh linenums prettyprinted">
           <code class="language-js">
 {
-  success: 'Computer record saved successfully'
+  success: 'Monitor record saved successfully'
 }
           </code>
         </pre>
@@ -815,7 +811,7 @@ PUT /monitor/&lt;record-id&gt;
 
         <pre class="prettyprint lang-sh linenums prettyprinted">
           <code class="language-sh">
-?hostname=&lt;machine-name&gt;&model=&lt;model-number&gt;&sku=&lt;machine-sku&gt;&uuic=&lt;machine-uuic&gt;&serial=&lt;machine-serial&gt;
+?hostname=&lt;monitor-name&gt;&model=&lt;model-number&gt;&sku=&lt;monitor-sku&gt;&serial=&lt;monitor-serial&gt;
           </code>
         </pre>
       </p>
@@ -826,7 +822,7 @@ PUT /monitor/&lt;record-id&gt;
         <pre class="prettyprint lang-sh linenums prettyprinted">
           <code class="language-js">
 {
-  success: 'Computer record updated sucessfully'
+  success: 'Monitor record updated sucessfully'
 }
           </code>
         </pre>
@@ -852,7 +848,7 @@ DELETE /monitor/&lt;record-id&gt;
         <pre class="prettyprint lang-sh linenums prettyprinted">
           <code class="language-js">
 {
-  success: 'Computer record deleted sucessfully'
+  success: 'Monitor record deleted sucessfully'
 }
           </code>
         </pre>
@@ -878,10 +874,10 @@ DELETE /monitor/&lt;record-id&gt;
     </p>
 
     <div id="api-rma-list">
-      <h3>List rma <span><a href="#toc">&#8593;</a></span></h3>
+      <h3>List RMA <span><a href="#toc">&#8593;</a></span></h3>
 
       <p>
-        To list all available rma:
+        To list all available RMA records:
 
         <pre class="prettyprint lang-sh linenums prettyprinted">
           <code class="language-sh">
@@ -897,28 +893,28 @@ GET /rma
           <code class="language-js">
 [
     {
-        "Id": "1572",
-        "Hostname": "ACQ-01",
-        "Model": "6200",
-        "SKU": "017043",
-        "UUIC": "034755",
-        "Serial": "090705",
-        "EOWD": "2013-06-02",
-        "OPD": "2009-06-02",
-        "Notes": "",
-        "Description": ""
+        "Id": "1",
+        "Problem": "0",
+        "Date": "2013-10-23",
+        "Hostname": "GRPC-01",
+        "Model": "970",
+        "SKU": "016014",
+        "UUIC": "040274",
+        "Serial": "087913",
+        "Part": "Video card",
+        "Notes": ""
     },
     {
-        "Id": "1573",
-        "Hostname": "ACQ-07",
-        "Model": "6200",
-        "SKU": "017056",
-        "UUIC": "034768",
-        "Serial": "090732",
-        "EOWD": "2013-06-02",
-        "OPD": "2009-06-02",
-        "Notes": "",
-        "Description": ""
+        "Id": "2",
+        "Problem": "0",
+        "Date": "2013-09-13",
+        "Hostname": "RFPC-01",
+        "Model": "970",
+        "SKU": "016014",
+        "UUIC": "040274",
+        "Serial": "087913",
+        "Part": "Motherboard",
+        "Notes": ""
     },
     /* ... */
 ]
@@ -935,7 +931,7 @@ GET /rma
 
         <pre class="prettyprint lang-sh linenums prettyprinted">
           <code class="language-sh">
-GET /rma/034*
+GET /rma/RFPC*
           </code>
         </pre>
       </p>
@@ -947,28 +943,16 @@ GET /rma/034*
           <code class="language-js">
 [
     {
-        "Id": "1572",
-        "Hostname": "ACQ-01",
-        "Model": "6200",
-        "SKU": "017043",
-        "UUIC": "034755",
-        "Serial": "090705",
-        "EOWD": "2013-06-02",
-        "OPD": "2009-06-02",
-        "Notes": "",
-        "Description": ""
-    },
-    {
-        "Id": "1573",
-        "Hostname": "ACQ-07",
-        "Model": "6200",
-        "SKU": "017056",
-        "UUIC": "034768",
-        "Serial": "090732",
-        "EOWD": "2013-06-02",
-        "OPD": "2009-06-02",
-        "Notes": "",
-        "Description": ""
+        "Id": "2",
+        "Problem": "0",
+        "Date": "2013-09-13",
+        "Hostname": "RFPC-01",
+        "Model": "970",
+        "SKU": "016014",
+        "UUIC": "040274",
+        "Serial": "087913",
+        "Part": "Motherboard",
+        "Notes": ""
     },
     /* ... */
 ]
