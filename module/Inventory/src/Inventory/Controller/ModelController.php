@@ -47,7 +47,8 @@ class ModelController extends AbstractRestfulController
 
             return $db->response($db->search($id));
         } else {
-            return $db->response(array('error'=>'Given parameters did meet validation requirements'));
+            return $db->response(array('error'=>'Given parameters did meet validation requirements',
+                                       'details'=>$search->getErrors()));
         }
 
         return $db->response(array('error'=>'Unable to search records with given parameters'));
@@ -66,7 +67,8 @@ class ModelController extends AbstractRestfulController
             if ($model->isValid()) {
                 return $db->response($db->add($post));
             } else {
-                return $db->response(array('error'=>'Given parameters did meet validation requirements'));
+                return $db->response(array('error'=>'Given parameters did meet validation requirements',
+                                           'details'=>$model->getErrors()));
             }
         }
 
@@ -84,7 +86,8 @@ class ModelController extends AbstractRestfulController
 
             return $db->response($db->update($id, $post));
         } else {
-            return $db->response(array('error'=>'Given parameters did meet validation requirements'));
+            return $db->response(array('error'=>'Given parameters did meet validation requirements',
+                                       'details'=>$model->getErrors()));
         }
 
         return $db->response(array('error'=>'Could not edit record'));
@@ -100,7 +103,8 @@ class ModelController extends AbstractRestfulController
 
             return $db->response($db->delete($post));
         } else {
-            return $db->response(array('error'=>'Given parameters did meet validation requirements'));
+            return $db->response(array('error'=>'Given parameters did meet validation requirements',
+                                       'details'=>$model->getErrors()));
         }
 
         return $db->response(array('error'=>'Unable delete specified record'));

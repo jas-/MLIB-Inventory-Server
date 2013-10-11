@@ -47,7 +47,8 @@ class MonitorController extends AbstractRestfulController
 
             return $db->response($db->search($id));
         } else {
-            return $db->response(array('error'=>'Given parameters did meet validation requirements'));
+            return $db->response(array('error'=>'Given parameters did meet validation requirements',
+                                       'details'=>$search->getErrors()));
         }
 
         return $db->response(array('error'=>'Unable to search records with given parameters'));
@@ -66,7 +67,8 @@ class MonitorController extends AbstractRestfulController
             if ($monitor->isValid()) {
                 return $db->response($db->add($request->getPost()));
             } else {
-                return $db->response(array('error'=>'Given parameters did meet validation requirements'));
+                return $db->response(array('error'=>'Given parameters did meet validation requirements',
+                                           'details'=>$monitor->getErrors()));
             }
         }
 
@@ -84,7 +86,8 @@ class MonitorController extends AbstractRestfulController
 
             return $db->response($db->update($id, $post));
         } else {
-            return $db->response(array('error'=>'Given parameters did meet validation requirements'));
+            return $db->response(array('error'=>'Given parameters did meet validation requirements',
+                                       'details'=>$monitor->getErrors()));
         }
 
         return $db->response(array('error'=>'Could not edit record'));
@@ -99,7 +102,8 @@ class MonitorController extends AbstractRestfulController
             $post = $monitor->doClean($id);
             return $db->response($db->delete($id));
         } else {
-            return $db->response(array('error'=>'Given parameters did meet validation requirements'));
+            return $db->response(array('error'=>'Given parameters did meet validation requirements',
+                                       'details'=>$monitor->getErrors()));
         }
 
         return $db->response(array('error'=>'Unable delete specified record'));
