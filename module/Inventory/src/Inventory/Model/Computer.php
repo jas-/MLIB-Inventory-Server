@@ -89,7 +89,7 @@ class Computer
 		return true;
     }
 
-    public getErrors()
+    public function getErrors()
     {
         return $this->errors;
     }

@@ -75,7 +75,7 @@ class Cors
 		return true;
     }
 
-    public getErrors()
+    public function getErrors()
     {
         return $this->errors;
     }

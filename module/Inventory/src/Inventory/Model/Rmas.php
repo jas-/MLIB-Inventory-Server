@@ -82,7 +82,7 @@ class Rmas
 		return true;
     }
 
-    public getErrors()
+    public function getErrors()
     {
         return $this->errors;
     }
