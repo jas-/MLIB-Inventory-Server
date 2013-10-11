@@ -8,6 +8,7 @@ use Inventory\Model\Sanitize\StripTags;
 class Delete
 {
     public $id;
+    protected $errors;
 
 	function __construct($data)
 	{
@@ -22,10 +23,16 @@ class Delete
 	public function isValid()
     {
 		if (!DeleteID::isValid($this->id)) {
+            $this->errors['id'] = 'ID value is invalid';
 			return false;
 		}
 
 		return true;
+    }
+
+    public getErrors()
+    {
+        return $this->errors;
     }
 
 	public function doClean($str)

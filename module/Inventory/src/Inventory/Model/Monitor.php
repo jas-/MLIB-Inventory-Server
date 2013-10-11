@@ -14,6 +14,7 @@ use Inventory\Model\Sanitize\StripTags;
 class Monitor
 {
     public $id, $hostname, $model, $sku, $serial, $notes, $data;
+    protected $errors;
 
 	function __construct($data)
 	{
@@ -36,42 +37,55 @@ class Monitor
 	public function isValid()
     {
 		if (!Hostnames::isValid($this->hostname)) {
+            $this->errors['hostname'] = 'Hostname value is invalid';
 			return false;
 		}
 
 		if (!Model::isValid($this->model)) {
+            $this->errors['model'] = 'Model value is invalid';
 			return false;
 		}
 
 		if (!SKU::isValid($this->sku)) {
+            $this->errors['sku'] = 'SKU value is invalid';
 			return false;
 		}
 
 		if (!Serial::isValid($this->serial)) {
+            $this->errors['serial'] = 'Serial value is invalid';
 			return false;
 		}
 
 		if (!Date::isValid($this->eowd)) {
-			return false;
+            $this->errors['eowd'] = 'EOWD value is invalid';
+            return false;
 		}
 
 		if (!Date::isValid($this->opd)) {
+            $this->errors['opd'] = 'OPD value is invalid';
 			return false;
 		}
 
 		if (!empty($this->description)) {
 			if (!Paragraph::isValid($this->description)) {
+                $this->errors['description'] = 'Description value is invalid';
 				return false;
 			}
 		}
 
 		if (!empty($this->notes)) {
 			if (!Paragraph::isValid($this->notes)) {
+                $this->errors['notes'] = 'Notes value is invalid';
 				return false;
 			}
 		}
 
 		return true;
+    }
+
+    public getErrors()
+    {
+        return $this->errors;
     }
 
 	public function doClean($str)

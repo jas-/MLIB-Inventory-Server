@@ -14,6 +14,7 @@ use Inventory\Model\Sanitize\StripTags;
 class Rmas
 {
     public $id, $hostname, $model, $sku, $serial, $notes, $data;
+    protected $errors;
 
 	function __construct($data)
 	{
@@ -40,36 +41,50 @@ class Rmas
 		}
 
 		if (!Hostnames::isValid($this->hostname)) {
+            $this->errors['hostname'] = 'Hostname value is invalid';
 			return false;
 		}
 
 		if (!SKU::isValid($this->sku)) {
+            $this->errors['sku'] = 'SKU value is invalid';
 			return false;
 		}
 
-		if (!UUIC::isValid($this->uuic)) {
-			return false;
-		}
+		if (!empty($this->notes)) {
+    		if (!UUIC::isValid($this->uuic)) {
+                $this->errors['uuic'] = 'UUIC value is invalid';
+    			return false;
+    		}
+        }
 
 		if (!Serial::isValid($this->serial)) {
+            $this->errors['serial'] = 'Serial value is invalid';
 			return false;
 		}
 
 		if (!Model::isValid($this->model)) {
+            $this->errors['model'] = 'Model value is invalid';
 			return false;
 		}
 
 		if (!Paragraph::isValid($this->part)) {
+            $this->errors['part'] = 'Part value is invalid';
 			return false;
 		}
 
 		if (!empty($this->notes)) {
 			if (!Paragraph::isValid($this->notes)) {
+                $this->errors['notes'] = 'Notes value is invalid';
 				return false;
 			}
 		}
 
 		return true;
+    }
+
+    public getErrors()
+    {
+        return $this->errors;
     }
 
 	public function doClean($str)

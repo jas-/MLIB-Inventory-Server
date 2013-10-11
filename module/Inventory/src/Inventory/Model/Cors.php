@@ -14,6 +14,7 @@ use Inventory\Model\Sanitize\StripTags;
 class Cors
 {
     public $id, $hostname, $model, $sku, $uuic, $serial, $notes, $data;
+    protected $errors;
 
     protected $allowedMethods = array(
 		'OPTIONS',
@@ -57,18 +58,26 @@ class Cors
 	public function isValid()
     {
 		if (!Paragraph::isValid($this->application)) {
+            $this->errors['application'] = 'Application value is invalid';
 			return false;
 		}
 
 		if (!Url::isValid($this->url)) {
+            $this->errors['url'] = 'URL value is invalid';
 			return false;
 		}
 
 		if (!Ip::isValid($this->ip)) {
+            $this->errors['ip'] = 'IP value is invalid';
 			return false;
 		}
 
 		return true;
+    }
+
+    public getErrors()
+    {
+        return $this->errors;
     }
 
 	public function doClean($str)
