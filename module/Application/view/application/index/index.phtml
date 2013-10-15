@@ -1,3 +1,4 @@
+<!-- MLIB-Inventory-Server RESTFul API -->
 <div id="overview">
   <h1>MLIB-Inventory-Server RESTFul API</h1>
 
@@ -12,9 +13,9 @@
     Information Services inventory management service. The offical project
     page can be found @ <a href="https://github.com/jas-/MLIB-Inventory-Server" target="_blank">github.com/jas-/MLIB-Inventory-Server</a>
   </p>
-
 </div>
 
+<!-- Table of contents -->
 <div id="toc">
   <h2>Table of contents</h2>
 
@@ -87,6 +88,7 @@
   </p>
 </div>
 
+<!-- Details -->
 <div id="project">
   <h2>Project details <span><a href="#toc">&#8593;</a></span></h2>
 
@@ -98,6 +100,7 @@
   </p>
 </div>
 
+<!-- Download instructions -->
 <div id="download">
   <h2>Download <span><a href="#toc">&#8593;</a></span></h2>
 
@@ -106,6 +109,7 @@
     (recommended) or the manual method. Please read on for details of each.
   </p>
 
+  <!-- Using git -->
   <div id="download-git">
     <h3>Using GIT <span><a href="#toc">&#8593;</a></span></h3>
 
@@ -121,6 +125,7 @@ shell> git clone --recursive https://github.com/jas-/MLIB-Inventory-Server.git
     </p>
   </div>
 
+  <!-- Manual download -->
   <div id="download-manual">
     <h3>Manual Installation <span><a href="#toc">&#8593;</a></span></h3>
 
@@ -151,6 +156,7 @@ shell> unzip2 master.zip
   </div>
 </div>
 
+<!-- Installation section -->
 <div id="installation">
   <h2>Installation <span><a href="#toc">&#8593;</a></span></h2>
 
@@ -159,6 +165,7 @@ shell> unzip2 master.zip
     need to install the project.
   </p>
     
+  <!-- Installation details -->
   <div id="installation-details">
     <h3>Details <span><a href="#toc">&#8593;</a></span></h3>
 
@@ -181,6 +188,7 @@ shell> unzip2 master.zip
     </p>
   </div>
 
+  <!-- Installation tools -->
   <div id="installation-tools">
     <h3>Installation tool <span><a href="#toc">&#8593;</a></span></h3>
 
@@ -199,6 +207,7 @@ shell> bash install/install
     </p>
   </div>
 
+  <!-- Post installation -->
   <div id="installation-post">
     <h3>Post installation <span><a href="#toc">&#8593;</a></span></h3>
 
@@ -221,6 +230,7 @@ shell> mysql -u &lt;username&gt; -p &lt;dbname&gt; -e 'CALL CorsAddUpdate("&lt;a
     </p>
 </div>
 
+<!-- Inventory management API -->
 <div id="api">
   <h2>API <span><a href="#toc">&#8593;</a></span></h2>
 
@@ -234,6 +244,7 @@ shell> mysql -u &lt;username&gt; -p &lt;dbname&gt; -e 'CALL CorsAddUpdate("&lt;a
     of the record type.
   </p>
 
+  <!-- Model management -->
   <div id="api-models">
     <h3>Models <span><a href="#toc">&#8593;</a></span></h3>
 
@@ -249,6 +260,7 @@ shell> mysql -u &lt;username&gt; -p &lt;dbname&gt; -e 'CALL CorsAddUpdate("&lt;a
       </ol>
     </p>
 
+    <!-- List all models -->
     <div id="api-models-list">
       <h3>List models <span><a href="#toc">&#8593;</a></span></h3>
 
@@ -291,6 +303,7 @@ GET /models
       </p>
     </div>
 
+    <!-- Search model records -->
     <div id="api-models-search">
       <h3>Search models <span><a href="#toc">&#8593;</a></span></h3>
 
@@ -324,6 +337,7 @@ GET /models/73*
       </p>
     </div>
 
+    <!-- Add new model records -->
     <div id="api-models-add">
       <h3>Add models <span><a href="#toc">&#8593;</a></span></h3>
 
@@ -360,6 +374,7 @@ POST /model
       </p>
     </div>
 
+    <!-- Update existing model records -->
     <div id="api-models-update">
       <h3>Update models <span><a href="#toc">&#8593;</a></span></h3>
 
@@ -396,6 +411,7 @@ PUT /model/&lt;record-id&gt;
       </p>
     </div>
 
+    <!-- Delete model records -->
     <div id="api-models-delete">
       <h3>Delete models <span><a href="#toc">&#8593;</a></span></h3>
 
@@ -423,6 +439,7 @@ DELETE /model/&lt;record-id&gt;
     </div>
   </div>  
 
+  <!-- Computer management -->
   <div id="api-computers">
     <h3>Computers <span><a href="#toc">&#8593;</a></span></h3>
 
@@ -445,6 +462,7 @@ DELETE /model/&lt;record-id&gt;
       </ol>
     </p>
 
+    <!-- List all computer assets -->
     <div id="api-computers-list">
       <h3>List computers <span><a href="#toc">&#8593;</a></span></h3>
 
@@ -495,6 +513,7 @@ GET /computer
       </p>
     </div>
 
+    <!-- Search all computer assets -->
     <div id="api-computers-search">
       <h3>Search computers <span><a href="#toc">&#8593;</a></span></h3>
 
@@ -545,6 +564,7 @@ GET /computer/034*
       </p>
     </div>
 
+    <!-- Add new computer records -->
     <div id="api-computers-add">
       <h3>Add computers <span><a href="#toc">&#8593;</a></span></h3>
 
@@ -581,6 +601,7 @@ POST /computer
       </p>
     </div>
 
+    <!-- Update existing computer records -->
     <div id="api-computers-update">
       <h3>Update computers <span><a href="#toc">&#8593;</a></span></h3>
 
@@ -617,6 +638,7 @@ PUT /computer/&lt;record-id&gt;
       </p>
     </div>
 
+    <!-- Delete computer records -->
     <div id="api-computers-delete">
       <h3>Delete computers <span><a href="#toc">&#8593;</a></span></h3>
 
@@ -644,6 +666,7 @@ DELETE /computer/&lt;record-id&gt;
     </div>
   </div>
 
+  <!-- Manage monitors -->
   <div id="api-monitors">
     <h3>Monitors <span><a href="#toc">&#8593;</a></span></h3>
 
@@ -661,6 +684,7 @@ DELETE /computer/&lt;record-id&gt;
       </ol>
     </p>
 
+    <!-- List all monitor asset records -->
     <div id="api-monitors-list">
       <h3>List monitors <span><a href="#toc">&#8593;</a></span></h3>
 
@@ -709,6 +733,7 @@ GET /monitor
       </p>
     </div>
 
+    <!-- Search all monitor records -->
     <div id="api-monitors-search">
       <h3>Search monitors <span><a href="#toc">&#8593;</a></span></h3>
 
@@ -757,6 +782,7 @@ GET /monitor/162*
       </p>
     </div>
 
+    <!-- Add new monitor records -->
     <div id="api-monitors-add">
       <h3>Add monitors <span><a href="#toc">&#8593;</a></span></h3>
 
@@ -793,6 +819,7 @@ POST /monitor
       </p>
     </div>
 
+    <!-- Update existing monitor records -->
     <div id="api-monitors-update">
       <h3>Update monitors <span><a href="#toc">&#8593;</a></span></h3>
 
@@ -829,6 +856,7 @@ PUT /monitor/&lt;record-id&gt;
       </p>
     </div>
 
+    <!-- Delete monitor records -->
     <div id="api-monitors-delete">
       <h3>Delete monitors <span><a href="#toc">&#8593;</a></span></h3>
 
@@ -856,6 +884,7 @@ DELETE /monitor/&lt;record-id&gt;
     </div>
   </div>
 
+  <!-- Manage RMA records -->
   <div id="api-rma">
     <h3>RMA <span><a href="#toc">&#8593;</a></span></h3>
 
@@ -873,6 +902,7 @@ DELETE /monitor/&lt;record-id&gt;
       </ol>
     </p>
 
+    <!-- List all RMA asset records -->
     <div id="api-rma-list">
       <h3>List RMA <span><a href="#toc">&#8593;</a></span></h3>
 
@@ -923,6 +953,7 @@ GET /rma
       </p>
     </div>
 
+    <!-- Search all RMA records -->
     <div id="api-rma-search">
       <h3>Search rma <span><a href="#toc">&#8593;</a></span></h3>
 
@@ -961,6 +992,7 @@ GET /rma/RFPC*
       </p>
     </div>
 
+    <!-- Add new RMA asset records -->
     <div id="api-rma-add">
       <h3>Add rma <span><a href="#toc">&#8593;</a></span></h3>
 
@@ -984,24 +1016,52 @@ POST /rma
         </pre>
       </p>
 
-      <p>
-        Response example:
+      <h4>Response example(s):</h4>
 
+      <p>A successful response when adding new RMA records
         <pre class="prettyprint lang-sh linenums prettyprinted">
           <code class="language-js">
 {
-  success: 'Computer record saved successfully'
+  success: 'Successfully added new RMA record'
+}
+          </code>
+        </pre>
+      </p>
+
+      <p>Invalid parameters response
+        <pre class="prettyprint lang-sh linenums prettyprinted">
+          <code class="language-js">
+{
+  error: 'Given parameters did meet validation requirements',
+  details: {
+    hostname: 'Hostname value is invalid',
+    model: 'Model value is invalid',
+    sku: 'SKU value is invalid',
+    uuic: 'UUIC value is invalid',
+    serial: 'Searial value is invalid',
+  }
+}
+          </code>
+        </pre>
+      </p>
+
+      <p>Generic error
+        <pre class="prettyprint lang-sh linenums prettyprinted">
+          <code class="language-js">
+{
+  error: 'Unable to search specified records'
 }
           </code>
         </pre>
       </p>
     </div>
 
+    <!-- Update existing RMA records -->
     <div id="api-rma-update">
       <h3>Update rma <span><a href="#toc">&#8593;</a></span></h3>
 
       <p>
-        To update an existing rma:
+        To update an existing RMA:
 
         <pre class="prettyprint lang-sh linenums prettyprinted">
           <code class="language-sh">
@@ -1020,13 +1080,40 @@ PUT /rma/&lt;record-id&gt;
         </pre>
       </p>
 
-      <p>
-        Response example(s):
+      <h4>Response example(s):</h4>
 
+      <p>A successful response when updating RMA asset records
         <pre class="prettyprint lang-sh linenums prettyprinted">
           <code class="language-js">
 {
-  success: 'Computer record updated sucessfully'
+  success: 'Sucessfully modified RMA record'
+}
+          </code>
+        </pre>
+      </p>
+
+      <p>Invalid parameters response
+        <pre class="prettyprint lang-sh linenums prettyprinted">
+          <code class="language-js">
+{
+  error: 'Given parameters did meet validation requirements',
+  details: {
+    hostname: 'Hostname value is invalid',
+    model: 'Model value is invalid',
+    sku: 'SKU value is invalid',
+    uuic: 'UUIC value is invalid',
+    serial: 'Searial value is invalid',
+  }
+}
+          </code>
+        </pre>
+      </p>
+
+      <p>Generic error
+        <pre class="prettyprint lang-sh linenums prettyprinted">
+          <code class="language-js">
+{
+  error: 'Unable to search specified records'
 }
           </code>
         </pre>
@@ -1046,13 +1133,37 @@ DELETE /rma/&lt;record-id&gt;
         </pre>
       </p>
 
-      <p>
-        Response example(s):
+      <h4>Response example(s):</h4>
 
+      <p>A successful response when removing an RMA asset record
         <pre class="prettyprint lang-sh linenums prettyprinted">
           <code class="language-js">
 {
-  success: 'Computer record deleted sucessfully'
+  sucess: 'Sucessfully removed RMA record'
+}
+
+          </code>
+        </pre>
+      </p>
+
+      <p>Invalid parameters response
+        <pre class="prettyprint lang-sh linenums prettyprinted">
+          <code class="language-js">
+{
+  error: 'Given parameters did meet validation requirements',
+  details: {
+    id: 'ID value is invalid'
+  }
+}
+          </code>
+        </pre>
+      </p>
+
+      <p>Generic error
+        <pre class="prettyprint lang-sh linenums prettyprinted">
+          <code class="language-js">
+{
+  error: 'Unable to remove specified records'
 }
           </code>
         </pre>
@@ -1138,9 +1249,9 @@ GET /cors/034*
         </pre>
       </p>
 
-      <p>
-        Response example:
+      <h4>Response example(s):</h4>
 
+      <p>A successful response when searching for CORS asset records
         <pre class="prettyprint lang-sh linenums prettyprinted">
           <code class="language-js">
 [
@@ -1173,6 +1284,29 @@ GET /cors/034*
           </code>
         </pre>
       </p>
+
+      <p>Invalid parameters response
+        <pre class="prettyprint lang-sh linenums prettyprinted">
+          <code class="language-js">
+{
+  error: 'Given parameters did meet validation requirements',
+  details: {
+    id: 'ID value is invalid'
+  }
+}
+          </code>
+        </pre>
+      </p>
+
+      <p>Generic error
+        <pre class="prettyprint lang-sh linenums prettyprinted">
+          <code class="language-js">
+{
+  error: 'Unable to search specified records'
+}
+          </code>
+        </pre>
+      </p>
     </div>
 
     <div id="api-cors-add">
@@ -1198,24 +1332,50 @@ POST /cors
         </pre>
       </p>
 
-      <p>
-        Response example:
+      <h4>Response example(s):</h4>
 
+      <p>A successful response when removing a CORS asset record
         <pre class="prettyprint lang-sh linenums prettyprinted">
           <code class="language-js">
 {
-  success: 'Computer record saved successfully'
+  success: 'CORS record sucessfully add'
+}
+          </code>
+        </pre>
+      </p>
+
+      <p>Invalid parameters response
+        <pre class="prettyprint lang-sh linenums prettyprinted">
+          <code class="language-js">
+{
+  error: 'Given parameters did meet validation requirements',
+  details: {
+    application: 'Application value is invalid'
+    url: 'URL value is invalid'
+    ip: 'IP value is invalid'
+  }
+}
+          </code>
+        </pre>
+      </p>
+
+      <p>Generic error
+        <pre class="prettyprint lang-sh linenums prettyprinted">
+          <code class="language-js">
+{
+  error: 'Unable to add specified record'
 }
           </code>
         </pre>
       </p>
     </div>
 
+    <!-- CORS Update -->
     <div id="api-cors-update">
       <h3>Update cors <span><a href="#toc">&#8593;</a></span></h3>
 
       <p>
-        To update an existing cors:
+        To update an existing CORS record:
 
         <pre class="prettyprint lang-sh linenums prettyprinted">
           <code class="language-sh">
@@ -1234,25 +1394,74 @@ PUT /cors/&lt;record-id&gt;
         </pre>
       </p>
 
-      <p>
-        Response example(s):
+      <h4>Response example(s):</h4>
 
+      <p>A successful response when updating a CORS asset record
         <pre class="prettyprint lang-sh linenums prettyprinted">
           <code class="language-js">
 {
-  success: 'Computer record updated sucessfully'
+  success: 'Successfully updated record'
+}
+          </code>
+        </pre>
+      </p>
+
+      <p>Invalid parameters response
+        <pre class="prettyprint lang-sh linenums prettyprinted">
+          <code class="language-js">
+{
+  error: 'Given parameters did meet validation requirements',
+  details: {
+    application: 'Application value is invalid'
+    url: 'URL value is invalid'
+    ip: 'IP value is invalid'
+  }
+}
+          </code>
+        </pre>
+      </p>
+
+      <p>No changes occured message
+        <pre class="prettyprint lang-sh linenums prettyprinted">
+          <code class="language-js">
+{
+  warning: 'No changes to cors record occured'
+}
+          </code>
+        </pre>
+      </p>
+
+      <p>Database record didn't exist
+        <pre class="prettyprint lang-sh linenums prettyprinted">
+          <code class="language-js">
+{
+  error: 'Whoops, an error occured while deleting cors record'
+}
+          </code>
+        </pre>
+      </p>
+
+      <p>Generic error
+        <pre class="prettyprint lang-sh linenums prettyprinted">
+          <code class="language-js">
+{
+  error: 'Could not edit record'
 }
           </code>
         </pre>
       </p>
     </div>
 
+    <!-- CORS Delete -->
     <div id="api-cors-delete">
       <h3>Delete cors <span><a href="#toc">&#8593;</a></span></h3>
+      <p>
+        Example usage of removing CORS records.
+      </p>
 
+      <h4>Usage example <span><a href="#toc">&#8593;</a></span></h4>
       <p>
         To remove an existing cors:
-
         <pre class="prettyprint lang-sh linenums prettyprinted">
           <code class="language-sh">
 DELETE /cors/&lt;record-id&gt;
@@ -1260,13 +1469,47 @@ DELETE /cors/&lt;record-id&gt;
         </pre>
       </p>
 
+      <h4>Response example(s):</h4>
       <p>
-        Response example(s):
-
+        A successful response when removing a CORS asset record
         <pre class="prettyprint lang-sh linenums prettyprinted">
           <code class="language-js">
 {
-  success: 'Computer record deleted sucessfully'
+  success: 'Successfully deleted record'
+}
+          </code>
+        </pre>
+      </p>
+
+      <p>
+        Invalid parameters response
+        <pre class="prettyprint lang-sh linenums prettyprinted">
+          <code class="language-js">
+{
+  error: 'Given parameters did meet validation requirements',
+  details: {
+    id: 'ID value is invalid'
+  }
+}
+          </code>
+        </pre>
+      </p>
+
+      <p>Database record didn't exist
+        <pre class="prettyprint lang-sh linenums prettyprinted">
+          <code class="language-js">
+{
+  error: 'Whoops, an error occured while deleting cors record'
+}
+          </code>
+        </pre>
+      </p>
+
+      <p>Generic error
+        <pre class="prettyprint lang-sh linenums prettyprinted">
+          <code class="language-js">
+{
+  error: 'Unable to delete specified record'
 }
           </code>
         </pre>
