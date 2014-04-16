@@ -244,6 +244,330 @@ shell> mysql -u &lt;username&gt; -p &lt;dbname&gt; -e 'CALL CorsAddUpdate("&lt;a
     of the record type.
   </p>
 
+  <!-- Models API -->
+  <div id="api-models">
+    <h3>Models <span><a href="#toc">&#8593;</a></span></h3>
+
+    <p>
+      Manage Models records. Below are the details of the available fields
+      per Models record. <i>* Important: Computer, Monitor & RMA records all require an existing, matching model entry
+
+      <ol>
+        <li><i>Model</i> - (Required) The model number associated with the montitor</li>
+        <li><i>EOWD</i> - (Optional) The end of warranty date</li>
+        <li><i>OPD</i> - (Optional) The original purchase date</li>
+        <li><i>Notes</i> - (Optional) Any notes associated with the model</li>
+        <li><i>Description</i> - (Optional) Any description information assocated with model</li>
+      </ol>
+    </p>
+
+    <div id="api-models-list">
+      <h3>List models <span><a href="#toc">&#8593;</a></span></h3>
+
+      <p>
+        To list all available models:
+
+        <pre class="prettyprint lang-sh linenums prettyprinted">
+          <code class="language-sh">
+GET /model
+          </code>
+        </pre>
+      </p>
+
+      <p>
+        Response example:
+
+        <pre class="prettyprint lang-sh linenums prettyprinted">
+          <code class="language-js">
+[
+    {
+        "Id": "591",
+        "Model": "6200",
+        "EOWD": "2013-06-20",
+        "OPD": "2009-06-01",
+        "Notes": "",
+        "Description": ""
+    },
+    {
+        "Id": "734",
+        "Model": "6350",
+        "EOWD": "1969-12-31",
+        "OPD": "1969-12-31",
+        "Notes": "",
+        "Description": ""
+    },
+    /* ... */
+]
+          </code>
+        </pre>
+      </p>
+    </div>
+
+    <div id="api-models-search">
+      <h3>Search models <span><a href="#toc">&#8593;</a></span></h3>
+
+      <p>
+        To search all available models (* is the wildcard):
+
+        <pre class="prettyprint lang-sh linenums prettyprinted">
+          <code class="language-sh">
+GET /model/96*
+          </code>
+        </pre>
+      </p>
+
+      <h4>Response example(s):</h4>
+
+      <p>A successful response when searching for Models asset records
+        <pre class="prettyprint lang-sh linenums prettyprinted">
+          <code class="language-js">
+[
+    {
+        "id": "590",
+        "model": "965",
+        "eowd": "1370217600",
+        "opd": "1243987200",
+        "description": "",
+        "notes": ""
+    },
+    /* ... */
+]
+          </code>
+        </pre>
+      </p>
+
+      <p>Invalid parameters response
+        <pre class="prettyprint lang-sh linenums prettyprinted">
+          <code class="language-js">
+{
+  error: 'Given parameters did meet validation requirements',
+  details: {
+    id: 'ID value is invalid'
+  }
+}
+          </code>
+        </pre>
+      </p>
+
+      <p>Generic error
+        <pre class="prettyprint lang-sh linenums prettyprinted">
+          <code class="language-js">
+{
+  error: 'Unable to search specified records'
+}
+          </code>
+        </pre>
+      </p>
+    </div>
+
+    <div id="api-models-add">
+      <h3>Add models <span><a href="#toc">&#8593;</a></span></h3>
+
+      <p>
+        To add a new models:
+
+        <pre class="prettyprint lang-sh linenums prettyprinted">
+          <code class="language-sh">
+POST /model
+          </code>
+        </pre>
+      </p>
+
+      <p>
+        Serialized data (see <a href="#api-models">required fields</a>):
+
+        <pre class="prettyprint lang-sh linenums prettyprinted">
+          <code class="language-sh">
+model=&lt;model-number&gt;&eowd=&lt;eowd-date&gt;&opd=&lt;opd-date&gt;
+          </code>
+        </pre>
+      </p>
+
+      <h4>Response example(s):</h4>
+
+      <p>A successful response when adding a Models asset record
+        <pre class="prettyprint lang-sh linenums prettyprinted">
+          <code class="language-js">
+{
+  success: 'Models record sucessfully add'
+}
+          </code>
+        </pre>
+      </p>
+
+      <p>Invalid parameters response
+        <pre class="prettyprint lang-sh linenums prettyprinted">
+          <code class="language-js">
+{
+    "error": "Given parameters did meet validation requirements",
+    "details": {
+        "model": "Model value is invalid",
+        "eowd": "EOWD value is invalid",
+        "opd": "OPD value is invalid"
+    }
+}
+          </code>
+        </pre>
+      </p>
+
+      <p>Generic error
+        <pre class="prettyprint lang-sh linenums prettyprinted">
+          <code class="language-js">
+{
+  error: 'Unable to add specified record'
+}
+          </code>
+        </pre>
+      </p>
+    </div>
+
+    <!-- Models Update -->
+    <div id="api-models-update">
+      <h3>Update models <span><a href="#toc">&#8593;</a></span></h3>
+
+      <p>
+        To update an existing Models record:
+
+        <pre class="prettyprint lang-sh linenums prettyprinted">
+          <code class="language-sh">
+PUT /model/&lt;record-id&gt;
+          </code>
+        </pre>
+      </p>
+
+      <p>
+        Serialized data (see <a href="#api-models">required fields</a>):
+
+        <pre class="prettyprint lang-sh linenums prettyprinted">
+          <code class="language-sh">
+model=&lt;model-number&gt;&eowd=&lt;eowd-date&gt;&opd=&lt;opd-date&gt;
+          </code>
+        </pre>
+      </p>
+
+      <h4>Response example(s):</h4>
+
+      <p>A successful response when updating a Models asset record
+        <pre class="prettyprint lang-sh linenums prettyprinted">
+          <code class="language-js">
+{
+  success: 'Successfully updated record'
+}
+          </code>
+        </pre>
+      </p>
+
+      <p>Invalid parameters response
+        <pre class="prettyprint lang-sh linenums prettyprinted">
+          <code class="language-js">
+{
+    "error": "Given parameters did meet validation requirements",
+    "details": {
+        "model": "Model value is invalid",
+        "eowd": "EOWD value is invalid",
+        "opd": "OPD value is invalid"
+    }
+}
+          </code>
+        </pre>
+      </p>
+
+      <p>No changes occured message
+        <pre class="prettyprint lang-sh linenums prettyprinted">
+          <code class="language-js">
+{
+  warning: 'No changes to models record occured'
+}
+          </code>
+        </pre>
+      </p>
+
+      <p>Database record didn't exist
+        <pre class="prettyprint lang-sh linenums prettyprinted">
+          <code class="language-js">
+{
+  error: 'Whoops, an error occured while deleting models record'
+}
+          </code>
+        </pre>
+      </p>
+
+      <p>Generic error
+        <pre class="prettyprint lang-sh linenums prettyprinted">
+          <code class="language-js">
+{
+  error: 'Could not edit record'
+}
+          </code>
+        </pre>
+      </p>
+    </div>
+
+    <!-- Models Delete -->
+    <div id="api-models-delete">
+      <h3>Delete models <span><a href="#toc">&#8593;</a></span></h3>
+      <p>
+        Example usage of removing Models records.
+      </p>
+
+      <h4>Usage example <span><a href="#toc">&#8593;</a></span></h4>
+      <p>
+        To remove an existing models:
+        <pre class="prettyprint lang-sh linenums prettyprinted">
+          <code class="language-sh">
+DELETE /model/&lt;record-id&gt;
+          </code>
+        </pre>
+      </p>
+
+      <h4>Response example(s):</h4>
+      <p>
+        A successful response when removing a Models asset record
+        <pre class="prettyprint lang-sh linenums prettyprinted">
+          <code class="language-js">
+{
+  success: 'Successfully deleted record'
+}
+          </code>
+        </pre>
+      </p>
+
+      <p>
+        Invalid parameters response
+        <pre class="prettyprint lang-sh linenums prettyprinted">
+          <code class="language-js">
+{
+  error: 'Given parameters did meet validation requirements',
+  details: {
+    id: 'ID value is invalid'
+  }
+}
+          </code>
+        </pre>
+      </p>
+
+      <p>Database record didn't exist
+        <pre class="prettyprint lang-sh linenums prettyprinted">
+          <code class="language-js">
+{
+  error: 'Whoops, an error occured while deleting models record'
+}
+          </code>
+        </pre>
+      </p>
+
+      <p>Generic error
+        <pre class="prettyprint lang-sh linenums prettyprinted">
+          <code class="language-js">
+{
+  error: 'Unable to delete specified record'
+}
+          </code>
+        </pre>
+      </p>
+    </div>
+  </div>
+
   <!-- Computers API -->
   <div id="api-computers">
     <h3>Computers <span><a href="#toc">&#8593;</a></span></h3>
