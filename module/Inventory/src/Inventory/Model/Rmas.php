@@ -37,6 +37,7 @@ class Rmas
 	public function isValid()
     {
 		if (!Date::isValid($this->date)) {
+            $this->errors['date'] = 'Date value is invalid (YYYY-MM-DD)';
 			return false;
 		}
 
@@ -50,7 +51,7 @@ class Rmas
 			return false;
 		}
 
-		if (!empty($this->notes)) {
+		if (!empty($this->uuic)) {
     		if (!UUIC::isValid($this->uuic)) {
                 $this->errors['uuic'] = 'UUIC value is invalid';
     			return false;

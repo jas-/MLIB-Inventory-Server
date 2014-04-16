@@ -257,6 +257,7 @@ shell> mysql -u &lt;username&gt; -p &lt;dbname&gt; -e 'CALL CorsAddUpdate("&lt;a
         <li><i>EOWD</i> - End of warranty date</li>
         <li><i>OPD</i> - Original purchase date</li>
         <li><i>Description</i> - A description of the model</li>
+        <li><i>Notes</i> - Model specific notes</li>
       </ol>
     </p>
 
@@ -274,9 +275,9 @@ GET /models
         </pre>
       </p>
 
-      <p>
-        Response example:
+      <h4>Response example(s):</h4>
 
+      <p>A successful response when listing model records
         <pre class="prettyprint lang-sh linenums prettyprinted">
           <code class="language-js">
 [
@@ -1171,6 +1172,323 @@ DELETE /rma/&lt;record-id&gt;
     </div>
   </div>
 
+  <div id="api-rma">
+    <h3>RMA <span><a href="#toc">&#8593;</a></span></h3>
+
+    <p>
+      Manage RMA records. Below are the details of the available fields
+      per RMA record.
+
+      <ol>
+        <li><i>Application</i> - The unique identifier associated with the
+          allowed application</li>
+        <li><i>URL</i> - The FQDN of the referring application</li>
+        <li><i>IP</i> - The IP of the referring application</li>
+      </ol>
+    </p>
+
+    <div id="api-rma-list">
+      <h3>List rma <span><a href="#toc">&#8593;</a></span></h3>
+
+      <p>
+        To list all available rma:
+
+        <pre class="prettyprint lang-sh linenums prettyprinted">
+          <code class="language-sh">
+GET /rma
+          </code>
+        </pre>
+      </p>
+
+      <p>
+        Response example:
+
+        <pre class="prettyprint lang-sh linenums prettyprinted">
+          <code class="language-js">
+[
+    {
+        "id": "1",
+        "application": "resource-name",
+        "url": "http://fqdn.of.resource-name",
+        "ip": "192.1.2.10"
+    },
+    {
+        "id": "2",
+        "application": "another-name",
+        "url": "http://fqdn.of.another-name",
+        "ip": "192.1.2.115"
+    },
+    /* ... */
+]
+          </code>
+        </pre>
+      </p>
+    </div>
+
+    <div id="api-rma-search">
+      <h3>Search rma <span><a href="#toc">&#8593;</a></span></h3>
+
+      <p>
+        To search all available rma (* is the wildcard):
+
+        <pre class="prettyprint lang-sh linenums prettyprinted">
+          <code class="language-sh">
+GET /rma/resource*
+          </code>
+        </pre>
+      </p>
+
+      <h4>Response example(s):</h4>
+
+      <p>A successful response when searching for RMA asset records
+        <pre class="prettyprint lang-sh linenums prettyprinted">
+          <code class="language-js">
+[
+    {
+        "id": "1",
+        "application": "resource-name",
+        "url": "http://fqdn.of.resource-name",
+        "ip": "192.1.2.10"
+    },
+    /* ... */
+]
+          </code>
+        </pre>
+      </p>
+
+      <p>Invalid parameters response
+        <pre class="prettyprint lang-sh linenums prettyprinted">
+          <code class="language-js">
+{
+  error: 'Given parameters did meet validation requirements',
+  details: {
+    id: 'ID value is invalid'
+  }
+}
+          </code>
+        </pre>
+      </p>
+
+      <p>Generic error
+        <pre class="prettyprint lang-sh linenums prettyprinted">
+          <code class="language-js">
+{
+  error: 'Unable to search specified records'
+}
+          </code>
+        </pre>
+      </p>
+    </div>
+
+    <div id="api-rma-add">
+      <h3>Add rma <span><a href="#toc">&#8593;</a></span></h3>
+
+      <p>
+        To add a new rma:
+
+        <pre class="prettyprint lang-sh linenums prettyprinted">
+          <code class="language-sh">
+POST /rma
+          </code>
+        </pre>
+      </p>
+
+      <p>
+        Serialized data (required fields):
+
+        <pre class="prettyprint lang-sh linenums prettyprinted">
+          <code class="language-sh">
+?hostname=&lt;machine-name&gt;&model=&lt;model-number&gt;&sku=&lt;machine-sku&gt;&uuic=&lt;machine-uuic&gt;&serial=&lt;machine-serial&gt;
+          </code>
+        </pre>
+      </p>
+
+      <h4>Response example(s):</h4>
+
+      <p>A successful response when adding a RMA asset record
+        <pre class="prettyprint lang-sh linenums prettyprinted">
+          <code class="language-js">
+{
+  success: 'RMA record sucessfully add'
+}
+          </code>
+        </pre>
+      </p>
+
+      <p>Invalid parameters response
+        <pre class="prettyprint lang-sh linenums prettyprinted">
+          <code class="language-js">
+{
+  error: 'Given parameters did meet validation requirements',
+  details: {
+    application: 'Application value is invalid'
+    url: 'URL value is invalid'
+    ip: 'IP value is invalid'
+  }
+}
+          </code>
+        </pre>
+      </p>
+
+      <p>Generic error
+        <pre class="prettyprint lang-sh linenums prettyprinted">
+          <code class="language-js">
+{
+  error: 'Unable to add specified record'
+}
+          </code>
+        </pre>
+      </p>
+    </div>
+
+    <!-- RMA Update -->
+    <div id="api-rma-update">
+      <h3>Update rma <span><a href="#toc">&#8593;</a></span></h3>
+
+      <p>
+        To update an existing RMA record:
+
+        <pre class="prettyprint lang-sh linenums prettyprinted">
+          <code class="language-sh">
+PUT /rma/&lt;record-id&gt;
+          </code>
+        </pre>
+      </p>
+
+      <p>
+        Serialized data (required fields):
+
+        <pre class="prettyprint lang-sh linenums prettyprinted">
+          <code class="language-sh">
+?hostname=&lt;machine-name&gt;&model=&lt;model-number&gt;&sku=&lt;machine-sku&gt;&uuic=&lt;machine-uuic&gt;&serial=&lt;machine-serial&gt;
+          </code>
+        </pre>
+      </p>
+
+      <h4>Response example(s):</h4>
+
+      <p>A successful response when updating a RMA asset record
+        <pre class="prettyprint lang-sh linenums prettyprinted">
+          <code class="language-js">
+{
+  success: 'Successfully updated record'
+}
+          </code>
+        </pre>
+      </p>
+
+      <p>Invalid parameters response
+        <pre class="prettyprint lang-sh linenums prettyprinted">
+          <code class="language-js">
+{
+  error: 'Given parameters did meet validation requirements',
+  details: {
+    application: 'Application value is invalid'
+    url: 'URL value is invalid'
+    ip: 'IP value is invalid'
+  }
+}
+          </code>
+        </pre>
+      </p>
+
+      <p>No changes occured message
+        <pre class="prettyprint lang-sh linenums prettyprinted">
+          <code class="language-js">
+{
+  warning: 'No changes to rma record occured'
+}
+          </code>
+        </pre>
+      </p>
+
+      <p>Database record didn't exist
+        <pre class="prettyprint lang-sh linenums prettyprinted">
+          <code class="language-js">
+{
+  error: 'Whoops, an error occured while deleting rma record'
+}
+          </code>
+        </pre>
+      </p>
+
+      <p>Generic error
+        <pre class="prettyprint lang-sh linenums prettyprinted">
+          <code class="language-js">
+{
+  error: 'Could not edit record'
+}
+          </code>
+        </pre>
+      </p>
+    </div>
+
+    <!-- RMA Delete -->
+    <div id="api-rma-delete">
+      <h3>Delete rma <span><a href="#toc">&#8593;</a></span></h3>
+      <p>
+        Example usage of removing RMA records.
+      </p>
+
+      <h4>Usage example <span><a href="#toc">&#8593;</a></span></h4>
+      <p>
+        To remove an existing rma:
+        <pre class="prettyprint lang-sh linenums prettyprinted">
+          <code class="language-sh">
+DELETE /rma/&lt;record-id&gt;
+          </code>
+        </pre>
+      </p>
+
+      <h4>Response example(s):</h4>
+      <p>
+        A successful response when removing a RMA asset record
+        <pre class="prettyprint lang-sh linenums prettyprinted">
+          <code class="language-js">
+{
+  success: 'Successfully deleted record'
+}
+          </code>
+        </pre>
+      </p>
+
+      <p>
+        Invalid parameters response
+        <pre class="prettyprint lang-sh linenums prettyprinted">
+          <code class="language-js">
+{
+  error: 'Given parameters did meet validation requirements',
+  details: {
+    id: 'ID value is invalid'
+  }
+}
+          </code>
+        </pre>
+      </p>
+
+      <p>Database record didn't exist
+        <pre class="prettyprint lang-sh linenums prettyprinted">
+          <code class="language-js">
+{
+  error: 'Whoops, an error occured while deleting rma record'
+}
+          </code>
+        </pre>
+      </p>
+
+      <p>Generic error
+        <pre class="prettyprint lang-sh linenums prettyprinted">
+          <code class="language-js">
+{
+  error: 'Unable to delete specified record'
+}
+          </code>
+        </pre>
+      </p>
+    </div>
+  </div>
+
+
   <div id="api-cors">
     <h3>CORS <span><a href="#toc">&#8593;</a></span></h3>
 
@@ -1206,28 +1524,16 @@ GET /cors
           <code class="language-js">
 [
     {
-        "Id": "1572",
-        "Hostname": "ACQ-01",
-        "Model": "6200",
-        "SKU": "017043",
-        "UUIC": "034755",
-        "Serial": "090705",
-        "EOWD": "2013-06-02",
-        "OPD": "2009-06-02",
-        "Notes": "",
-        "Description": ""
+        "id": "1",
+        "application": "resource-name",
+        "url": "http://fqdn.of.resource-name",
+        "ip": "192.1.2.10"
     },
     {
-        "Id": "1573",
-        "Hostname": "ACQ-07",
-        "Model": "6200",
-        "SKU": "017056",
-        "UUIC": "034768",
-        "Serial": "090732",
-        "EOWD": "2013-06-02",
-        "OPD": "2009-06-02",
-        "Notes": "",
-        "Description": ""
+        "id": "2",
+        "application": "another-name",
+        "url": "http://fqdn.of.another-name",
+        "ip": "192.1.2.115"
     },
     /* ... */
 ]
@@ -1244,7 +1550,7 @@ GET /cors
 
         <pre class="prettyprint lang-sh linenums prettyprinted">
           <code class="language-sh">
-GET /cors/034*
+GET /cors/resource*
           </code>
         </pre>
       </p>
@@ -1256,28 +1562,10 @@ GET /cors/034*
           <code class="language-js">
 [
     {
-        "Id": "1572",
-        "Hostname": "ACQ-01",
-        "Model": "6200",
-        "SKU": "017043",
-        "UUIC": "034755",
-        "Serial": "090705",
-        "EOWD": "2013-06-02",
-        "OPD": "2009-06-02",
-        "Notes": "",
-        "Description": ""
-    },
-    {
-        "Id": "1573",
-        "Hostname": "ACQ-07",
-        "Model": "6200",
-        "SKU": "017056",
-        "UUIC": "034768",
-        "Serial": "090732",
-        "EOWD": "2013-06-02",
-        "OPD": "2009-06-02",
-        "Notes": "",
-        "Description": ""
+        "id": "1",
+        "application": "resource-name",
+        "url": "http://fqdn.of.resource-name",
+        "ip": "192.1.2.10"
     },
     /* ... */
 ]
@@ -1334,7 +1622,7 @@ POST /cors
 
       <h4>Response example(s):</h4>
 
-      <p>A successful response when removing a CORS asset record
+      <p>A successful response when adding a CORS asset record
         <pre class="prettyprint lang-sh linenums prettyprinted">
           <code class="language-js">
 {

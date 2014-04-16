@@ -47,7 +47,7 @@ class RmaController extends AbstractRestfulController
 
             return $db->response($db->search($id));
         } else {
-            return $db->response(array('error'=>'Given parameters did meet validation requirements'
+            return $db->response(array('error'=>'Given parameters did meet validation requirements',
                                        'details'=>$search->getErrors()));
         }
 
