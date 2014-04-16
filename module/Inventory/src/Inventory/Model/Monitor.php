@@ -56,22 +56,28 @@ class Monitor
 			return false;
 		}
 
-		if (!Date::isValid($this->eowd)) {
+    if (!empty($this->eowd)) {
+      if (!Date::isValid($this->eowd)) {
             $this->errors['eowd'] = 'EOWD value is invalid';
             return false;
-		}
+      }
+    }
 
-		if (!Date::isValid($this->opd)) {
+		if (!empty($this->opd)) {
+      if (!Date::isValid($this->opd)) {
             $this->errors['opd'] = 'OPD value is invalid';
-			return false;
-		}
+      	return false;
+      }
+    }
 
 		if (!empty($this->description)) {
-			if (!Paragraph::isValid($this->description)) {
+      if (!empty($this->description)) {
+  			if (!Paragraph::isValid($this->description)) {
                 $this->errors['description'] = 'Description value is invalid';
-				return false;
-			}
-		}
+  				return false;
+  			}
+  		}
+    }
 
 		if (!empty($this->notes)) {
 			if (!Paragraph::isValid($this->notes)) {
