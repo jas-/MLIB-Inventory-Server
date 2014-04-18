@@ -37,12 +37,18 @@ DROP TABLE IF EXISTS `models`;
 CREATE TABLE `models` (
   `id` BIGINT NOT NULL AUTO_INCREMENT,
   `model` CHAR(128) NOT NULL,
-  `eowd` CHAR(32) NOT NULL,
-  `opd` CHAR(32) NOT NULL,
   `description` CHAR(128) NOT NULL,
   `notes` LONGTEXT NOT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY (`model`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci AUTO_INCREMENT=0;
+
+DROP TABLE IF EXISTS `warranty`;
+CREATE TABLE `warranty` (
+  `id` BIGINT NOT NULL AUTO_INCREMENT,
+  `eowd` CHAR(32) NOT NULL,
+  `opd` CHAR(32) NOT NULL,
+  PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci AUTO_INCREMENT=0;
 
 DROP TABLE IF EXISTS `computers`;
@@ -52,16 +58,20 @@ CREATE TABLE `computers` (
   `model` CHAR(128) NOT NULL,
   `sku` CHAR(128) NOT NULL,
   `uuic` CHAR(128) NOT NULL,
+  `warranty` BIGINT NOT NULL,
   `serial` CHAR(128) NOT NULL,
   `notes` LONGTEXT NOT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY (`sku`,`serial`),
-  INDEX (`hostname`, `model`),
+  INDEX (`hostname`, `model`, `warranty`),
   CONSTRAINT `fk_computers2hostnames` FOREIGN KEY (`hostname`)
    REFERENCES `hostnames` (`hostname`)
     ON DELETE CASCADE ON UPDATE CASCADE,
   CONSTRAINT `fk_computers2models` FOREIGN KEY (`model`)
    REFERENCES `models` (`model`)
+    ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT `fk_computers2warranty` FOREIGN KEY (`warranty`)
+   REFERENCES `warranty` (`id`)
     ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci AUTO_INCREMENT=0;
 
@@ -72,6 +82,7 @@ CREATE TABLE `monitors` (
   `model` CHAR(128) NOT NULL,
   `sku` CHAR(128) NOT NULL,
   `serial` CHAR(128) NOT NULL,
+  `warranty` BIGINT NOT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY (`sku`,`serial`),
   INDEX (`hostname`, `model`),
@@ -80,6 +91,9 @@ CREATE TABLE `monitors` (
     ON DELETE CASCADE ON UPDATE CASCADE,
   CONSTRAINT `fk_monitors2models` FOREIGN KEY (`model`)
    REFERENCES `models` (`model`)
+    ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT `fk_monitors2warranty` FOREIGN KEY (`warranty`)
+   REFERENCES `warranty` (`id`)
     ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci AUTO_INCREMENT=0;
 
@@ -112,17 +126,17 @@ CREATE TABLE IF NOT EXISTS `cors` (
 CREATE OR REPLACE DEFINER='{RO}'@'{SERVER}'
  SQL SECURITY INVOKER
 VIEW viewInventoryComputers AS
- SELECT c.id AS Id, c.hostname AS Hostname, c.model AS Model, c.sku AS SKU, c.uuic AS UUIC, c.serial AS Serial, FROM_UNIXTIME(m.eowd, '%Y-%m-%d') AS EOWD, FROM_UNIXTIME(m.opd, '%Y-%m-%d') AS OPD, m.notes AS Notes, m.description AS Description FROM computers c LEFT JOIN models m ON c.model = m.model ORDER BY c.hostname;
+ SELECT c.id AS Id, c.hostname AS Hostname, c.model AS Model, c.sku AS SKU, c.uuic AS UUIC, c.serial AS Serial, FROM_UNIXTIME(w.eowd, '%Y-%m-%d') AS EOWD, FROM_UNIXTIME(w.opd, '%Y-%m-%d') AS OPD, m.notes AS Notes, m.description AS Description FROM computers c LEFT JOIN models m ON c.model = m.model LEFT JOIN warranty w ON c.warranty = w.id ORDER BY c.hostname;
 
 CREATE OR REPLACE DEFINER='{RO}'@'{SERVER}'
  SQL SECURITY INVOKER
 VIEW viewInventoryMonitors AS
- SELECT m.id AS Id, m.hostname AS Hostname, m.model AS Model, m.sku AS SKU, m.serial AS Serial, FROM_UNIXTIME(mo.eowd, '%Y-%m-%d') AS EOWD, FROM_UNIXTIME(mo.opd, '%Y-%m-%d') AS OPD, mo.notes AS Notes, mo.description AS Description FROM monitors m LEFT JOIN models mo ON m.model = mo.model ORDER BY `hostname`;
+ SELECT m.id AS Id, m.hostname AS Hostname, m.model AS Model, m.sku AS SKU, m.serial AS Serial, FROM_UNIXTIME(w.eowd, '%Y-%m-%d') AS EOWD, FROM_UNIXTIME(w.opd, '%Y-%m-%d') AS OPD, mo.notes AS Notes, mo.description AS Description FROM monitors m LEFT JOIN models mo ON m.model = mo.model LEFT JOIN warranty w ON m.warranty = w.id ORDER BY `hostname`;
 
 CREATE OR REPLACE DEFINER='{RO}'@'{SERVER}'
  SQL SECURITY INVOKER
 VIEW viewInventoryModels AS
- SELECT id AS Id, model AS Model, FROM_UNIXTIME(eowd, '%Y-%m-%d') AS EOWD, FROM_UNIXTIME(opd, '%Y-%m-%d') AS OPD, notes AS Notes, description AS Description FROM models ORDER BY `model`;
+ SELECT id AS Id, model AS Model, notes AS Notes, description AS Description FROM models ORDER BY `model`;
 
 CREATE OR REPLACE DEFINER='{RO}'@'{SERVER}'
  SQL SECURITY INVOKER
