@@ -15,7 +15,7 @@ CREATE  DEFINER=`{RO}`@`{SERVER}` PROCEDURE `ComputerSearch`(IN `s` LONGTEXT)
  SQL SECURITY INVOKER
  COMMENT 'Search for computer'
 BEGIN
- SELECT * FROM `viewInventoryComputers` WHERE `Hostname` LIKE s OR `Model` LIKE s OR `SKU` LIKE s OR `UUIC` LIKE s OR `Serial` LIKE s ORDER BY `hostname`;
+ SELECT * FROM `viewInventoryComputers` WHERE `Hostname` LIKE s OR `Model` LIKE s OR `SKU` LIKE s OR `UUIC` LIKE s OR `Serial` LIKE s ORDER BY `hostname` OR s LIKE `eowd` OR s LIKE `opd`;
 END//
 
 DROP PROCEDURE IF EXISTS `ComputerAddUpdate`;
