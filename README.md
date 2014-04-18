@@ -5,6 +5,9 @@ Introduction
 ------------
 Restful service for handling computer asset management.
 
+Download
+------------
+It is best to clone this repo like so `git clone --recursive https://github.com/jas-/MLIB-Inventory-Server.git`
 
 Installation
 ------------
