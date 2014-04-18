@@ -55,7 +55,7 @@ CREATE TABLE `computers` (
   `serial` CHAR(128) NOT NULL,
   `notes` LONGTEXT NOT NULL,
   PRIMARY KEY (`id`),
-  UNIQUE KEY (`sku`,`uuic`,`serial`),
+  UNIQUE KEY (`sku`,`serial`),
   INDEX (`hostname`, `model`),
   CONSTRAINT `fk_computers2hostnames` FOREIGN KEY (`hostname`)
    REFERENCES `hostnames` (`hostname`)
