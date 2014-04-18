@@ -15,7 +15,7 @@ CREATE DEFINER=`{RO}`@`{SERVER}` PROCEDURE `MonitorSearch`(IN `s` LONGTEXT)
  SQL SECURITY INVOKER
  COMMENT 'Searches monitor records'
 BEGIN
- SELECT * FROM `viewInventoryMonitors` WHERE `Hostname` LIKE s OR `Model` LIKE s OR `SKU` LIKE s OR `Serial` LIKE s ORDER BY `hostname`;
+ SELECT * FROM `viewInventoryMonitors` WHERE `Hostname` LIKE s OR `Model` LIKE s OR `SKU` LIKE s OR `Serial` LIKE s ORDER BY `hostname` OR `eowd` LIKE s OR `opd` LIKE s;
 END//
 
 DROP PROCEDURE IF EXISTS `MonitorAddUpdate`;
