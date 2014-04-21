@@ -30,7 +30,7 @@ CREATE TABLE `hostnames` (
   `id` BIGINT NOT NULL AUTO_INCREMENT,
   `hostname` CHAR(128) NOT NULL,
   PRIMARY KEY (`id`),
-  INDEX (`hostname`)
+  UNIQUE KEY (`hostname`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci AUTO_INCREMENT=0;
 
 DROP TABLE IF EXISTS `models`;
@@ -54,7 +54,7 @@ CREATE TABLE `warranty` (
 DROP TABLE IF EXISTS `computers`;
 CREATE TABLE `computers` (
   `id` BIGINT NOT NULL AUTO_INCREMENT,
-  `hostname` CHAR(128) NOT NULL,
+  `hostname` BIGINT NOT NULL,
   `model` BIGINT NOT NULL,
   `sku` CHAR(128) NOT NULL,
   `uuic` CHAR(128) NOT NULL,
@@ -65,7 +65,7 @@ CREATE TABLE `computers` (
   UNIQUE KEY (`sku`,`serial`),
   INDEX (`hostname`, `model`, `warranty`),
   CONSTRAINT `fk_computers2hostnames` FOREIGN KEY (`hostname`)
-   REFERENCES `hostnames` (`hostname`)
+   REFERENCES `hostnames` (`id`)
     ON DELETE CASCADE ON UPDATE CASCADE,
   CONSTRAINT `fk_computers2models` FOREIGN KEY (`model`)
    REFERENCES `models` (`id`)
