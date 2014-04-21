@@ -78,16 +78,16 @@ CREATE TABLE `computers` (
 DROP TABLE IF EXISTS `monitors`;
 CREATE TABLE `monitors` (
   `id` BIGINT NOT NULL AUTO_INCREMENT,
-  `hostname` CHAR(128) NOT NULL,
+  `hostname` BIGINT NOT NULL,
   `model` CHAR(128) NOT NULL,
   `sku` CHAR(128) NOT NULL,
   `serial` CHAR(128) NOT NULL,
   `warranty` BIGINT NOT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY (`sku`,`serial`),
-  INDEX (`hostname`, `model`),
+  INDEX (`hostname`, `model`, `warranty`),
   CONSTRAINT `fk_monitors2hostnames` FOREIGN KEY (`hostname`)
-   REFERENCES `hostnames` (`hostname`)
+   REFERENCES `hostnames` (`id`)
     ON DELETE CASCADE ON UPDATE CASCADE,
   CONSTRAINT `fk_monitors2models` FOREIGN KEY (`model`)
    REFERENCES `models` (`model`)
