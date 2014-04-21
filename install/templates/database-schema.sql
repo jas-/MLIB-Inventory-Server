@@ -37,8 +37,7 @@ DROP TABLE IF EXISTS `models`;
 CREATE TABLE `models` (
   `id` BIGINT NOT NULL AUTO_INCREMENT,
   `model` CHAR(128) NOT NULL,
-  `description` CHAR(128) NOT NULL,
-  `notes` LONGTEXT NOT NULL,
+  `description` LONGTEXT NOT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY (`model`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci AUTO_INCREMENT=0;
@@ -83,6 +82,7 @@ CREATE TABLE `monitors` (
   `sku` CHAR(128) NOT NULL,
   `serial` CHAR(128) NOT NULL,
   `warranty` BIGINT NOT NULL,
+  `notes` LONGTEXT NOT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY (`sku`,`serial`),
   INDEX (`hostname`, `model`, `warranty`),
@@ -126,17 +126,17 @@ CREATE TABLE IF NOT EXISTS `cors` (
 CREATE OR REPLACE DEFINER='{RO}'@'{SERVER}'
  SQL SECURITY INVOKER
 VIEW viewInventoryComputers AS
- SELECT c.id AS Id, h.hostname AS Hostname, m.model AS Model, c.sku AS SKU, c.uuic AS UUIC, c.serial AS Serial, FROM_UNIXTIME(w.eowd, '%Y-%m-%d') AS EOWD, FROM_UNIXTIME(w.opd, '%Y-%m-%d') AS OPD, m.notes AS Notes, m.description AS Description FROM computers c LEFT JOIN hostnames h ON h.id = c.hostname LEFT JOIN models m ON c.model = m.model LEFT JOIN warranty w ON c.warranty = w.id ORDER BY c.hostname;
+ SELECT c.id AS Id, h.hostname AS Hostname, m.model AS Model, c.sku AS SKU, c.uuic AS UUIC, c.serial AS Serial, FROM_UNIXTIME(w.eowd, '%Y-%m-%d') AS EOWD, FROM_UNIXTIME(w.opd, '%Y-%m-%d') AS OPD, m.description AS Description, c.notes AS Notes FROM computers c LEFT JOIN hostnames h ON h.id = c.hostname LEFT JOIN models m ON c.model = m.id LEFT JOIN warranty w ON c.warranty = w.id ORDER BY c.hostname;
 
 CREATE OR REPLACE DEFINER='{RO}'@'{SERVER}'
  SQL SECURITY INVOKER
 VIEW viewInventoryMonitors AS
- SELECT m.id AS Id, m.hostname AS Hostname, m.model AS Model, m.sku AS SKU, m.serial AS Serial, FROM_UNIXTIME(w.eowd, '%Y-%m-%d') AS EOWD, FROM_UNIXTIME(w.opd, '%Y-%m-%d') AS OPD, mo.notes AS Notes, mo.description AS Description FROM monitors m LEFT JOIN models mo ON m.model = mo.model LEFT JOIN warranty w ON m.warranty = w.id ORDER BY `hostname`;
+ SELECT m.id AS Id, h.hostname AS Hostname, mo.model AS Model, m.sku AS SKU, m.serial AS Serial, FROM_UNIXTIME(w.eowd, '%Y-%m-%d') AS EOWD, FROM_UNIXTIME(w.opd, '%Y-%m-%d') AS OPD, mo.description AS Description, m.notes AS Notes FROM monitors m LEFT JOIN hostnames h ON h.id = m.hostname LEFT JOIN models mo ON m.model = mo.id LEFT JOIN warranty w ON m.warranty = w.id ORDER BY `hostname`;
 
 CREATE OR REPLACE DEFINER='{RO}'@'{SERVER}'
  SQL SECURITY INVOKER
 VIEW viewInventoryModels AS
- SELECT id AS Id, model AS Model, notes AS Notes, description AS Description FROM models ORDER BY `model`;
+ SELECT id AS Id, model AS Model, description AS Description FROM models ORDER BY `model`;
 
 CREATE OR REPLACE DEFINER='{RO}'@'{SERVER}'
  SQL SECURITY INVOKER
