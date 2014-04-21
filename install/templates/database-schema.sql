@@ -55,11 +55,11 @@ DROP TABLE IF EXISTS `computers`;
 CREATE TABLE `computers` (
   `id` BIGINT NOT NULL AUTO_INCREMENT,
   `hostname` CHAR(128) NOT NULL,
-  `model` CHAR(128) NOT NULL,
+  `model` BIGINT NOT NULL,
   `sku` CHAR(128) NOT NULL,
   `uuic` CHAR(128) NOT NULL,
-  `warranty` BIGINT NOT NULL,
   `serial` CHAR(128) NOT NULL,
+  `warranty` BIGINT NOT NULL,
   `notes` LONGTEXT NOT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY (`sku`,`serial`),
@@ -68,7 +68,7 @@ CREATE TABLE `computers` (
    REFERENCES `hostnames` (`hostname`)
     ON DELETE CASCADE ON UPDATE CASCADE,
   CONSTRAINT `fk_computers2models` FOREIGN KEY (`model`)
-   REFERENCES `models` (`model`)
+   REFERENCES `models` (`id`)
     ON DELETE CASCADE ON UPDATE CASCADE,
   CONSTRAINT `fk_computers2warranty` FOREIGN KEY (`warranty`)
    REFERENCES `warranty` (`id`)
@@ -126,7 +126,7 @@ CREATE TABLE IF NOT EXISTS `cors` (
 CREATE OR REPLACE DEFINER='{RO}'@'{SERVER}'
  SQL SECURITY INVOKER
 VIEW viewInventoryComputers AS
- SELECT c.id AS Id, c.hostname AS Hostname, c.model AS Model, c.sku AS SKU, c.uuic AS UUIC, c.serial AS Serial, FROM_UNIXTIME(w.eowd, '%Y-%m-%d') AS EOWD, FROM_UNIXTIME(w.opd, '%Y-%m-%d') AS OPD, m.notes AS Notes, m.description AS Description FROM computers c LEFT JOIN models m ON c.model = m.model LEFT JOIN warranty w ON c.warranty = w.id ORDER BY c.hostname;
+ SELECT c.id AS Id, c.hostname AS Hostname, m.model AS Model, c.sku AS SKU, c.uuic AS UUIC, c.serial AS Serial, FROM_UNIXTIME(w.eowd, '%Y-%m-%d') AS EOWD, FROM_UNIXTIME(w.opd, '%Y-%m-%d') AS OPD, m.notes AS Notes, m.description AS Description FROM computers c LEFT JOIN models m ON c.model = m.model LEFT JOIN warranty w ON c.warranty = w.id ORDER BY c.hostname;
 
 CREATE OR REPLACE DEFINER='{RO}'@'{SERVER}'
  SQL SECURITY INVOKER
