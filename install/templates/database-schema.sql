@@ -126,7 +126,7 @@ CREATE TABLE IF NOT EXISTS `cors` (
 CREATE OR REPLACE DEFINER='{RO}'@'{SERVER}'
  SQL SECURITY INVOKER
 VIEW viewInventoryComputers AS
- SELECT c.id AS Id, c.hostname AS Hostname, m.model AS Model, c.sku AS SKU, c.uuic AS UUIC, c.serial AS Serial, FROM_UNIXTIME(w.eowd, '%Y-%m-%d') AS EOWD, FROM_UNIXTIME(w.opd, '%Y-%m-%d') AS OPD, m.notes AS Notes, m.description AS Description FROM computers c LEFT JOIN models m ON c.model = m.model LEFT JOIN warranty w ON c.warranty = w.id ORDER BY c.hostname;
+ SELECT c.id AS Id, h.hostname AS Hostname, m.model AS Model, c.sku AS SKU, c.uuic AS UUIC, c.serial AS Serial, FROM_UNIXTIME(w.eowd, '%Y-%m-%d') AS EOWD, FROM_UNIXTIME(w.opd, '%Y-%m-%d') AS OPD, m.notes AS Notes, m.description AS Description FROM computers c LEFT JOIN hostnames h ON h.id = c.hostname LEFT JOIN models m ON c.model = m.model LEFT JOIN warranty w ON c.warranty = w.id ORDER BY c.hostname;
 
 CREATE OR REPLACE DEFINER='{RO}'@'{SERVER}'
  SQL SECURITY INVOKER
