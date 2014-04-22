@@ -48,7 +48,17 @@ BEGIN
     EXECUTE stmt;
     DEALLOCATE PREPARE stmt;
 
-    SELECT @hid AS HostnameID, @mid AS ModelID;
+    IF m IS NOT NULL AND m NOT LIKE '' THEN
+      SET @sql = CONCAT('SELECT `id` INTO @wid FROM `warranty` WHERE `id` = "',m,'"');
+    ELSE
+      SET @sql = CONCAT('SELECT 1 INTO @wid');
+    END IF;
+
+    PREPARE stmt FROM @sql;
+    EXECUTE stmt;
+    DEALLOCATE PREPARE stmt;
+
+    SELECT @hid AS HostnameID, @mid AS ModelID, @wid AS WarrantyID, s AS SKU, sl AS Serial;
 
   END LOOP;
 
