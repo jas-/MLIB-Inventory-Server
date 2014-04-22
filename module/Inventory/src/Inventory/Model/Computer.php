@@ -52,10 +52,12 @@ class Computer
 			return false;
 		}
 
-		if (!UUIC::isValid($this->uuic)) {
-            $this->errors['uuic'] = 'UUIC value is invalid';
-			return false;
-		}
+    if (!empty($this->uuic)){
+  		if (!UUIC::isValid($this->uuic)) {
+              $this->errors['uuic'] = 'UUIC value is invalid';
+  			return false;
+  		}
+    }
 
 		if (!Serial::isValid($this->serial)) {
             $this->errors['serial'] = 'Serial value is invalid';
