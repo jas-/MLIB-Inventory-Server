@@ -78,7 +78,7 @@ DROP TABLE IF EXISTS `monitors`;
 CREATE TABLE `monitors` (
   `id` BIGINT NOT NULL AUTO_INCREMENT,
   `hostname` BIGINT NOT NULL,
-  `model` CHAR(128) NOT NULL,
+  `model` BIGINT NOT NULL,
   `sku` CHAR(128) NOT NULL,
   `serial` CHAR(128) NOT NULL,
   `warranty` BIGINT NOT NULL,
@@ -90,7 +90,7 @@ CREATE TABLE `monitors` (
    REFERENCES `hostnames` (`id`)
     ON DELETE CASCADE ON UPDATE CASCADE,
   CONSTRAINT `fk_monitors2models` FOREIGN KEY (`model`)
-   REFERENCES `models` (`model`)
+   REFERENCES `models` (`id`)
     ON DELETE CASCADE ON UPDATE CASCADE,
   CONSTRAINT `fk_monitors2warranty` FOREIGN KEY (`warranty`)
    REFERENCES `warranty` (`id`)
