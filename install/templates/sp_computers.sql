@@ -19,33 +19,42 @@ BEGIN
 END//
 
 DROP PROCEDURE IF EXISTS `ComputerAddUpdate`;
-CREATE DEFINER=`{ADMIN}`@`{SERVER}` PROCEDURE `ComputerAddUpdate`(IN `h` CHAR(128), IN `m` CHAR(128), IN `s` CHAR(128), IN `u` CHAR(128), IN `sl` CHAR(128), IN `n` LONGTEXT)
+CREATE DEFINER=`{ADMIN}`@`{SERVER}` PROCEDURE `ComputerAddUpdate`(IN `h` CHAR(128), IN `m` CHAR(128), IN `s` CHAR(128), IN `u` CHAR(128), IN `sl` CHAR(128), IN `e` CHAR(32), IN `o` CHAR(32), IN `n` LONGTEXT)
  DETERMINISTIC
  SQL SECURITY INVOKER
  COMMENT 'Add/Update computer'
 BEGIN
- SELECT COUNT(*) FROM `models` WHERE `model` = m INTO @model;
- SELECT COUNT(*) FROM `hostnames` WHERE `hostname` = h INTO @hostname;
+  SET @hid = 1;
+  SET @mid = 1;
+  SELECT `id` INTO @mid FROM `models` WHERE `model` = m;
+  SET @wid = 1;
+  SELECT `id` INTO @wid FROM `hostnames` WHERE `hostname` = h;
 
- IF (SELECT COUNT(*) FROM `viewInventoryComputers` WHERE `SKU` = s OR `UUIC` = u OR `Serial` = sl) <= 0
- THEN
+  SELECT COUNT(*) FROM `hostnames` WHERE `hostname` = h INTO @hostname;
+  SELECT COUNT(*) FROM `models` WHERE `model` = m INTO @model;
+  SELECT COUNT(*) FROM `warranty` WHERE `eowd` = e AND `opd` = o INTO @warranty;
 
-  IF (@model <= 0)
-  THEN
-   INSERT INTO `models` (`model`) VALUES (m);
+  IF (SELECT COUNT(*) FROM `viewInventoryComputers` WHERE `SKU` = s OR `UUIC` = u OR `Serial` = sl) <= 0 THEN
+
+    IF (@hostname <= 0) THEN
+      INSERT INTO `hostnames` (`hostname`) VALUES (h);
+    ELSE
+      SELECT `id` INTO @hid FROM `hostnames` WHERE `hostname` = h;
+    END IF;
+
+    IF (@warranty <= 0) THEN
+      INSERT INTO `hostnames` (`hostname`) VALUES (h);
+    ELSE
+
+    END IF;
+
+
+    INSERT INTO `computers` (`hostname`, `model`, `sku`, `uuic`, `serial`, `notes`) VALUES (h, m, s, u, sl, n);
+    SELECT ROW_COUNT() AS affected;
+  ELSE
+    UPDATE `computers` SET `hostname`=h, `model`=m, `notes`=n WHERE `sku`=s AND `uuic`=u AND `serial`=sl;
+    SELECT 2 AS affected;
   END IF;
-
-  IF (@hostname <= 0)
-  THEN
-   INSERT INTO `hostnames` (`hostname`) VALUES (h);
-  END IF;
-
-  INSERT INTO `computers` (`hostname`, `model`, `sku`, `uuic`, `serial`, `notes`) VALUES (h, m, s, u, sl, n);
-  SELECT ROW_COUNT() AS affected;
- ELSE
-  UPDATE `computers` SET `hostname`=h, `model`=m, `notes`=n WHERE `sku`=s AND `uuic`=u AND `serial`=sl;
-  SELECT 2 AS affected;
- END IF;
 END//
 
 DROP PROCEDURE IF EXISTS `ComputerUpdate`;
