@@ -24,35 +24,33 @@ CREATE DEFINER=`{ADMIN}`@`{SERVER}` PROCEDURE `ComputerAddUpdate`(IN `h` CHAR(12
  SQL SECURITY INVOKER
  COMMENT 'Add/Update computer'
 BEGIN
-  SET @hid = 1;
-  SET @mid = 1;
+
+  SELECT `id` INTO @hid FROM `hostnames` WHERE `hostname` = h;
   SELECT `id` INTO @mid FROM `models` WHERE `model` = m;
-  SET @wid = 1;
-  SELECT `id` INTO @wid FROM `hostnames` WHERE `hostname` = h;
+  SELECT `id` INTO @wid FROM `warranty` WHERE `eowd` = UNIX_TIMESTAMP(e) AND `opd` = UNIX_TIMESTAMP(o);
 
-  SELECT COUNT(*) FROM `hostnames` WHERE `hostname` = h INTO @hostname;
-  SELECT COUNT(*) FROM `models` WHERE `model` = m INTO @model;
-  SELECT COUNT(*) FROM `warranty` WHERE `eowd` = e AND `opd` = o INTO @warranty;
+  SELECT COUNT(*) INTO @exists FROM `viewInventoryComputers` WHERE `SKU` = s OR `UUIC` = u OR `Serial` = sl;
 
-  IF (SELECT COUNT(*) FROM `viewInventoryComputers` WHERE `SKU` = s OR `UUIC` = u OR `Serial` = sl) <= 0 THEN
+  IF (@hid <= 0 OR @hid = '' OR @hid IS NULL) THEN
+    INSERT INTO `hostnames` (`hostname`) VALUES (h);
+    SELECT `id` INTO @hid FROM `hostnames` WHERE `hostname` = h;
+  END IF;
 
-    IF (@hostname <= 0) THEN
-      INSERT INTO `hostnames` (`hostname`) VALUES (h);
-    ELSE
-      SELECT `id` INTO @hid FROM `hostnames` WHERE `hostname` = h;
-    END IF;
+  IF (@mid <= 0 OR @mid = '' OR @mid IS NULL) THEN
+    INSERT INTO `models` (`model`) VALUES (m);
+    SELECT `id` INTO @mid FROM `models` WHERE `model` = m;
+  END IF;
 
-    IF (@warranty <= 0) THEN
-      INSERT INTO `hostnames` (`hostname`) VALUES (h);
-    ELSE
+  IF (@wid <= 0 OR @wid = '' OR @wid IS NULL) THEN
+    INSERT INTO `warranty` (`eowd`, `opd`) VALUES (UNIX_TIMESTAMP(e), UNIX_TIMESTAMP(o));
+    SELECT `id` INTO @wid FROM `warranty` WHERE `eowd` = UNIX_TIMESTAMP(e) AND `opd` = UNIX_TIMESTAMP(o);
+  END IF;
 
-    END IF;
-
-
-    INSERT INTO `computers` (`hostname`, `model`, `sku`, `uuic`, `serial`, `notes`) VALUES (h, m, s, u, sl, n);
+  IF (@exists <= 0) THEN
+    INSERT INTO `computers` (`hostname`, `model`, `sku`, `uuic`, `serial`, `warranty`, `notes`) VALUES (@hid, @mid, s, u, sl, @wid, n);
     SELECT ROW_COUNT() AS affected;
   ELSE
-    UPDATE `computers` SET `hostname`=h, `model`=m, `notes`=n WHERE `sku`=s AND `uuic`=u AND `serial`=sl;
+    UPDATE `computers` SET `hostname`=@hid, `model`=@mid, `warranty`=@wid, `notes`=n WHERE `sku`=s AND `uuic`=u AND `serial`=sl;
     SELECT 2 AS affected;
   END IF;
 END//
