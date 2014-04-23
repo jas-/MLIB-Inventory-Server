@@ -141,6 +141,11 @@ VIEW viewInventoryModels AS
 
 CREATE OR REPLACE DEFINER='{RO}'@'{SERVER}'
  SQL SECURITY DEFINER
+VIEW viewInventoryWarranty AS
+ SELECT id AS Id, FROM_UNIXTIME(eowd, '%Y-%m-%d') AS EOWD, FROM_UNIXTIME(opd, '%Y-%m-%d') AS OPD FROM warranty ORDER BY OPD ASC;
+
+CREATE OR REPLACE DEFINER='{RO}'@'{SERVER}'
+ SQL SECURITY DEFINER
 VIEW viewInventoryRMA AS
  SELECT id AS Id, incorrect AS Problem, FROM_UNIXTIME(date, '%Y-%m-%d') AS Date, hostname AS Hostname, model AS Model, sku AS SKU, uuic AS UUIC, serial AS Serial, eowd AS EOWD, part AS Part, notes AS Notes FROM rma ORDER BY `Date` ASC;
 
