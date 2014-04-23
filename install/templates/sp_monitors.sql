@@ -23,14 +23,14 @@ CREATE  DEFINER=`{RO}`@`{SERVER}` PROCEDURE `MonitorSearch`(IN `s` LONGTEXT)
  SQL SECURITY INVOKER
  COMMENT 'Search for monitor'
 BEGIN
- SELECT * FROM `viewInventoryMonitors` WHERE `Hostname` LIKE s OR `Model` LIKE s OR `SKU` LIKE s OR `Serial` LIKE s OR `eowd` LIKE UNIX_TIMESTAMP(s) OR `opd` LIKE UNIX_TIMESTAMP(s) ORDER BY `hostname`;
+ SELECT * FROM `viewInventoryMonitors` WHERE `Hostname` LIKE s OR `Model` LIKE s OR `SKU` LIKE s OR `Serial` LIKE s OR `eowd` LIKE UNIX_TIMESTAMP(s) OR `opd` LIKE UNIX_TIMESTAMP(s) ORDER BY `hostname` ASC;
 END//
 
 -- Add/Updates monitor record
 -- Creates new entries for hostname, models & warranty tables if they don't alreay exist
 -- Args: hostname, model, sku, uuic, serial, eowd (end of warranty date), opd (original purchase date) & notes
 DROP PROCEDURE IF EXISTS `MonitorAddUpdate`;
-CREATE DEFINER=`{ADMIN}`@`{SERVER}` PROCEDURE `MonitorAddUpdate`(IN `h` CHAR(128), IN `m` CHAR(128), IN `s` CHAR(128), IN `u` CHAR(128), IN `sl` CHAR(128), IN `e` CHAR(32), IN `o` CHAR(32), IN `n` LONGTEXT)
+CREATE DEFINER=`{ADMIN}`@`{SERVER}` PROCEDURE `MonitorAddUpdate`(IN `h` CHAR(128), IN `m` CHAR(128), IN `s` CHAR(128), IN `sl` CHAR(128), IN `e` CHAR(32), IN `o` CHAR(32), IN `n` LONGTEXT)
  DETERMINISTIC
  SQL SECURITY INVOKER
  COMMENT 'Add/Update monitor'
@@ -42,7 +42,7 @@ BEGIN
   SELECT `id` INTO @wid FROM `warranty` WHERE `eowd` = UNIX_TIMESTAMP(e) AND `opd` = UNIX_TIMESTAMP(o);
 
   -- Determine if we are going to add or update a record
-  SELECT COUNT(*) INTO @exists FROM `monitors` WHERE `SKU` = s OR `UUIC` = u OR `Serial` = sl;
+  SELECT COUNT(*) INTO @exists FROM `monitors` WHERE `SKU` = s OR `Serial` = sl;
 
   -- If an id doesn't exist for the hostname create one
   IF (@hid <= 0 OR @hid = '' OR @hid IS NULL) THEN
@@ -64,10 +64,10 @@ BEGIN
 
   -- Add or update the monitor record
   IF (@exists <= 0) THEN
-    INSERT INTO `monitors` (`hostname`, `model`, `sku`, `uuic`, `serial`, `warranty`, `notes`) VALUES (@hid, @mid, s, u, sl, @wid, n);
+    INSERT INTO `monitors` (`hostname`, `model`, `sku`, `serial`, `warranty`, `notes`) VALUES (@hid, @mid, s, sl, @wid, n);
     SELECT ROW_COUNT() AS affected;
   ELSE
-    UPDATE `monitors` SET `hostname`=@hid, `model`=@mid, `warranty`=@wid, `notes`=n WHERE `sku`=s AND `uuic`=u AND `serial`=sl;
+    UPDATE `monitors` SET `hostname`=@hid, `model`=@mid, `warranty`=@wid, `notes`=n WHERE `sku`=s AND `serial`=sl;
     SELECT 2 AS affected;
   END IF;
 END//
@@ -76,7 +76,7 @@ END//
 -- Updates existing monitor, hostname, model & warranty information
 -- Args: id, hostname, model, sku, uuic, serial, eowd (end of warranty date), opd (original purchase date)
 DROP PROCEDURE IF EXISTS `MonitorUpdate`;
-CREATE DEFINER=`{ADMIN}`@`{SERVER}` PROCEDURE `MonitorUpdate`(IN `i` BIGINT, IN `h` CHAR(128), IN `m` CHAR(128), IN `s` CHAR(128), IN `u` CHAR(128), IN `sl` CHAR(128), IN `e` CHAR(32), IN `o` CHAR(32), IN `n` LONGTEXT)
+CREATE DEFINER=`{ADMIN}`@`{SERVER}` PROCEDURE `MonitorUpdate`(IN `i` BIGINT, IN `h` CHAR(128), IN `m` CHAR(128), IN `s` CHAR(128), IN `sl` CHAR(128), IN `e` CHAR(32), IN `o` CHAR(32), IN `n` LONGTEXT)
  DETERMINISTIC
  SQL SECURITY INVOKER
  COMMENT 'Update monitor record'
@@ -116,7 +116,7 @@ MonitorUpdate:BEGIN
 
   -- Update the monitor record
   IF (@exists > 0) THEN
-    UPDATE `monitors` SET `hostname`=@hid, `model`=@mid, `sku`=s, `uuic`=u, `serial`=sl, `warranty`=@wid, `notes`=n WHERE `id`=i;
+    UPDATE `monitors` SET `hostname`=@hid, `model`=@mid, `sku`=s, `serial`=sl, `warranty`=@wid, `notes`=n WHERE `id`=i;
     SELECT ROW_COUNT() AS affected;
   ELSE
     SELECT 0 AS affected;
@@ -134,7 +134,7 @@ CREATE DEFINER=`{ADMIN}`@`{SERVER}` PROCEDURE `MonitorDelete`(IN `i` BIGINT)
  COMMENT 'Delete monitor'
 BEGIN
 
-  -- Lookup existing ID for hostname, model & warranty
+  -- Lookup existing ID for hostname
   SELECT `hostname` INTO @hid FROM `monitors` WHERE `id` = i;
 
   -- If a hostname record exists remove it
