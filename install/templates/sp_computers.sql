@@ -23,7 +23,7 @@ CREATE  DEFINER=`{RO}`@`{SERVER}` PROCEDURE `ComputerSearch`(IN `s` LONGTEXT)
  SQL SECURITY INVOKER
  COMMENT 'Search for computer'
 BEGIN
- SELECT * FROM `viewInventoryComputers` WHERE `Hostname` LIKE s OR `Model` LIKE s OR `SKU` LIKE s OR `UUIC` LIKE s OR `Serial` LIKE s ORDER BY `hostname` OR s LIKE `eowd` OR s LIKE `opd`;
+ SELECT * FROM `viewInventoryComputers` WHERE `Hostname` LIKE s OR `Model` LIKE s OR `SKU` LIKE s OR `UUIC` LIKE s OR `Serial` LIKE s OR `eowd` LIKE UNIX_TIMESTAMP(s) OR `opd` LIKE UNIX_TIMESTAMP(s) ORDER BY `hostname`;
 END//
 
 -- Add/Updates computer record
@@ -126,6 +126,7 @@ ComputerUpdate:BEGIN
 END//
 
 -- Remove computer record by ID
+-- Args: id
 DROP PROCEDURE IF EXISTS `ComputerDelete`;
 CREATE DEFINER=`{ADMIN}`@`{SERVER}` PROCEDURE `ComputerDelete`(IN `i` BIGINT)
  DETERMINISTIC
