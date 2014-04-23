@@ -90,7 +90,7 @@ ComputerUpdate:BEGIN
   -- Does a record exist matching the id given?
   SELECT COUNT(*) INTO @exists FROM `computers` WHERE `id` = i;
 
-  -- If a hostname record doesn't exist update it
+  -- If a hostname record exists update it
   IF (@hid > 0 OR @hid != '' OR @hid IS NOT NULL) THEN
     UPDATE `hostnames` SET `hostname` = h WHERE `id` = @hid;
   ELSE
@@ -114,7 +114,7 @@ ComputerUpdate:BEGIN
     LEAVE ComputerUpdate;
   END IF;
 
-  -- Add or update the computer record
+  -- Update the computer record
   IF (@exists > 0) THEN
     UPDATE `computers` SET `hostname`=@hid, `model`=@mid, `sku`=s, `uuic`=u, `serial`=sl, `warranty`=@wid, `notes`=n WHERE `id`=i;
     SELECT ROW_COUNT() AS affected;
@@ -125,14 +125,25 @@ ComputerUpdate:BEGIN
 
 END//
 
+-- Remove computer record by ID
 DROP PROCEDURE IF EXISTS `ComputerDelete`;
 CREATE DEFINER=`{ADMIN}`@`{SERVER}` PROCEDURE `ComputerDelete`(IN `i` BIGINT)
  DETERMINISTIC
  SQL SECURITY INVOKER
  COMMENT 'Delete computer'
 BEGIN
- DELETE FROM `computers` WHERE `id`=i;
- SELECT ROW_COUNT() AS affected;
+
+  -- Lookup existing ID for hostname, model & warranty
+  SELECT `hostname` INTO @hid FROM `computers` WHERE `id` = i;
+
+  -- If a hostname record exists remove it
+  IF (@hid > 0 OR @hid != '' OR @hid IS NOT NULL) THEN
+    DELETE FROM `hostnames` WHERE `id` = @hid;
+    SELECT ROW_COUNT() AS affected;
+  ELSE
+    SELECT 0 AS affected;
+  END IF;
+
 END//
 
 DELIMITER ;
