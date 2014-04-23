@@ -24,7 +24,7 @@ CREATE DEFINER=`{ADMIN}`@`{SERVER}` PROCEDURE `RMAAddUpdate`(IN `d` CHAR(12), IN
  SQL SECURITY INVOKER
  COMMENT 'Add/Update rma'
 BEGIN
- INSERT INTO `rma` (`date`, `hostname`, `sku`, `uuic`, `serial`, `model`, `eowd`, `part`, `notes`) VALUES (UNIX_TIMESTAMP(d), h, s, u, sl, m, e, p, n) ON DUPLICATE KEY UPDATE `date`=UNIX_TIMESTAMP(d), `hostname`=h, `sku`=s, `uuic`=u, `serial`=sl, `model`=m, `eowd`=e, `part`=p, `notes`=n;
+ INSERT INTO `rma` (`date`, `hostname`, `sku`, `uuic`, `serial`, `model`, `eowd`, `part`, `notes`) VALUES (UNIX_TIMESTAMP(d), h, s, u, sl, m, UNIX_TIMESTAMP(e), p, n) ON DUPLICATE KEY UPDATE `date`=UNIX_TIMESTAMP(d), `hostname`=h, `sku`=s, `uuic`=u, `serial`=sl, `model`=m, `eowd`=UNIX_TIMESTAMP(e), `part`=p, `notes`=n;
  SELECT ROW_COUNT() AS affected;
 END//
 
@@ -34,7 +34,7 @@ CREATE DEFINER=`{ADMIN}`@`{SERVER}` PROCEDURE `RMAUpdate`(IN `i` BIGINT, IN `d` 
  SQL SECURITY INVOKER
  COMMENT 'Add/Update rma'
 BEGIN
- UPDATE `rma` SET `date`=UNIX_TIMESTAMP(d), `hostname`=h, `sku`=s, `uuic`=u, `serial`=sl, `model`=m, `eowd`=e, `part`=p, `notes`=n WHERE `id` = i LIMIT 1;
+ UPDATE `rma` SET `date`=UNIX_TIMESTAMP(d), `hostname`=h, `sku`=s, `uuic`=u, `serial`=sl, `model`=m, `eowd`=UNIX_TIMESTAMP(e), `part`=p, `notes`=n WHERE `id` = i LIMIT 1;
  SELECT ROW_COUNT() AS affected;
 END//
 
