@@ -15,7 +15,7 @@ CREATE DEFINER=`{RO}`@`{SERVER}` PROCEDURE `RMASearch`(IN `s` LONGTEXT)
  SQL SECURITY INVOKER
  COMMENT 'Searches monitor records'
 BEGIN
- SELECT * FROM `rma` WHERE `date` LIKE s OR `hostname` LIKE s OR `sku` LIKE s OR `uuic` LIKE s OR `serial` LIKE s OR `model` LIKE s OR `part` LIKE s OR `notes` LIKE s ORDER BY `hostname`;
+ SELECT * FROM `viewInventoryRMA` WHERE `Date` LIKE s OR `Hostname` LIKE s OR `SKU` LIKE s OR `UUIC` LIKE s OR `Serial` LIKE s OR `Model` LIKE s OR `Part` LIKE s OR `Notes` LIKE s ORDER BY `Date` ASC;
 END//
 
 DROP PROCEDURE IF EXISTS `RMAAddUpdate`;

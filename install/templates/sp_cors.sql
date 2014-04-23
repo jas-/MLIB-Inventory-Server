@@ -15,7 +15,7 @@ CREATE DEFINER=`{RO}`@`{SERVER}` PROCEDURE `CorsSearch`(IN `s` LONGTEXT)
  SQL SECURITY INVOKER
  COMMENT 'Searches monitor records'
 BEGIN
- SELECT * FROM `cors` WHERE `application` LIKE s OR `url` LIKE s OR `ip` LIKE s ORDER BY `application`;
+ SELECT * FROM `viewInventoryCors` WHERE `Application` LIKE s OR `URL` LIKE s OR `IP` LIKE s ORDER BY `application`;
 END//
 
 DROP PROCEDURE IF EXISTS `CorsAddUpdate`;

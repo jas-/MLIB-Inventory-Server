@@ -141,7 +141,7 @@ VIEW viewInventoryModels AS
 CREATE OR REPLACE DEFINER='{RO}'@'{SERVER}'
  SQL SECURITY INVOKER
 VIEW viewInventoryRMA AS
- SELECT id AS Id, incorrect AS Problem, FROM_UNIXTIME(date, '%Y-%m-%d') AS Date, hostname AS Hostname, model AS Model, sku AS SKU, uuic AS UUIC, serial AS Serial, part AS Part, notes AS Notes FROM rma ORDER BY `date`;
+ SELECT id AS Id, incorrect AS Problem, FROM_UNIXTIME(date, '%Y-%m-%d') AS Date, hostname AS Hostname, model AS Model, sku AS SKU, uuic AS UUIC, serial AS Serial, part AS Part, notes AS Notes FROM rma ORDER BY `Date` ASC;
 
 CREATE OR REPLACE DEFINER='{RO}'@'{SERVER}'
  SQL SECURITY INVOKER
