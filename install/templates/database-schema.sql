@@ -106,6 +106,7 @@ CREATE TABLE `rma` (
   `uuic` CHAR(128) NOT NULL,
   `serial` CHAR(128) NOT NULL,
   `model` CHAR(128) NOT NULL,
+  `eowd` CHAR(32) NOT NULL,
   `incorrect` TINYINT(1) NOT NULL,
   `part` CHAR(128) NOT NULL,
   `notes` LONGTEXT NOT NULL,
@@ -124,26 +125,26 @@ CREATE TABLE IF NOT EXISTS `cors` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci AUTO_INCREMENT=0;
 
 CREATE OR REPLACE DEFINER='{RO}'@'{SERVER}'
- SQL SECURITY INVOKER
+ SQL SECURITY DEFINER
 VIEW viewInventoryComputers AS
  SELECT c.id AS Id, h.hostname AS Hostname, m.model AS Model, c.sku AS SKU, c.uuic AS UUIC, c.serial AS Serial, FROM_UNIXTIME(w.eowd, '%Y-%m-%d') AS EOWD, FROM_UNIXTIME(w.opd, '%Y-%m-%d') AS OPD, m.description AS Description, c.notes AS Notes FROM computers c LEFT JOIN hostnames h ON h.id = c.hostname LEFT JOIN models m ON c.model = m.id LEFT JOIN warranty w ON c.warranty = w.id ORDER BY `hostname` ASC;
 
 CREATE OR REPLACE DEFINER='{RO}'@'{SERVER}'
- SQL SECURITY INVOKER
+ SQL SECURITY DEFINER
 VIEW viewInventoryMonitors AS
  SELECT m.id AS Id, h.hostname AS Hostname, mo.model AS Model, m.sku AS SKU, m.serial AS Serial, FROM_UNIXTIME(w.eowd, '%Y-%m-%d') AS EOWD, FROM_UNIXTIME(w.opd, '%Y-%m-%d') AS OPD, mo.description AS Description, m.notes AS Notes FROM monitors m LEFT JOIN hostnames h ON h.id = m.hostname LEFT JOIN models mo ON m.model = mo.id LEFT JOIN warranty w ON m.warranty = w.id ORDER BY `hostname` ASC;
 
 CREATE OR REPLACE DEFINER='{RO}'@'{SERVER}'
- SQL SECURITY INVOKER
+ SQL SECURITY DEFINER
 VIEW viewInventoryModels AS
  SELECT id AS Id, model AS Model, description AS Description FROM models ORDER BY `model`;
 
 CREATE OR REPLACE DEFINER='{RO}'@'{SERVER}'
- SQL SECURITY INVOKER
+ SQL SECURITY DEFINER
 VIEW viewInventoryRMA AS
- SELECT id AS Id, incorrect AS Problem, FROM_UNIXTIME(date, '%Y-%m-%d') AS Date, hostname AS Hostname, model AS Model, sku AS SKU, uuic AS UUIC, serial AS Serial, part AS Part, notes AS Notes FROM rma ORDER BY `Date` ASC;
+ SELECT id AS Id, incorrect AS Problem, FROM_UNIXTIME(date, '%Y-%m-%d') AS Date, hostname AS Hostname, model AS Model, sku AS SKU, uuic AS UUIC, serial AS Serial, eowd AS EOWD, part AS Part, notes AS Notes FROM rma ORDER BY `Date` ASC;
 
 CREATE OR REPLACE DEFINER='{RO}'@'{SERVER}'
- SQL SECURITY INVOKER
+ SQL SECURITY DEFINER
 VIEW viewInventoryCORS AS
  SELECT id AS Id, application AS Application, url AS URL, ip AS IP FROM cors ORDER BY `application`;
