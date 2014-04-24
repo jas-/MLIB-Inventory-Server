@@ -562,7 +562,7 @@ INSERT INTO `models` VALUES (1,'',''),
                             (6350,'6350','');
 
 INSERT INTO `warranty` VALUES (1,'',''),
-                              (940,UNIX_TIMESTAMP('2013-06-03'),UNIX_TIMESTAMP('2009-06-03')),
+                              (940,UNIX_TIMESTAMP('2013-07-01'),UNIX_TIMESTAMP('2009-07-01')),
                               (965,UNIX_TIMESTAMP('2013-06-05'),UNIX_TIMESTAMP('2009-06-04')),
                               (970,UNIX_TIMESTAMP('2014-01-07'),UNIX_TIMESTAMP('2009-06-03')),
                               (980,UNIX_TIMESTAMP('2015-07-02'),UNIX_TIMESTAMP('2012-07-02')),
