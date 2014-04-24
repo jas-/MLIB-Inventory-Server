@@ -94,7 +94,7 @@ MonitorUpdate:BEGIN
   IF (@hid > 0 OR @hid != '' OR @hid IS NOT NULL) THEN
     UPDATE `hostnames` SET `hostname` = h WHERE `id` = @hid;
   ELSE
-    SELECT 0 AS affected;
+    SELECT -1 AS affected;
     LEAVE MonitorUpdate;
   END IF;
 
@@ -102,7 +102,7 @@ MonitorUpdate:BEGIN
   IF (@mid > 0 OR @mid != '' OR @mid IS NOT NULL) THEN
     UPDATE `models` SET `model` = m WHERE `id` = @mid;
   ELSE
-    SELECT 0 AS affected;
+    SELECT -1 AS affected;
     LEAVE MonitorUpdate;
   END IF;
 
@@ -110,7 +110,7 @@ MonitorUpdate:BEGIN
   IF (@wid > 0 OR @wid != '' OR @wid IS NOT NULL) THEN
     UPDATE `warranty` SET `eowd` = UNIX_TIMESTAMP(e), `opd` = UNIX_TIMESTAMP(o) WHERE `id` = @wid;
   ELSE
-    SELECT 0 AS affected;
+    SELECT -1 AS affected;
     LEAVE MonitorUpdate;
   END IF;
 
@@ -119,7 +119,7 @@ MonitorUpdate:BEGIN
     UPDATE `monitors` SET `hostname`=@hid, `model`=@mid, `sku`=s, `serial`=sl, `warranty`=@wid, `notes`=n WHERE `id`=i;
     SELECT ROW_COUNT() AS affected;
   ELSE
-    SELECT 0 AS affected;
+    SELECT -1 AS affected;
     LEAVE MonitorUpdate;
   END IF;
 
@@ -142,7 +142,7 @@ BEGIN
     DELETE FROM `hostnames` WHERE `id` = @hid;
     SELECT ROW_COUNT() AS affected;
   ELSE
-    SELECT 0 AS affected;
+    SELECT -1 AS affected;
   END IF;
 
 END//

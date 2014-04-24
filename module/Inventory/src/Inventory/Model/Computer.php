@@ -13,86 +13,96 @@ use Inventory\Model\Sanitize\StripTags;
 
 class Computer
 {
-    public $id, $hostname, $model, $sku, $uuic, $serial, $notes, $data;
-    protected $errors;
+  public $id, $hostname, $model, $sku, $uuic, $serial, $notes, $data;
+  protected $errors;
 
 	function __construct($data)
 	{
-		$this->exchangeArray(array_change_key_case((array)$data, CASE_LOWER));
+    $this->exchangeArray(array_change_key_case((array)$data, CASE_LOWER));
 	}
 
-    public function exchangeArray($data)
-    {
-        $this->id = (isset($data['id'])) ? $data['id'] : null;
-        $this->hostname = (isset($data['hostname'])) ? $data['hostname'] : null;
-        $this->model = (isset($data['model'])) ? $data['model'] : null;
-        $this->sku = (isset($data['sku'])) ? $data['sku'] : null;
-        $this->uuic = (isset($data['uuic'])) ? $data['uuic'] : null;
-        $this->serial = (isset($data['serial'])) ? $data['serial'] : null;
-        $this->eowd = (isset($data['eowd'])) ? $data['eowd'] : null;
-        $this->opd = (isset($data['opd'])) ? $data['opd'] : null;
-        $this->description = (isset($data['description'])) ? $data['description'] : null;
+  public function exchangeArray($data)
+  {
+    $this->id = (isset($data['id'])) ? $data['id'] : null;
+    $this->hostname = (isset($data['hostname'])) ? $data['hostname'] : null;
+    $this->model = (isset($data['model'])) ? $data['model'] : null;
+    $this->sku = (isset($data['sku'])) ? $data['sku'] : null;
+    $this->uuic = (isset($data['uuic'])) ? $data['uuic'] : null;
+    $this->serial = (isset($data['serial'])) ? $data['serial'] : null;
+    $this->eowd = (isset($data['eowd'])) ? $data['eowd'] : null;
+    $this->opd = (isset($data['opd'])) ? $data['opd'] : null;
+    $this->description = (isset($data['description'])) ? $data['description'] : null;
 		$this->notes = (isset($data['notes'])) ? $data['notes'] : null;
-    }
+  }
 
 	public function isValid()
-    {
-		if (!Hostnames::isValid($this->hostname)) {
-            $this->errors['hostname'] = 'Hostname value is invalid';
-			return false;
-		}
+  {
+    if (!empty($this->hostname)){
+  		if (!Hostnames::isValid($this->hostname)) {
+        $this->errors['hostname'] = 'Hostname value is invalid';
+        return false;
+      }
+    }
 
-		if (!Model::isValid($this->model)) {
-            $this->errors['model'] = 'Model value is invalid';
-			return false;
-		}
+    if (!empty($this->model)){
+  		if (!Model::isValid($this->model)) {
+        $this->errors['model'] = 'Model value is invalid';
+        return false;
+      }
+    }
 
 		if (!SKU::isValid($this->sku)) {
-            $this->errors['sku'] = 'SKU value is invalid';
-			return false;
+      $this->errors['sku'] = 'SKU value is invalid';
+      return false;
 		}
 
-		if (!UUIC::isValid($this->uuic)) {
-            $this->errors['uuic'] = 'UUIC value is invalid';
-			return false;
-		}
+    if (!empty($this->uuic)){
+  		if (!UUIC::isValid($this->uuic)) {
+        $this->errors['uuic'] = 'UUIC value is invalid';
+  			return false;
+  		}
+    }
 
 		if (!Serial::isValid($this->serial)) {
             $this->errors['serial'] = 'Serial value is invalid';
 			return false;
 		}
 
-		if (!Date::isValid($this->eowd)) {
-            $this->errors['eowd'] = 'EOWD value is invalid';
-			return false;
-		}
+    if (!empty($this->eowd)){
+  		if (!Date::isValid($this->eowd)) {
+        $this->errors['eowd'] = 'EOWD value is invalid';
+        return false;
+      }
+    }
 
-		if (!Date::isValid($this->opd)) {
-            $this->errors['opd'] = 'OPD value is invalid';
-			return false;
-		}
+    if (!empty($this->opd)){
+      if (!Date::isValid($this->opd)) {
+        $this->errors['opd'] = 'OPD value is invalid';
+        return false;
+      }
+    }
 
 		if (!empty($this->description)) {
 			if (!Paragraph::isValid($this->description)) {
-                $this->errors['description'] = 'Description value is invalid';
+        $this->errors['description'] = 'Description value is invalid';
 				return false;
 			}
 		}
 
 		if (!empty($this->notes)) {
 			if (!Paragraph::isValid($this->notes)) {
-                $this->errors['notes'] = 'Notes value is invalid';
+        $this->errors['notes'] = 'Notes value is invalid';
 				return false;
 			}
 		}
 
 		return true;
-    }
+  }
 
-    public function getErrors()
-    {
-        return $this->errors;
-    }
+  public function getErrors()
+  {
+    return $this->errors;
+  }
 
 	public function doClean($str)
 	{

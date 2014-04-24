@@ -94,7 +94,7 @@ ComputerUpdate:BEGIN
   IF (@hid > 0 OR @hid != '' OR @hid IS NOT NULL) THEN
     UPDATE `hostnames` SET `hostname` = h WHERE `id` = @hid;
   ELSE
-    SELECT "-0" AS affected;
+    SELECT -1 AS affected;
     LEAVE ComputerUpdate;
   END IF;
 
@@ -102,7 +102,7 @@ ComputerUpdate:BEGIN
   IF (@mid > 0 OR @mid != '' OR @mid IS NOT NULL) THEN
     UPDATE `models` SET `model` = m WHERE `id` = @mid;
   ELSE
-    SELECT "-0" AS affected;
+    SELECT -1 AS affected;
     LEAVE ComputerUpdate;
   END IF;
 
