@@ -25,6 +25,7 @@ FLUSH PRIVILEGES;
 -- Switch to newly created db context
 USE `{NAME}`;
 
+-- Handle unique hostnames
 DROP TABLE IF EXISTS `hostnames`;
 CREATE TABLE `hostnames` (
   `id` BIGINT NOT NULL AUTO_INCREMENT,
@@ -33,6 +34,7 @@ CREATE TABLE `hostnames` (
   UNIQUE KEY (`hostname`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci AUTO_INCREMENT=0;
 
+-- Handles unique model definitions
 DROP TABLE IF EXISTS `models`;
 CREATE TABLE `models` (
   `id` BIGINT NOT NULL AUTO_INCREMENT,
@@ -42,6 +44,7 @@ CREATE TABLE `models` (
   UNIQUE KEY (`model`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci AUTO_INCREMENT=0;
 
+-- Handles warranty definitions
 DROP TABLE IF EXISTS `warranty`;
 CREATE TABLE `warranty` (
   `id` BIGINT NOT NULL AUTO_INCREMENT,
@@ -51,51 +54,55 @@ CREATE TABLE `warranty` (
   UNIQUE KEY (`eowd`, `opd`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci AUTO_INCREMENT=0;
 
+-- Handles computer records
+-- Linked to hostnames, models & warranty items
 DROP TABLE IF EXISTS `computers`;
 CREATE TABLE `computers` (
   `id` BIGINT NOT NULL AUTO_INCREMENT,
-  `hostname` BIGINT NOT NULL,
-  `model` BIGINT NOT NULL,
+  `hostname` BIGINT,
+  `model` BIGINT,
   `sku` CHAR(128) NOT NULL,
-  `uuic` CHAR(128) NOT NULL,
+  `uuic` CHAR(128),
   `serial` CHAR(128) NOT NULL,
-  `warranty` BIGINT NOT NULL,
+  `warranty` BIGINT,
   `notes` LONGTEXT NOT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY (`sku`,`serial`),
   INDEX (`hostname`, `model`, `warranty`),
   CONSTRAINT `fk_computers2hostnames` FOREIGN KEY (`hostname`)
    REFERENCES `hostnames` (`id`)
-    ON DELETE CASCADE ON UPDATE CASCADE,
+    ON DELETE SET NULL ON UPDATE CASCADE,
   CONSTRAINT `fk_computers2models` FOREIGN KEY (`model`)
    REFERENCES `models` (`id`)
-    ON DELETE CASCADE ON UPDATE CASCADE,
+    ON DELETE SET NULL ON UPDATE CASCADE,
   CONSTRAINT `fk_computers2warranty` FOREIGN KEY (`warranty`)
    REFERENCES `warranty` (`id`)
-    ON DELETE CASCADE ON UPDATE CASCADE
+    ON DELETE SET NULL ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci AUTO_INCREMENT=0;
 
+-- Handles monitor device types
+-- Linked to hostnames, models & warranty
 DROP TABLE IF EXISTS `monitors`;
 CREATE TABLE `monitors` (
   `id` BIGINT NOT NULL AUTO_INCREMENT,
-  `hostname` BIGINT NOT NULL,
-  `model` BIGINT NOT NULL,
+  `hostname` BIGINT,
+  `model` BIGINT,
   `sku` CHAR(128) NOT NULL,
   `serial` CHAR(128) NOT NULL,
-  `warranty` BIGINT NOT NULL,
+  `warranty` BIGINT,
   `notes` LONGTEXT NOT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY (`sku`,`serial`),
   INDEX (`hostname`, `model`, `warranty`),
   CONSTRAINT `fk_monitors2hostnames` FOREIGN KEY (`hostname`)
    REFERENCES `hostnames` (`id`)
-    ON DELETE CASCADE ON UPDATE CASCADE,
+    ON DELETE SET NULL ON UPDATE CASCADE,
   CONSTRAINT `fk_monitors2models` FOREIGN KEY (`model`)
    REFERENCES `models` (`id`)
-    ON DELETE CASCADE ON UPDATE CASCADE,
+    ON DELETE SET NULL ON UPDATE CASCADE,
   CONSTRAINT `fk_monitors2warranty` FOREIGN KEY (`warranty`)
    REFERENCES `warranty` (`id`)
-    ON DELETE CASCADE ON UPDATE CASCADE
+    ON DELETE SET NULL ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci AUTO_INCREMENT=0;
 
 DROP TABLE IF EXISTS `rma`;
