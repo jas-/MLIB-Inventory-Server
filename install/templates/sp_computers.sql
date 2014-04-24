@@ -42,7 +42,7 @@ BEGIN
   SELECT `id` INTO @wid FROM `warranty` WHERE `eowd` = UNIX_TIMESTAMP(e) AND `opd` = UNIX_TIMESTAMP(o);
 
   -- Determine if we are going to add or update a record
-  SELECT COUNT(*) INTO @exists FROM `computers` WHERE `SKU` = s OR `UUIC` = u OR `Serial` = sl;
+  SELECT COUNT(*) INTO @exists FROM `computers` WHERE `sku` = s OR `uuic` = u OR `serial` = sl;
 
   -- If an id doesn't exist for the hostname create one
   IF (@hid <= 0 OR @hid = '' OR @hid IS NULL) THEN
@@ -94,7 +94,7 @@ ComputerUpdate:BEGIN
   IF (@hid > 0 OR @hid != '' OR @hid IS NOT NULL) THEN
     UPDATE `hostnames` SET `hostname` = h WHERE `id` = @hid;
   ELSE
-    SELECT 0 AS affected;
+    SELECT "-0" AS affected;
     LEAVE ComputerUpdate;
   END IF;
 
@@ -102,7 +102,7 @@ ComputerUpdate:BEGIN
   IF (@mid > 0 OR @mid != '' OR @mid IS NOT NULL) THEN
     UPDATE `models` SET `model` = m WHERE `id` = @mid;
   ELSE
-    SELECT 0 AS affected;
+    SELECT "-0" AS affected;
     LEAVE ComputerUpdate;
   END IF;
 
@@ -110,7 +110,7 @@ ComputerUpdate:BEGIN
   IF (@wid > 0 OR @wid != '' OR @wid IS NOT NULL) THEN
     UPDATE `warranty` SET `eowd` = UNIX_TIMESTAMP(e), `opd` = UNIX_TIMESTAMP(o) WHERE `id` = @wid;
   ELSE
-    SELECT 0 AS affected;
+    SELECT -1 AS affected;
     LEAVE ComputerUpdate;
   END IF;
 
@@ -119,7 +119,7 @@ ComputerUpdate:BEGIN
     UPDATE `computers` SET `hostname`=@hid, `model`=@mid, `sku`=s, `uuic`=u, `serial`=sl, `warranty`=@wid, `notes`=n WHERE `id`=i;
     SELECT ROW_COUNT() AS affected;
   ELSE
-    SELECT 0 AS affected;
+    SELECT -1 AS affected;
     LEAVE ComputerUpdate;
   END IF;
 
@@ -142,7 +142,7 @@ BEGIN
     DELETE FROM `hostnames` WHERE `id` = @hid;
     SELECT ROW_COUNT() AS affected;
   ELSE
-    SELECT 0 AS affected;
+    SELECT -1 AS affected;
   END IF;
 
 END//
