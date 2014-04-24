@@ -1,4 +1,4 @@
-INSERT INTO `hostnames` VALUES (1,'NoName'),
+INSERT INTO `hostnames` VALUES (1,''),
                                (589,'ACQ-01'),
                                (592,'ACQ-07'),
                                (593,'ACQ-10'),
@@ -552,7 +552,7 @@ INSERT INTO `hostnames` VALUES (1,'NoName'),
                                (65,'UP-03'),
                                (7,'WA-06');
 
-INSERT INTO `models` VALUES (1,'NoName',''),
+INSERT INTO `models` VALUES (1,'',''),
                             (2,'Laptop',''),
                             (940,'940',''),
                             (965,'965',''),
@@ -561,13 +561,13 @@ INSERT INTO `models` VALUES (1,'NoName',''),
                             (6200,'6200',''),
                             (6350,'6350','');
 
-INSERT INTO `warranty` VALUES (1,UNIX_TIMESTAMP('1970-01-01'),UNIX_TIMESTAMP('1970-01-01')),
+INSERT INTO `warranty` VALUES (1,'',''),
                               (940,UNIX_TIMESTAMP('2013-06-03'),UNIX_TIMESTAMP('2009-06-03')),
-                              (965,UNIX_TIMESTAMP('2013-06-03'),UNIX_TIMESTAMP('2009-06-03')),
-                              (970,UNIX_TIMESTAMP('2013-06-03'),UNIX_TIMESTAMP('2009-06-03')),
+                              (965,UNIX_TIMESTAMP('2013-06-05'),UNIX_TIMESTAMP('2009-06-04')),
+                              (970,UNIX_TIMESTAMP('2014-01-07'),UNIX_TIMESTAMP('2009-06-03')),
                               (980,UNIX_TIMESTAMP('2015-07-02'),UNIX_TIMESTAMP('2012-07-02')),
-                              (6200,UNIX_TIMESTAMP('2013-06-03'),UNIX_TIMESTAMP('2009-06-03')),
-                              (6350,UNIX_TIMESTAMP('1970-01-02'),UNIX_TIMESTAMP('1970-01-02'));
+                              (6200,UNIX_TIMESTAMP('2013-06-04'),UNIX_TIMESTAMP('2009-06-05')),
+                              (6350,UNIX_TIMESTAMP('2017-04-16'),UNIX_TIMESTAMP('2014-04-16'));
 
 INSERT INTO `computers` VALUES (1025,223,965,'015056','036897','085625',965,''),
                                (1026,217,965,'015050','036891','085487',965,''),
