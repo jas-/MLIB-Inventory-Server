@@ -84,8 +84,8 @@ MonitorUpdate:BEGIN
 
   -- Lookup existing ID for hostname, model & warranty
   SELECT `hostname` INTO @hid FROM `monitors` WHERE `id` = i;
-  SELECT `model` INTO @mid FROM `monitors` WHERE `id` = i;
-  SELECT `warranty` INTO @wid FROM `monitors` WHERE `id` = i;
+  SELECT `id` INTO @mid FROM `models` WHERE `model` = m;
+  SELECT `warranty` INTO @wid FROM `monitors` WHERE `warranty` = i;
 
   -- Does a record exist matching the id given?
   SELECT COUNT(*) INTO @exists FROM `monitors` WHERE `id` = i;
@@ -94,28 +94,29 @@ MonitorUpdate:BEGIN
   IF (@hid > 0 OR @hid != '' OR @hid IS NOT NULL) THEN
     UPDATE `hostnames` SET `hostname` = h WHERE `id` = @hid;
   ELSE
-    SELECT -1 AS affected;
-    LEAVE MonitorUpdate;
+    INSERT INTO `hostnames` (`hostname`) VALUES (h);
+    SELECT LAST_INSERT_ID() INTO @hid;
   END IF;
 
   -- If a model record exists update it
   IF (@mid > 0 OR @mid != '' OR @mid IS NOT NULL) THEN
     UPDATE `models` SET `model` = m WHERE `id` = @mid;
   ELSE
-    SELECT -1 AS affected;
-    LEAVE MonitorUpdate;
+    INSERT INTO `models` (`model`) VALUES (m);
+    SELECT LAST_INSERT_ID() INTO @mid;
   END IF;
 
   -- If a warranty record exists update it
   IF (@wid > 0 OR @wid != '' OR @wid IS NOT NULL) THEN
     UPDATE `warranty` SET `eowd` = UNIX_TIMESTAMP(e), `opd` = UNIX_TIMESTAMP(o) WHERE `id` = @wid;
   ELSE
-    SELECT -1 AS affected;
-    LEAVE MonitorUpdate;
+    INSERT INTO `warranty` (`eowd`, `opd`) VALUES (UNIX_TIMESTAMP(e), UNIX_TIMESTAMP(o));
+    SELECT LAST_INSERT_ID() INTO @wid;
   END IF;
 
   -- Update the monitor record
   IF (@exists > 0) THEN
+    SET @sql = CONCAT('UPDATE `monitors` SET `hostname`=@hid, `model`=@mid, `sku`=',s,', `serial`=',sl,', `warranty`=@wid, `notes`=',n,' WHERE `id`=',i,'');
     UPDATE `monitors` SET `hostname`=@hid, `model`=@mid, `sku`=s, `serial`=sl, `warranty`=@wid, `notes`=n WHERE `id`=i;
     SELECT ROW_COUNT() AS affected;
   ELSE

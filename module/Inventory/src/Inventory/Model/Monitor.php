@@ -36,15 +36,19 @@ class Monitor
 
 	public function isValid()
     {
-		if (!Hostnames::isValid($this->hostname)) {
-            $this->errors['hostname'] = 'Hostname value is invalid';
-			return false;
-		}
+    if (!empty($this->hostname)){
+  		if (!Hostnames::isValid($this->hostname)) {
+        $this->errors['hostname'] = 'Hostname value is invalid';
+        return false;
+      }
+    }
 
-		if (!Model::isValid($this->model)) {
-            $this->errors['model'] = 'Model value is invalid';
-			return false;
-		}
+    if (!empty($this->model)){
+  		if (!Model::isValid($this->model)) {
+        $this->errors['model'] = 'Model value is invalid';
+        return false;
+      }
+    }
 
 		if (!SKU::isValid($this->sku)) {
             $this->errors['sku'] = 'SKU value is invalid';
