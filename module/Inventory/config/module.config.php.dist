@@ -93,7 +93,7 @@ return array(
 			'ViewJsonStrategy',
 		),
         'template_path_stack' => array(
-            'album' => __DIR__ . '/../view',
+            'inventory' => __DIR__ . '/../view',
         ),
     ),
 );
