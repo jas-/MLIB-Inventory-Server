@@ -38,17 +38,6 @@ class Module
                     $config['database']['password'] = $config['database']['accounts']['admin']['password'];
                     return new Adapter($config['database']);
                 },
-                'Inventory\Model\ComputerTable' =>  function($sm) {
-                    $tableGateway = $sm->get('ComputerTableGateway');
-                    $table = new ComputerTable($tableGateway);
-                    return $table;
-                },
-                'ComputerTableGateway' => function ($sm) {
-                    $dbAdapter = $sm->get('Zend\Db\Adapter\Adapter');
-                    $resultSetPrototype = new ResultSet();
-                    $resultSetPrototype->setArrayObjectPrototype(new Album());
-                    return new TableGateway('computers', $dbAdapter, null, $resultSetPrototype);
-                },
             ),
         );
     }

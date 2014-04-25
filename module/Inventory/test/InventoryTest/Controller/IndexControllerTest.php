@@ -1,26 +1,47 @@
 <?php
 
-namespace InventoryTest\Controller;
+namespace Inventory \Controller;
 
-use Zend\Test\PHPUnit\Controller\AbstractHttpControllerTestCase;
+use InventoryTest\Bootstrap;
+use Zend\Mvc\Router\Http\TreeRouteStack as HttpRouter;
+use Inventory\Controller\ComputerController;
+use Zend\Http\Request;
+use Zend\Http\Response;
+use Zend\Mvc\MvcEvent;
+use Zend\Mvc\Router\RouteMatch;
+use PHPUnit_Framework_TestCase;
 
-class InventoryControllerTest extends AbstractHttpControllerTestCase
+class InventoryControllerTest extends \PHPUnit_Framework_TestCase
 {
-    public function setUp()
+    protected $controller;
+    protected $request;
+    protected $response;
+    protected $routeMatch;
+    protected $event;
+
+    protected function setUp()
     {
-        $this->setApplicationConfig(
-            include '/var/www/html/MLIB-Inventory-Server/module/Inventory/config/module.config.php'
-        );
-        parent::setUp();
+        $serviceManager = Bootstrap::getServiceManager();
+        $this->controller = new ComputerController();
+        $this->request    = new Request();
+        $this->routeMatch = new RouteMatch(array('controller' => 'index'));
+        $this->event      = new MvcEvent();
+        $config = $serviceManager->get('Config');
+        $routerConfig = isset($config['router']) ? $config['router'] : array();
+        $router = HttpRouter::factory($routerConfig);
+
+        $this->event->setRouter($router);
+        $this->event->setRouteMatch($this->routeMatch);
+        $this->controller->setEvent($this->event);
+        $this->controller->setServiceLocator($serviceManager);
     }
 
   public function testComputerIndexAction()
   {
-    $this->dispatch('/computer');
-    $this->assertResponseStatusCode(200);
-    $this->assertModuleName('Inventory');
-    $this->assertControllerName('Album\Controller\Computer');
-    $this->assertControllerClass('ComputerController');
-    $this->assertMatchedRouteName('computer');
+    $this->routeMatch->setParam('action', '/computer');
+
+    $result   = $this->controller->dispatch($this->request);
+    $response = $this->controller->getResponse();
+    $this->assertEquals(200, $response->getStatusCode());
   }
 }

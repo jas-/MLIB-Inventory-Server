@@ -154,7 +154,9 @@ class Cors
 	{
 		if (is_array($array)) {
 			foreach($array as $key => $value) {
-				$array[$key] = $value['URL'];
+        if (isset($value['URL'])){
+          $array[$key] = $value['URL'];
+        }
 			}
 		}
 		return $array;
