@@ -1,0 +1,23 @@
+#!/bin/bash
+
+# Simple API fuzzer
+
+# API routes
+API=( /computer /monitor /models /rma /warranty /cors )
+
+# API methods
+METHODS=( GET PUT POST DELETE )
+
+# API route inpput fields
+computers=( hostname model sku uuic serial eowd opd notes )
+monitors=( hostname model sku serial eowd opd notes )
+models=( model description )
+rma=( current hostname sku uuic serial model eowd incorrect part notes )
+warranty=( eowd opd )
+cors=( name url ip )
+
+api(){
+  for uri in $(seq 0 $((${#API[@]} -1))); do
+    echo ${uri}
+  done
+}

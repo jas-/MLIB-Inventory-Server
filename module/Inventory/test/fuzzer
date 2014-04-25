@@ -1,0 +1,111 @@
+#!/bin/bash
+
+# Simple API fuzzer
+
+# FQDN
+FQDN="inventory-server.dev"
+
+# API routes
+API=( /computer /monitor /models /rma /warranty /cors )
+
+# API methods
+METHODS=( GET PUT POST DELETE )
+
+# API route inpput fields
+computers=( hostname model sku uuic serial eowd opd notes )
+monitors=( hostname model sku serial eowd opd notes )
+models=( model description )
+rma=( current hostname sku uuic serial model eowd incorrect part notes )
+warranty=( eowd opd )
+cors=( name url ip )
+
+doit(){
+  for uri in $(seq 0 $((${#API[@]} -1))); do
+    echo -e "Testing ${FQDN}${API[$uri]}..."
+    method ${API[$uri]}
+  done
+}
+
+method(){
+  for method in $(seq 0 $((${#METHODS[@]} -1))); do
+    echo -e " - Checking ${METHODS[$method]}..."
+
+    f="${1:1}"
+    case "${f}" in
+      computer ) x=$(data "${computers[*]}")
+                 y=$(data "${computers[*]}" "invalid")
+                 send "${1}" "${METHODS[$method]}" "{$x}"
+                 send "${1}" "${METHODS[$method]}" "${y}"
+                 ;;
+      monitor ) x=$(data "${monitors[*]}")
+                y=$(data "${monitors[*]}" "invalid")
+                send "${1}" "${METHODS[$method]}" "{$x}"
+                send "${1}" "${METHODS[$method]}" "${y}"
+                ;;
+      models ) x=$(data "${models[*]}")
+               y=$(data "${models[*]}" "invalid")
+               send "${1}" "${METHODS[$method]}" "{$x}"
+               send "${1}" "${METHODS[$method]}" "${y}"
+               ;;
+      rma ) x=$(data "${rma[*]}")
+            y=$(data "${rma[*]}" "invalid")
+            send "${1}" "${METHODS[$method]}" "{$x}"
+            send "${1}" "${METHODS[$method]}" "${y}"
+            ;;
+      warranty ) x=$(data "${warranty[*]}")
+                 y=$(data "${warranty[*]}" "invalid")
+                 send "${1}" "${METHODS[$method]}" "{$x}"
+                 send "${1}" "${METHODS[$method]}" "${y}"
+                 ;;
+      cors ) x=$(data "${cors[*]}")
+             y=$(data "${cors[*]}" "invalid")
+             send "${1}" "${METHODS[$method]}" "{$x}"
+             send "${1}" "${METHODS[$method]}" "${y}"
+             ;;
+    esac
+  done
+}
+
+data(){
+  f=( $1 )
+  str=''
+
+  for field in $(seq 0 $((${#f[@]} -1))); do
+
+    x="${f[$field]}"
+
+    if [ "${2}" = "invalid" ]; then
+      string=$(invalid)
+    else
+      string=$(valid)
+    fi
+
+    if [ "${str}" = '' ]; then
+      str="$x=$string"
+    else
+      str="$str&$x=$string"
+    fi
+  done
+
+  echo "${str}"
+}
+
+valid(){
+  echo "$(tr -cd '[:alnum:]' < /dev/urandom | fold -w25 | head -n1)"
+}
+
+invalid(){
+  echo "$(tr -cd '[:print"]' < /dev/urandom | fold -w1024 | head -n1)"
+}
+
+send(){
+  if [[ "${2}" =~ [^PUT|^DELETE] ]]; then
+    echo "Sending ${3} as ${2} to ${FQDN}${1}..."
+    curl -X "${2}" -d "${3}" "${FQDN}${1}"
+  else
+    echo "Sending ${3} as ${2} to ${FQDN}${1}/1..."
+    curl -X "${2}" -d "${3}" "${FQDN}${1}/1"
+  fi  
+}
+
+doit
