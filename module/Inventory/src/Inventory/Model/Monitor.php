@@ -36,41 +36,43 @@ class Monitor
 
 	public function isValid()
     {
+    $ret = true;
+
     if (!empty($this->hostname)){
   		if (!Hostnames::isValid($this->hostname)) {
         $this->errors['hostname'] = 'Hostname value is invalid';
-        return false;
+			$ret = false;
       }
     }
 
     if (!empty($this->model)){
   		if (!Model::isValid($this->model)) {
         $this->errors['model'] = 'Model value is invalid';
-        return false;
+			$ret = false;
       }
     }
 
 		if (!SKU::isValid($this->sku)) {
             $this->errors['sku'] = 'SKU value is invalid';
-			return false;
+			$ret = false;
 		}
 
 		if (!Serial::isValid($this->serial)) {
             $this->errors['serial'] = 'Serial value is invalid';
-			return false;
+			$ret = false;
 		}
 
     if (!empty($this->eowd)) {
       if (!Date::isValid($this->eowd)) {
             $this->errors['eowd'] = 'EOWD value is invalid';
-            return false;
+			$ret = false;
       }
     }
 
 		if (!empty($this->opd)) {
       if (!Date::isValid($this->opd)) {
             $this->errors['opd'] = 'OPD value is invalid';
-      	return false;
+			$ret = false;
       }
     }
 
@@ -78,7 +80,7 @@ class Monitor
       if (!empty($this->description)) {
   			if (!Paragraph::isValid($this->description)) {
                 $this->errors['description'] = 'Description value is invalid';
-  				return false;
+			$ret = false;
   			}
   		}
     }
@@ -86,11 +88,11 @@ class Monitor
 		if (!empty($this->notes)) {
 			if (!Paragraph::isValid($this->notes)) {
                 $this->errors['notes'] = 'Notes value is invalid';
-				return false;
+			$ret = false;
 			}
 		}
 
-		return true;
+		return $ret;
     }
 
     public function getErrors()

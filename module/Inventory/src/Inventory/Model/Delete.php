@@ -22,12 +22,14 @@ class Delete
 
 	public function isValid()
     {
+    $ret = true;
+
 		if (!DeleteID::isValid($this->id)) {
             $this->errors['id'] = 'ID value is invalid';
-			return false;
+			$ret = false;
 		}
 
-		return true;
+		return $ret;
     }
 
     public function getErrors()

@@ -57,22 +57,24 @@ class Cors
 
 	public function isValid()
     {
+    $ret = true;
+
 		if (!Paragraph::isValid($this->application)) {
             $this->errors['application'] = 'Application value is invalid';
-			return false;
+			$ret = false;
 		}
 
 		if (!Url::isValid($this->url)) {
             $this->errors['url'] = 'URL value is invalid';
-			return false;
+			$ret = false;
 		}
 
 		if (!Ip::isValid($this->ip)) {
             $this->errors['ip'] = 'IP value is invalid';
-			return false;
+			$ret = false;
 		}
 
-		return true;
+		return $ret;
     }
 
     public function getErrors()

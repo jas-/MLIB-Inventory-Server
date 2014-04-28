@@ -31,36 +31,38 @@ class Models
 
 	public function isValid()
     {
+    $ret = true;
+
 		if (!Model::isValid($this->model)) {
             $this->errors['model'] = 'Model value is invalid';
-			return false;
+			$ret = false;
 		}
 
 		if (!Date::isValid($this->eowd)) {
             $this->errors['eowd'] = 'EOWD value is invalid';
-			return false;
+			$ret = false;
 		}
 
 		if (!Date::isValid($this->opd)) {
             $this->errors['opd'] = 'OPD value is invalid';
-			return false;
+			$ret = false;
 		}
 
 		if (!empty($this->description)) {
 			if (!Paragraph::isValid($this->description)) {
                 $this->errors['description'] = 'Description value is invalid';
-				return false;
+			$ret = false;
 			}
 		}
 
 		if (!empty($this->notes)) {
 			if (!Paragraph::isValid($this->notes)) {
                 $this->errors['notes'] = 'Notes value is invalid';
-				return false;
+			$ret = false;
 			}
 		}
 
-		return true;
+		return $ret;
     }
 
     public function getErrors()

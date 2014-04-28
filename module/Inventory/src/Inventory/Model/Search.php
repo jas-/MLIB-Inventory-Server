@@ -22,12 +22,14 @@ class Search
 
 	public function isValid()
     {
+    $ret = true;
+
 		if (!SearchPattern::isValid($this->id)) {
             $this->errors['id'] = 'ID value is invalid';
-			return false;
+			$ret = false;
 		}
 
-		return true;
+		return $ret;
     }
 
     public function getErrors()

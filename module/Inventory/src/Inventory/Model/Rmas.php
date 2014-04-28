@@ -36,51 +36,53 @@ class Rmas
 
 	public function isValid()
     {
+    $ret = true;
+
 		if (!Date::isValid($this->date)) {
             $this->errors['date'] = 'Date value is invalid (YYYY-MM-DD)';
-			return false;
+			$ret = false;
 		}
 
 		if (!Hostnames::isValid($this->hostname)) {
             $this->errors['hostname'] = 'Hostname value is invalid';
-			return false;
+			$ret = false;
 		}
 
 		if (!SKU::isValid($this->sku)) {
             $this->errors['sku'] = 'SKU value is invalid';
-			return false;
+			$ret = false;
 		}
 
 		if (!empty($this->uuic)) {
     		if (!UUIC::isValid($this->uuic)) {
                 $this->errors['uuic'] = 'UUIC value is invalid';
-    			return false;
+			$ret = false;
     		}
         }
 
 		if (!Serial::isValid($this->serial)) {
             $this->errors['serial'] = 'Serial value is invalid';
-			return false;
+			$ret = false;
 		}
 
 		if (!Model::isValid($this->model)) {
             $this->errors['model'] = 'Model value is invalid';
-			return false;
+			$ret = false;
 		}
 
 		if (!Paragraph::isValid($this->part)) {
             $this->errors['part'] = 'Part value is invalid';
-			return false;
+			$ret = false;
 		}
 
 		if (!empty($this->notes)) {
 			if (!Paragraph::isValid($this->notes)) {
                 $this->errors['notes'] = 'Notes value is invalid';
-				return false;
+			$ret = false;
 			}
 		}
 
-		return true;
+		return $ret;
     }
 
     public function getErrors()
