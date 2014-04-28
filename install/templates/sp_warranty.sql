@@ -16,7 +16,7 @@ CREATE DEFINER=`{RO}`@`{SERVER}` PROCEDURE `WarrantySearch`(IN `s` CHAR(128))
  COMMENT 'Search computer records by warranty'
 BEGIN
   SET @search = UNIX_TIMESTAMP(s);
-  SELECT * FROM `warranty` WHERE `eowd` LIKE @s OR `opd` LIKE @s;
+  SELECT * FROM `viewInventoryWarranty` WHERE `eowd` LIKE @s OR `opd` LIKE @s;
 END//
 
 DROP PROCEDURE IF EXISTS `WarrantyAddUpdate`;
