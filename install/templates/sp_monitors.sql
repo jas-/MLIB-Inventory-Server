@@ -110,7 +110,7 @@ MonitorUpdate:BEGIN
   IF (@wid > 0 OR @wid != '' OR @wid IS NOT NULL) THEN
     UPDATE `warranty` SET `eowd` = UNIX_TIMESTAMP(e), `opd` = UNIX_TIMESTAMP(o) WHERE `id` = @wid;
   ELSE
-    INSERT INTO `warranty` (`eowd`, `opd`) VALUES (UNIX_TIMESTAMP(e), UNIX_TIMESTAMP(o));
+    INSERT INTO `warranty` (`eowd`, `opd`) VALUES (UNIX_TIMESTAMP(e), UNIX_TIMESTAMP(o)) ON DUPLICATE KEY UPDATE `eowd`=UNIX_TIMESTAMP(e), `opd`=UNIX_TIMESTAMP(o);
     SELECT LAST_INSERT_ID() INTO @wid;
   END IF;
 
