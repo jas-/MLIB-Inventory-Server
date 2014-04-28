@@ -42,7 +42,7 @@ BEGIN
   SELECT `id` INTO @wid FROM `warranty` WHERE `eowd` = UNIX_TIMESTAMP(e) AND `opd` = UNIX_TIMESTAMP(o);
 
   -- Determine if we are going to add or update a record
-  SELECT COUNT(*) INTO @exists FROM `computers` WHERE `sku` = s OR `uuic` = u OR `serial` = sl;
+  SELECT COUNT(*) INTO @exists FROM `computers` WHERE `sku` = s OR `serial` = sl;
 
   -- If an id doesn't exist for the hostname create one
   IF (@hid <= 0 OR @hid = '' OR @hid IS NULL) THEN
