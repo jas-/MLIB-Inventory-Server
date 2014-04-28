@@ -33,7 +33,7 @@ return array(
                     'route'    => '/computer[/:action][/:id]',
                     'constraints' => array(
                         'action' => '[a-zA-Z][a-zA-Z0-9_-]',
-                        'id' => '[0-9]',
+//                        'id' => '[a-zA-Z][a-zA-Z0-9_-*]',
                     ),
                     'defaults' => array(
                         'controller' => 'Inventory\Controller\Computer',
@@ -46,7 +46,7 @@ return array(
                     'route'    => '/monitor[/:action][/:id]',
                     'constraints' => array(
                         'action' => '[a-zA-Z][a-zA-Z0-9_-]',
-                        'id' => '[0-9]',
+//                        'id' => '[a-zA-Z][a-zA-Z0-9_-*]',
                     ),
                     'defaults' => array(
                         'controller' => 'Inventory\Controller\Monitor',
@@ -59,7 +59,7 @@ return array(
                     'route'    => '/rma[/:action][/:id]',
                     'constraints' => array(
                         'action' => '[a-zA-Z][a-zA-Z0-9_-]',
-                        'id' => '[0-9]',
+//                        'id' => '[a-zA-Z][a-zA-Z0-9_-*]',
                     ),
                     'defaults' => array(
                         'controller' => 'Inventory\Controller\Rma',
@@ -72,7 +72,7 @@ return array(
                     'route'    => '/model[/:action][/:id]',
                     'constraints' => array(
                         'action' => '[a-zA-Z][a-zA-Z0-9_-]',
-                        'id' => '[0-9]',
+//                        'id' => '[a-zA-Z][a-zA-Z0-9_-*]',
                     ),
                     'defaults' => array(
                         'controller' => 'Inventory\Controller\Model',
@@ -85,7 +85,7 @@ return array(
                     'route'    => '/cors[/:action][/:id]',
                     'constraints' => array(
                         'action' => '[a-zA-Z][a-zA-Z0-9_-]',
-                        'id' => '[0-9]',
+//                        'id' => '[a-zA-Z][a-zA-Z0-9_-*]',
                     ),
                     'defaults' => array(
                         'controller' => 'Inventory\Controller\Cors',
@@ -98,7 +98,7 @@ return array(
                     'route'    => '/warranty[/:action][/:id]',
                     'constraints' => array(
                         'action' => '[a-zA-Z][a-zA-Z0-9_-]',
-                        'id' => '[0-9]',
+//                        'id' => '[a-zA-Z][a-zA-Z0-9_-*]',
                     ),
                     'defaults' => array(
                         'controller' => 'Inventory\Controller\Warranty',
