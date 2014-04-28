@@ -68,6 +68,9 @@ mysql -u ${mu} --password=${pass} ${name} < sp_monitors.sql
 echo "Creating model record management procedures"
 mysql -u ${mu} --password=${pass} ${name} < sp_models.sql
 
+echo "Creating warranty record management procedures"
+mysql -u ${mu} --password=${pass} ${name} < sp_warranty.sql
+
 echo "Creating rma record management procedures"
 mysql -u ${mu} --password=${pass} ${name} < sp_rma.sql
 

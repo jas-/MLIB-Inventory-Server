@@ -22,6 +22,7 @@ return array(
             'Inventory\Controller\Rma' => 'Inventory\Controller\RmaController',
             'Inventory\Controller\Model' => 'Inventory\Controller\ModelController',
             'Inventory\Controller\Cors' => 'Inventory\Controller\CorsController',
+            'Inventory\Controller\Warranty' => 'Inventory\Controller\WarrantyController',
         ),
     ),
     'router' => array(
@@ -83,6 +84,18 @@ return array(
                     ),
                     'defaults' => array(
                         'controller' => 'Inventory\Controller\Cors',
+                    ),
+                ),
+            ),
+            'warranty' => array(
+                'type'    => 'segment',
+                'options' => array(
+                    'route'    => '/warranty[/:action][/:id]',
+                    'constraints' => array(
+                        'action' => '[a-zA-Z][a-zA-Z0-9_-]*',
+                    ),
+                    'defaults' => array(
+                        'controller' => 'Inventory\Controller\Warranty',
                     ),
                 ),
             ),
