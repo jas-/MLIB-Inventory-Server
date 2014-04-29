@@ -19,9 +19,7 @@ class WarrantyDB extends AbstractDB
 
 	public function add($obj)
 	{
-		$sql = sprintf('CALL WarrantyAddUpdate("%s", "%s")',
-					   $obj['eowd'], $obj['opd']);
-
+		$sql = sprintf('CALL WarrantyAddUpdate("%s", "%s")', $obj['eowd'], $obj['opd']);
 		$result = parent::query($sql);
 
 		$r = ((int)$result[0]['affected'] === 1) ? 'added new' : 'updated existing';
