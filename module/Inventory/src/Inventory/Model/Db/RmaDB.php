@@ -19,9 +19,9 @@ class RmaDB extends AbstractDB
 
 	public function add($obj)
 	{
-		$sql = sprintf('CALL RmaAddUpdate("%s", "%s", "%s", "%s","%s", "%s", "%s", "%s")',
+		$sql = sprintf('CALL RmaAddUpdate("%s", "%s", "%s", "%s","%s", "%s", "%s", "%s", "%s")',
 					   $obj['date'], $obj['hostname'], $obj['sku'], $obj['uuic'], $obj['serial'],
-					   $obj['model'], $obj['part'], $obj['description']);
+					   $obj['model'], $obj['eowd'], $obj['part'], $obj['notes']);
 
 		$result = parent::query($sql);
 
@@ -35,9 +35,9 @@ class RmaDB extends AbstractDB
 
 	public function update($id, $obj)
 	{
-		$sql = sprintf('CALL RmaUpdate("%d", "%s", "%s", "%s", "%s","%s", "%s", "%s", "%s")',
+		$sql = sprintf('CALL RmaUpdate("%d", "%s", "%s", "%s", "%s","%s", "%s", "%s", "%s", "%s")',
 					   $id, $obj['date'], $obj['hostname'], $obj['sku'], $obj['uuic'], $obj['serial'],
-					   $obj['model'], $obj['part'], $obj['description']);
+					   $obj['model'], $obj['eowd'], $obj['part'], $obj['notes']);
 
 		$result = parent::query($sql);
 
