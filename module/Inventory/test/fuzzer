@@ -9,7 +9,7 @@ FQDN="inventory-server.dev"
 API=( /computer /monitor /model /rma /warranty /cors )
 
 # API methods
-METHODS=( GET PUT POST DELETE )
+METHODS=( GET POST PUT DELETE )
 
 # API route inpput fields
 computers=( hostname model sku uuic serial eowd opd notes )
@@ -35,32 +35,32 @@ method(){
       computer ) x=$(data "${computers[*]}")
                  y=$(data "${computers[*]}" "invalid")
                  send "${1}" "${METHODS[$method]}" "{$x}"
-#                 send "${1}" "${METHODS[$method]}" "${y}"
+                 send "${1}" "${METHODS[$method]}" "${y}"
                  ;;
       monitor ) x=$(data "${monitors[*]}")
                 y=$(data "${monitors[*]}" "invalid")
                 send "${1}" "${METHODS[$method]}" "{$x}"
-#                send "${1}" "${METHODS[$method]}" "${y}"
+                send "${1}" "${METHODS[$method]}" "${y}"
                 ;;
       models ) x=$(data "${models[*]}")
                y=$(data "${models[*]}" "invalid")
                send "${1}" "${METHODS[$method]}" "{$x}"
-#               send "${1}" "${METHODS[$method]}" "${y}"
+               send "${1}" "${METHODS[$method]}" "${y}"
                ;;
       rma ) x=$(data "${rma[*]}")
             y=$(data "${rma[*]}" "invalid")
             send "${1}" "${METHODS[$method]}" "{$x}"
-#            send "${1}" "${METHODS[$method]}" "${y}"
+            send "${1}" "${METHODS[$method]}" "${y}"
             ;;
       warranty ) x=$(data "${warranty[*]}")
                  y=$(data "${warranty[*]}" "invalid")
                  send "${1}" "${METHODS[$method]}" "{$x}"
-#                 send "${1}" "${METHODS[$method]}" "${y}"
+                 send "${1}" "${METHODS[$method]}" "${y}"
                  ;;
       cors ) x=$(data "${cors[*]}")
              y=$(data "${cors[*]}" "invalid")
              send "${1}" "${METHODS[$method]}" "{$x}"
-#             send "${1}" "${METHODS[$method]}" "${y}"
+             send "${1}" "${METHODS[$method]}" "${y}"
              ;;
     esac
   done
@@ -80,6 +80,10 @@ data(){
       string=$(valid)
     fi
 
+    if [ "${x}" = "eowd" ] || [ "${x}" = "opd" ]; then
+      string=$(dates)
+    fi
+    echo $string
     if [ "${str}" = '' ]; then
       str="$x=$string"
     else
@@ -90,8 +94,12 @@ data(){
   echo "${str}"
 }
 
+dates(){
+  echo "$(date +'%Y-%m-%d')"
+}
+
 valid(){
-  echo "$(tr -cd '[:alnum:]' < /dev/urandom | fold -w25 | head -n1)"
+  echo "$(tr -cd '[:alnum:]' < /dev/urandom | fold -w6 | head -n1)"
 }
 
 invalid(){
@@ -99,10 +107,10 @@ invalid(){
 }
 
 send(){
+  echo ""
+  echo "${2} to ${FQDN}${1}..."
+  echo "${3}"
   if [[ "${2}" =~ [^PUT|^DELETE] ]]; then
-    echo ""
-    echo "${2} to ${FQDN}${1}..."
-    echo ""
     curl -X "${2}" -d "${3}" "${FQDN}${1}"
   else
     echo "${2} to ${FQDN}${1}/1..."

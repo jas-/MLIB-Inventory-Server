@@ -46,20 +46,20 @@ BEGIN
 
   -- If an id doesn't exist for the hostname create one
   IF (@hid <= 0 OR @hid = '' OR @hid IS NULL) THEN
-    INSERT INTO `hostnames` (`hostname`) VALUES (h);
-    SELECT `id` INTO @hid FROM `hostnames` WHERE `hostname` = h;
+    INSERT INTO `hostnames` (`hostname`) VALUES (h) ON DUPLICATE KEY UPDATE `hostname` = h;
+    SELECT LAST_INSERT_ID() INTO @hid;
   END IF;
 
   -- If an id doesn't exist for the model create one
   IF (@mid <= 0 OR @mid = '' OR @mid IS NULL) THEN
-    INSERT INTO `models` (`model`) VALUES (m);
-    SELECT `id` INTO @mid FROM `models` WHERE `model` = m;
+    INSERT INTO `models` (`model`) VALUES (m) ON DUPLICATE KEY UPDATE `model` = m;
+    SELECT LAST_INSERT_ID() INTO @mid;
   END IF;
 
   -- If an id doesn't exist for the warranty create one
   IF (@wid <= 0 OR @wid = '' OR @wid IS NULL) THEN
-    INSERT INTO `warranty` (`eowd`, `opd`) VALUES (UNIX_TIMESTAMP(e), UNIX_TIMESTAMP(o));
-    SELECT `id` INTO @wid FROM `warranty` WHERE `eowd` = UNIX_TIMESTAMP(e) AND `opd` = UNIX_TIMESTAMP(o);
+    INSERT INTO `warranty` (`eowd`, `opd`) VALUES (UNIX_TIMESTAMP(e), UNIX_TIMESTAMP(o)) ON DUPLICATE KEY UPDATE `eowd` = UNIX_TIMESTAMP(e), `opd` = UNIX_TIMESTAMP(o);
+    SELECT LAST_INSERT_ID() INTO @wid;
   END IF;
 
   -- Add or update the computer record
@@ -94,7 +94,7 @@ ComputerUpdate:BEGIN
   IF (@hid > 0 OR @hid != '' OR @hid IS NOT NULL) THEN
     UPDATE `hostnames` SET `hostname` = h WHERE `id` = @hid;
   ELSE
-    INSERT INTO `hostnames` (`hostname`) VALUES (h);
+    INSERT INTO `hostnames` (`hostname`) VALUES (h) ON DUPLICATE KEY UPDATE `hostname` = h;
     SELECT LAST_INSERT_ID() INTO @hid;
   END IF;
 
@@ -102,7 +102,7 @@ ComputerUpdate:BEGIN
   IF (@mid > 0 OR @mid != '' OR @mid IS NOT NULL) THEN
     UPDATE `models` SET `model` = m WHERE `id` = @mid;
   ELSE
-    INSERT INTO `models` (`model`) VALUES (m);
+    INSERT INTO `models` (`model`) VALUES (m) ON DUPLICATE KEY UPDATE `model` = m;
     SELECT LAST_INSERT_ID() INTO @mid;
   END IF;
 
