@@ -137,6 +137,9 @@ BEGIN
   -- Lookup existing ID for hostname, model & warranty
   SELECT `hostname` INTO @hid FROM `computers` WHERE `id` = i;
 
+  -- Remove record
+  DELETE FROM `computers` WHERE `id` = i;
+
   -- If a hostname record exists remove it
   IF (@hid > 0 OR @hid != '' OR @hid IS NOT NULL) THEN
     DELETE FROM `hostnames` WHERE `id` = @hid;

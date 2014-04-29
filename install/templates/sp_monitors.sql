@@ -138,6 +138,9 @@ BEGIN
   -- Lookup existing ID for hostname
   SELECT `hostname` INTO @hid FROM `monitors` WHERE `id` = i;
 
+  -- Remove record
+  DELETE FROM `monitors` WHERE `id` = i;
+
   -- If a hostname record exists remove it
   IF (@hid > 0 OR @hid != '' OR @hid IS NOT NULL) THEN
     DELETE FROM `hostnames` WHERE `id` = @hid;
