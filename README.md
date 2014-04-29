@@ -289,8 +289,6 @@ shell> mysql -u &lt;username&gt; -p &lt;dbname&gt; -e 'CALL CorsAddUpdate("&lt;a
 
       <ol>
         <li><i>Model</i> - (Required) The model number associated with the montitor</li>
-        <li><i>EOWD</i> - (Optional) The end of warranty date</li>
-        <li><i>OPD</i> - (Optional) The original purchase date</li>
         <li><i>Notes</i> - (Optional) Any notes associated with the model</li>
         <li><i>Description</i> - (Optional) Any description information assocated with model</li>
       </ol>
@@ -318,16 +316,12 @@ GET /model
     {
         "Id": "591",
         "Model": "6200",
-        "EOWD": "2013-06-20",
-        "OPD": "2009-06-01",
         "Notes": "",
         "Description": ""
     },
     {
         "Id": "734",
         "Model": "6350",
-        "EOWD": "1969-12-31",
-        "OPD": "1969-12-31",
         "Notes": "",
         "Description": ""
     },
@@ -360,8 +354,6 @@ GET /model/96*
     {
         "id": "590",
         "model": "965",
-        "eowd": "1370217600",
-        "opd": "1243987200",
         "description": "",
         "notes": ""
     },
@@ -413,7 +405,7 @@ POST /model
 
         <pre class="prettyprint lang-sh linenums prettyprinted">
           <code class="language-sh">
-model=&lt;model-number&gt;&eowd=&lt;eowd-date&gt;&opd=&lt;opd-date&gt;
+model=&lt;model-number&gt;
           </code>
         </pre>
       </p>
@@ -436,9 +428,7 @@ model=&lt;model-number&gt;&eowd=&lt;eowd-date&gt;&opd=&lt;opd-date&gt;
 {
     "error": "Given parameters did meet validation requirements",
     "details": {
-        "model": "Model value is invalid",
-        "eowd": "EOWD value is invalid",
-        "opd": "OPD value is invalid"
+        "model": "Model value is invalid"
     }
 }
           </code>
@@ -498,9 +488,7 @@ model=&lt;model-number&gt;&eowd=&lt;eowd-date&gt;&opd=&lt;opd-date&gt;
 {
     "error": "Given parameters did meet validation requirements",
     "details": {
-        "model": "Model value is invalid",
-        "eowd": "EOWD value is invalid",
-        "opd": "OPD value is invalid"
+        "model": "Model value is invalid"
     }
 }
           </code>
@@ -612,10 +600,10 @@ DELETE /model/&lt;record-id&gt;
       per Computers record.
 
       <ol>
-        <li><i>Hostname</i> - (Required) The unique identifier associated with the computer</li>
-        <li><i>Model</i> - (Required) The model number associated with the montitor (see <a href="#api-models">models</a>)</li>
+        <li><i>Hostname</i> - (Optional) The unique identifier associated with the computer</li>
+        <li><i>Model</i> - (Optional) The model number associated with the montitor (see <a href="#api-models">models</a>)</li>
         <li><i>SKU</i> - (Required) The SKU number</li>
-        <li><i>UUIC</i> - (Required) The UUIC number</li>
+        <li><i>UUIC</i> - (Optional) The UUIC number</li>
         <li><i>Serial</i> - (Required) The serial number</li>
         <li><i>EOWD</i> - (Optional) The end of warranty date</li>
         <li><i>OPD</i> - (Optional) The original purchase date</li>
@@ -765,7 +753,7 @@ POST /computer
 
         <pre class="prettyprint lang-sh linenums prettyprinted">
           <code class="language-sh">
-hostname=&lt;computer-name&gt;&model=&lt;model-number&gt;&sku=&lt;computer-sku&gt;&serial=&lt;computer-serial&gt;
+hostname=&lt;computer-name&gt;&model=&lt;model-number&gt;&sku=&lt;computer-sku&gt;&serial=&lt;computer-serial&gt;&eowd=&lt;computer-eowd&gt;&eopd=&lt;computer-opd&gt;&notes=&lt;computer-notes&gt;
           </code>
         </pre>
       </p>
@@ -792,7 +780,10 @@ hostname=&lt;computer-name&gt;&model=&lt;model-number&gt;&sku=&lt;computer-sku&g
         "model": "Model value is invalid",
         "sku": "SKU value is invalid",
         "uuic": "UUIC value is invalid",
-        "Serial": "Serial value is invalid"
+        "serial": "Serial value is invalid",
+        "eowd": "EOWD value is invalid",
+        "opd": "OPD value is invalid",
+        "notes": "Notes value is invalid"
     }
 }
           </code>
@@ -829,7 +820,7 @@ PUT /computers/&lt;record-id&gt;
 
         <pre class="prettyprint lang-sh linenums prettyprinted">
           <code class="language-sh">
-hostname=&lt;machine-name&gt;&model=&lt;model-number&gt;&sku=&lt;machine-sku&gt;&uuic=&lt;machine-uuic&gt;&serial=&lt;machine-serial&gt;
+hostname=&lt;computer-name&gt;&model=&lt;model-number&gt;&sku=&lt;computer-sku&gt;&serial=&lt;computer-serial&gt;&eowd=&lt;computer-eowd&gt;&eopd=&lt;computer-opd&gt;&notes=&lt;computer-notes&gt;
           </code>
         </pre>
       </p>
@@ -856,7 +847,10 @@ hostname=&lt;machine-name&gt;&model=&lt;model-number&gt;&sku=&lt;machine-sku&gt;
         "model": "Model value is invalid",
         "sku": "SKU value is invalid",
         "uuic": "UUIC value is invalid",
-        "Serial": "Serial value is invalid"
+        "serial": "Serial value is invalid",
+        "eowd": "EOWD value is invalid",
+        "opd": "OPD value is invalid",
+        "notes": "Notes value is invalid"
     }
 }
           </code>
@@ -968,8 +962,8 @@ DELETE /computers/&lt;record-id&gt;
       per Monitors record.
 
       <ol>
-        <li><i>Hostname</i> - (Required) The unique identifier associated with the monitor</li>
-        <li><i>Model</i> - (Required) The model number associated with the montitor (see <a href="#api-models">models</a>)</li>
+        <li><i>Hostname</i> - (Optional) The unique identifier associated with the monitor</li>
+        <li><i>Model</i> - (Optional) The model number associated with the montitor (see <a href="#api-models">models</a>)</li>
         <li><i>SKU</i> - (Required) The SKU number</li>
         <li><i>Serial</i> - (Required) The serial number</li>
         <li><i>EOWD</i> - (Optional) The end of warranty date</li>
@@ -1116,7 +1110,7 @@ POST /monitor
 
         <pre class="prettyprint lang-sh linenums prettyprinted">
           <code class="language-sh">
-hostname=&lt;monitor-name&gt;&model=&lt;model-number&gt;&sku=&lt;monitor-sku&gt;&serial=&lt;monitor-serial&gt;
+hostname=&lt;monitor-name&gt;&model=&lt;model-number&gt;&sku=&lt;monitor-sku&gt;&serial=&lt;monitor-serial&gt;&eowd=&lt;monitor-eowd&gt;&eopd=&lt;monitor-opd&gt;&notes=&lt;monitor-notes&gt;
           </code>
         </pre>
       </p>
@@ -1142,7 +1136,11 @@ hostname=&lt;monitor-name&gt;&model=&lt;model-number&gt;&sku=&lt;monitor-sku&gt;
         "hostname": "Hostname value is invalid",
         "model": "Model value is invalid",
         "sku": "SKU value is invalid",
-        "Serial": "Serial value is invalid"
+        "uuic": "UUIC value is invalid",
+        "serial": "Serial value is invalid",
+        "eowd": "EOWD value is invalid",
+        "opd": "OPD value is invalid",
+        "notes": "Notes value is invalid"
     }
 }
           </code>
@@ -1179,7 +1177,7 @@ PUT /monitors/&lt;record-id&gt;
 
         <pre class="prettyprint lang-sh linenums prettyprinted">
           <code class="language-sh">
-hostname=&lt;machine-name&gt;&model=&lt;model-number&gt;&sku=&lt;machine-sku&gt;&uuic=&lt;machine-uuic&gt;&serial=&lt;machine-serial&gt;
+hostname=&lt;monitor-name&gt;&model=&lt;model-number&gt;&sku=&lt;monitor-sku&gt;&serial=&lt;monitor-serial&gt;&eowd=&lt;monitor-eowd&gt;&eopd=&lt;monitor-opd&gt;&notes=&lt;monitor-notes&gt;
           </code>
         </pre>
       </p>
@@ -1205,7 +1203,11 @@ hostname=&lt;machine-name&gt;&model=&lt;model-number&gt;&sku=&lt;machine-sku&gt;
         "hostname": "Hostname value is invalid",
         "model": "Model value is invalid",
         "sku": "SKU value is invalid",
-        "Serial": "Serial value is invalid"
+        "uuic": "UUIC value is invalid",
+        "serial": "Serial value is invalid",
+        "eowd": "EOWD value is invalid",
+        "opd": "OPD value is invalid",
+        "notes": "Notes value is invalid"
     }
 }
           </code>
