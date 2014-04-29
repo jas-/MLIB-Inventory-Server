@@ -19,9 +19,8 @@ class WarrantyDB extends AbstractDB
 
 	public function add($obj)
 	{
-		$sql = sprintf('CALL WarrantyAddUpdate("%s", "%s", "%s", "%s","%s", "%s", "%s", "%s")',
-					   $obj['date'], $obj['hostname'], $obj['sku'], $obj['uuic'], $obj['serial'],
-					   $obj['model'], $obj['part'], $obj['description']);
+		$sql = sprintf('CALL WarrantyAddUpdate("%s", "%s")',
+					   $obj['eowd'], $obj['opd']);
 
 		$result = parent::query($sql);
 
@@ -30,14 +29,13 @@ class WarrantyDB extends AbstractDB
 		if ((int)$result[0]['affected'] > 0) {
 			return array('success'=>'Successfully '.$r.' record');
 		}
-		return array('error'=>'Whoops, an error occured while adding new RMA record');
+		return array('error'=>'Whoops, an error occured while adding new warranty record');
 	}
 
 	public function update($id, $obj)
 	{
-		$sql = sprintf('CALL WarrantyUpdate("%d", "%s", "%s", "%s", "%s","%s", "%s", "%s", "%s")',
-					   $id, $obj['date'], $obj['hostname'], $obj['sku'], $obj['uuic'], $obj['serial'],
-					   $obj['model'], $obj['part'], $obj['description']);
+		$sql = sprintf('CALL WarrantyUpdate("%d", "%s", "%s")',
+					   $id, $obj['eowd'], $obj['opd']);
 
 		$result = parent::query($sql);
 
@@ -49,7 +47,7 @@ class WarrantyDB extends AbstractDB
 			return array('warning'=>'No changes to RMA record occured');
 		}
 
-		return array('error'=>'Whoops, an error occured while updating RMA record');
+		return array('error'=>'Whoops, an error occured while updating warranty record');
 	}
 
 	public function search($id)
@@ -66,6 +64,6 @@ class WarrantyDB extends AbstractDB
 		if ((int)$result[0]['affected'] > 0) {
 			return array('success'=>'Successfully deleted record');
 		}
-		return array('error'=>'Whoops, an error occured while deleting RMA record');
+		return array('error'=>'Whoops, an error occured while deleting warranty record');
 	}
 }
