@@ -19,9 +19,8 @@ class ModelDB extends AbstractDB
 
 	public function add($obj)
 	{
-		$sql = sprintf('CALL ModelAddUpdate("%s", "%s", "%s", "%s", "%s")',
-					   $obj['modelname'], $obj['eowd'], $obj['opd'], $obj['description'],
-					   $obj['notes']);
+		$sql = sprintf('CALL ModelAddUpdate("%s", "%s")',
+					   $obj['modelname'], $obj['description']);
 
 		$result = parent::query($sql);
 
@@ -35,9 +34,8 @@ class ModelDB extends AbstractDB
 
 	public function update($id, $obj)
 	{
-		$sql = sprintf('CALL ModelUpdate("%d", "%s", "%s", "%s", "%s", "%s")',
-					   $id, $obj['model'], $obj['eowd'], $obj['opd'], $obj['description'],
-					   $obj['notes']);
+		$sql = sprintf('CALL ModelUpdate("%d", "%s", "%s")',
+					   $id, $obj['model'], $obj['description']);
 
 		$result = parent::query($sql);
 

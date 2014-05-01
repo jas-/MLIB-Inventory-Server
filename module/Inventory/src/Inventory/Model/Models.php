@@ -22,11 +22,8 @@ class Models
 		$data['model'] = (isset($data['modelname'])) ? $data['modelname'] : $data['model'];
 
 		$this->id = (isset($data['id'])) ? $data['id'] : null;
-        $this->model = (isset($data['model'])) ? $data['model'] : null;
-		$this->eowd = (isset($data['eowd'])) ? $data['eowd'] : null;
-        $this->opd = (isset($data['opd'])) ? $data['opd'] : null;
-        $this->description = (isset($data['description'])) ? $data['description'] : null;
-		$this->notes = (isset($data['notes'])) ? $data['notes'] : null;
+    $this->model = (isset($data['model'])) ? $data['model'] : null;
+    $this->description = (isset($data['description'])) ? $data['description'] : null;
     }
 
 	public function isValid()
@@ -38,26 +35,9 @@ class Models
 			$ret = false;
 		}
 
-		if (!Date::isValid($this->eowd)) {
-            $this->errors['eowd'] = 'EOWD value is invalid';
-			$ret = false;
-		}
-
-		if (!Date::isValid($this->opd)) {
-            $this->errors['opd'] = 'OPD value is invalid';
-			$ret = false;
-		}
-
 		if (!empty($this->description)) {
 			if (!Paragraph::isValid($this->description)) {
                 $this->errors['description'] = 'Description value is invalid';
-			$ret = false;
-			}
-		}
-
-		if (!empty($this->notes)) {
-			if (!Paragraph::isValid($this->notes)) {
-                $this->errors['notes'] = 'Notes value is invalid';
 			$ret = false;
 			}
 		}
