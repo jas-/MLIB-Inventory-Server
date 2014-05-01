@@ -48,8 +48,8 @@ CREATE TABLE `models` (
 DROP TABLE IF EXISTS `warranty`;
 CREATE TABLE `warranty` (
   `id` BIGINT NOT NULL AUTO_INCREMENT,
-  `eowd` CHAR(32) NOT NULL,
-  `opd` CHAR(32) NOT NULL,
+  `eowd` CHAR(32) NULL DEFAULT NULL,
+  `opd` CHAR(32) NULL DEFAULT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY (`eowd`, `opd`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci AUTO_INCREMENT=0;
