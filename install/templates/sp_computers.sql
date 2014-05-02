@@ -83,36 +83,40 @@ CREATE DEFINER=`{ADMIN}`@`{SERVER}` PROCEDURE `ComputerUpdate`(IN `i` BIGINT, IN
 ComputerUpdate:BEGIN
 
   -- Lookup existing ID for hostname, model & warranty
-  SELECT `hostname` INTO @hid FROM `computers` WHERE `id` = i;
-  SELECT `model` INTO @mid FROM `computers` WHERE `id` = i;
-  SELECT `warranty` INTO @wid FROM `computers` WHERE `id` = i;
+  SELECT `id` INTO @hid FROM `hostnames` WHERE `hostname` = h;
+  SELECT `hostname` INTO @hn FROM `hostnames` WHERE `hostname` = h;
+  SELECT `id` INTO @mid FROM `models` WHERE `model` = m;
+  SELECT `id` INTO @wid FROM `warranty` WHERE `eowd` = UNIX_TIMESTAMP(e) AND `opd` = UNIX_TIMESTAMP(o);
 
   -- Does a record exist matching the id given?
   SELECT COUNT(*) INTO @exists FROM `computers` WHERE `id` = i;
 
-  -- If a hostname record exists update it
-  IF (@hid > 0 OR @hid != '' OR @hid IS NOT NULL) THEN
-    UPDATE `hostnames` SET `hostname` = h WHERE `id` = @hid;
-  ELSE
+  -- If an id doesn't exist for the hostname create one
+  IF (@hid <= 0 OR @hid = '' OR @hid IS NULL OR @hn != h) THEN
     INSERT INTO `hostnames` (`hostname`) VALUES (h) ON DUPLICATE KEY UPDATE `hostname` = h;
     SELECT LAST_INSERT_ID() INTO @hid;
   END IF;
 
-  -- If a model record exists update it
-  IF (@mid > 0 OR @mid != '' OR @mid IS NOT NULL) THEN
-    UPDATE `models` SET `model` = m WHERE `id` = @mid;
-  ELSE
+  -- If an id doesn't exist for the model create one
+  IF (@mid <= 0 OR @mid = '' OR @mid IS NULL) THEN
     INSERT INTO `models` (`model`) VALUES (m) ON DUPLICATE KEY UPDATE `model` = m;
     SELECT LAST_INSERT_ID() INTO @mid;
   END IF;
 
-  -- If a warranty record exists update it
-  IF (@wid > 0 OR @wid != '' OR @wid IS NOT NULL) THEN
-    UPDATE `warranty` SET `eowd` = UNIX_TIMESTAMP(e), `opd` = UNIX_TIMESTAMP(o) WHERE `id` = @wid;
+  IF (e != '' OR e IS NOT NULL) THEN
+    SET @eowd = UNIX_TIMESTAMP(e);
   ELSE
-    INSERT INTO `warranty` (`eowd`, `opd`) VALUES (UNIX_TIMESTAMP(e), UNIX_TIMESTAMP(o)) ON DUPLICATE KEY UPDATE `eowd`=UNIX_TIMESTAMP(e), `opd`=UNIX_TIMESTAMP(o);
-    SELECT LAST_INSERT_ID() INTO @wid;
+    SET @eowd = NULL;
   END IF;
+
+  IF (o != '' OR o IS NOT NULL) THEN
+    SET @opd = UNIX_TIMESTAMP(o);
+  ELSE
+    SET @opd = NULL;
+  END IF;
+
+  INSERT INTO `warranty` (`eowd`, `opd`) VALUES (@eowd, @opd) ON DUPLICATE KEY UPDATE `eowd`=@eowd, `opd`=@opd;
+  SELECT LAST_INSERT_ID() INTO @wid;
 
   -- Update the computer record
   IF (@exists > 0) THEN

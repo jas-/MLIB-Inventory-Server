@@ -38,9 +38,9 @@ class ComputerDB extends AbstractDB
 		$sql = sprintf('CALL ComputerUpdate(%d, "%s", "%s", "%s", "%s", "%s", "%s", "%s", "%s")',
 					   $id, $obj['hostname'], $obj['model'], $obj['sku'], $obj['uuic'],
 					    $obj['serial'], $obj['eowd'], $obj['opd'], $obj['notes']);
-
+echo $sql;
 		$result = parent::query($sql);
-
+print_r($result);
 		if ((int)$result[0]['affected'] > 0) {
 			return array('success'=>'Successfully updated record');
 		}
