@@ -135,12 +135,12 @@ CREATE TABLE IF NOT EXISTS `cors` (
 CREATE OR REPLACE DEFINER='{RO}'@'{SERVER}'
  SQL SECURITY DEFINER
 VIEW viewInventoryComputers AS
- SELECT c.id AS Id, h.hostname AS Hostname, m.model AS Model, c.sku AS SKU, c.uuic AS UUIC, c.serial AS Serial, FROM_UNIXTIME(w.eowd, '%Y-%m-%d') AS EOWD, FROM_UNIXTIME(w.opd, '%Y-%m-%d') AS OPD, m.description AS Description, c.notes AS Notes FROM computers c LEFT JOIN hostnames h ON h.id = c.hostname LEFT JOIN models m ON c.model = m.id LEFT JOIN warranty w ON c.warranty = w.id ORDER BY `hostname` ASC;
+ SELECT c.id AS Id, h.hostname AS Hostname, m.model AS Model, c.sku AS SKU, c.uuic AS UUIC, c.serial AS Serial, (CASE WHEN eowd IS NULL THEN "" ELSE FROM_UNIXTIME(eowd, "%Y-%m-%d") END) AS EOWD, (CASE WHEN opd IS NULL THEN "" ELSE FROM_UNIXTIME(opd, "%Y-%m-%d") END) AS OPD, m.description AS Description, c.notes AS Notes FROM computers c LEFT JOIN hostnames h ON h.id = c.hostname LEFT JOIN models m ON c.model = m.id LEFT JOIN warranty w ON c.warranty = w.id ORDER BY `hostname` ASC;
 
 CREATE OR REPLACE DEFINER='{RO}'@'{SERVER}'
  SQL SECURITY DEFINER
 VIEW viewInventoryMonitors AS
- SELECT m.id AS Id, h.hostname AS Hostname, mo.model AS Model, m.sku AS SKU, m.serial AS Serial, FROM_UNIXTIME(w.eowd, '%Y-%m-%d') AS EOWD, FROM_UNIXTIME(w.opd, '%Y-%m-%d') AS OPD, mo.description AS Description, m.notes AS Notes FROM monitors m LEFT JOIN hostnames h ON h.id = m.hostname LEFT JOIN models mo ON m.model = mo.id LEFT JOIN warranty w ON m.warranty = w.id ORDER BY `hostname` ASC;
+ SELECT m.id AS Id, h.hostname AS Hostname, mo.model AS Model, m.sku AS SKU, m.serial AS Serial, (CASE WHEN eowd IS NULL THEN "" ELSE FROM_UNIXTIME(eowd, "%Y-%m-%d") END) AS EOWD, (CASE WHEN opd IS NULL THEN "" ELSE FROM_UNIXTIME(opd, "%Y-%m-%d") END) AS OPD, mo.description AS Description, m.notes AS Notes FROM monitors m LEFT JOIN hostnames h ON h.id = m.hostname LEFT JOIN models mo ON m.model = mo.id LEFT JOIN warranty w ON m.warranty = w.id ORDER BY `hostname` ASC;
 
 CREATE OR REPLACE DEFINER='{RO}'@'{SERVER}'
  SQL SECURITY DEFINER
@@ -150,7 +150,7 @@ VIEW viewInventoryModels AS
 CREATE OR REPLACE DEFINER='{RO}'@'{SERVER}'
  SQL SECURITY DEFINER
 VIEW viewInventoryWarranty AS
- SELECT id AS Id, FROM_UNIXTIME(eowd, '%Y-%m-%d') AS EOWD, FROM_UNIXTIME(opd, '%Y-%m-%d') AS OPD FROM warranty ORDER BY OPD ASC;
+ SELECT id AS Id, (CASE WHEN eowd IS NULL THEN "" ELSE FROM_UNIXTIME(eowd, "%Y-%m-%d") END) AS EOWD, (CASE WHEN opd IS NULL THEN "" ELSE FROM_UNIXTIME(opd, "%Y-%m-%d") END) AS OPD FROM warranty ORDER BY OPD ASC;
 
 CREATE OR REPLACE DEFINER='{RO}'@'{SERVER}'
  SQL SECURITY DEFINER
