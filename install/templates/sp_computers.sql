@@ -115,8 +115,11 @@ ComputerUpdate:BEGIN
     SET @opd = NULL;
   END IF;
 
-  INSERT INTO `warranty` (`eowd`, `opd`) VALUES (@eowd, @opd) ON DUPLICATE KEY UPDATE `eowd`=@eowd, `opd`=@opd;
-  SELECT LAST_INSERT_ID() INTO @wid;
+  -- If an id doesn't exist for the warranty create one
+  IF (@wid <= 0 OR @wid = '' OR @wid IS NULL) THEN
+    INSERT INTO `warranty` (`eowd`, `opd`) VALUES (@eowd, @opd) ON DUPLICATE KEY UPDATE `eowd`=@eowd, `opd`=@opd;
+    SELECT LAST_INSERT_ID() INTO @wid;
+  END IF;
 
   -- Update the computer record
   IF (@exists > 0) THEN
