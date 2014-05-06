@@ -80,48 +80,47 @@ CREATE DEFINER=`{ADMIN}`@`{SERVER}` PROCEDURE `MonitorUpdate`(IN `i` BIGINT, IN 
  DETERMINISTIC
  SQL SECURITY INVOKER
  COMMENT 'Update monitor record'
-MonitorUpdate:BEGIN
+BEGIN
 
   -- Lookup existing ID for hostname, model & warranty
-  SELECT `hostname` INTO @hid FROM `monitors` WHERE `id` = i;
+  SELECT `id` INTO @hid FROM `hostnames` WHERE `hostname` = h;
+  SELECT `hostname` INTO @hn FROM `hostnames` WHERE `hostname` = h;
   SELECT `id` INTO @mid FROM `models` WHERE `model` = m;
-  SELECT `warranty` INTO @wid FROM `monitors` WHERE `warranty` = i;
+
+  -- Set EOWD & OPD values
+  SET @eowd = (CASE WHEN e IS NULL OR e = '' THEN NULL ELSE UNIX_TIMESTAMP(e) END);
+  SET @opd = (CASE WHEN o IS NULL OR o = '' THEN NULL ELSE UNIX_TIMESTAMP(o) END);
+
+  -- Lookup existing warranty matching supplied values
+  SELECT `id` INTO @wid FROM `warranty` WHERE `eowd` = @eowd AND `opd` = @opd OR `eowd` IS NULL AND `opd` IS NULL;
 
   -- Does a record exist matching the id given?
   SELECT COUNT(*) INTO @exists FROM `monitors` WHERE `id` = i;
 
-  -- If a hostname record exists update it
-  IF (@hid > 0 OR @hid != '' OR @hid IS NOT NULL) THEN
-    UPDATE `hostnames` SET `hostname` = h WHERE `id` = @hid;
-  ELSE
+  -- If an id doesn't exist for the hostname create one
+  IF (@hid <= 0 OR @hid = '' OR @hid IS NULL OR @hn != h) THEN
     INSERT INTO `hostnames` (`hostname`) VALUES (h) ON DUPLICATE KEY UPDATE `hostname` = h;
     SELECT LAST_INSERT_ID() INTO @hid;
   END IF;
 
-  -- If a model record exists update it
-  IF (@mid > 0 OR @mid != '' OR @mid IS NOT NULL) THEN
-    UPDATE `models` SET `model` = m WHERE `id` = @mid;
-  ELSE
+  -- If an id doesn't exist for the model create one
+  IF (@mid <= 0 OR @mid = '' OR @mid IS NULL) THEN
     INSERT INTO `models` (`model`) VALUES (m) ON DUPLICATE KEY UPDATE `model` = m;
     SELECT LAST_INSERT_ID() INTO @mid;
   END IF;
 
-  -- If a warranty record exists update it
-  IF (@wid > 0 OR @wid != '' OR @wid IS NOT NULL) THEN
-    UPDATE `warranty` SET `eowd` = UNIX_TIMESTAMP(e), `opd` = UNIX_TIMESTAMP(o) WHERE `id` = @wid;
-  ELSE
-    INSERT INTO `warranty` (`eowd`, `opd`) VALUES (UNIX_TIMESTAMP(e), UNIX_TIMESTAMP(o)) ON DUPLICATE KEY UPDATE `eowd`=UNIX_TIMESTAMP(e), `opd`=UNIX_TIMESTAMP(o);
+  -- If an id doesn't exist for the warranty create one
+  IF (@wid <= 0 OR @wid = '' OR @wid IS NULL) THEN
+    INSERT INTO `warranty` (`eowd`, `opd`) VALUES (@eowd, @opd) ON DUPLICATE KEY UPDATE `eowd`=@eowd, `opd`=@opd;
     SELECT LAST_INSERT_ID() INTO @wid;
   END IF;
 
   -- Update the monitor record
   IF (@exists > 0) THEN
-    SET @sql = CONCAT('UPDATE `monitors` SET `hostname`=@hid, `model`=@mid, `sku`=',s,', `serial`=',sl,', `warranty`=@wid, `notes`=',n,' WHERE `id`=',i,'');
     UPDATE `monitors` SET `hostname`=@hid, `model`=@mid, `sku`=s, `serial`=sl, `warranty`=@wid, `notes`=n WHERE `id`=i;
     SELECT ROW_COUNT() AS affected;
   ELSE
     SELECT -1 AS affected;
-    LEAVE MonitorUpdate;
   END IF;
 
 END//

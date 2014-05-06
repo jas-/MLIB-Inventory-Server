@@ -80,13 +80,19 @@ CREATE DEFINER=`{ADMIN}`@`{SERVER}` PROCEDURE `ComputerUpdate`(IN `i` BIGINT, IN
  DETERMINISTIC
  SQL SECURITY INVOKER
  COMMENT 'Update computer record'
-ComputerUpdate:BEGIN
+BEGIN
 
   -- Lookup existing ID for hostname, model & warranty
   SELECT `id` INTO @hid FROM `hostnames` WHERE `hostname` = h;
   SELECT `hostname` INTO @hn FROM `hostnames` WHERE `hostname` = h;
   SELECT `id` INTO @mid FROM `models` WHERE `model` = m;
-  SELECT `id` INTO @wid FROM `warranty` WHERE `eowd` = UNIX_TIMESTAMP(e) AND `opd` = UNIX_TIMESTAMP(o);
+
+  -- Set EOWD & OPD values
+  SET @eowd = (CASE WHEN e IS NULL OR e = '' THEN NULL ELSE UNIX_TIMESTAMP(e) END);
+  SET @opd = (CASE WHEN o IS NULL OR o = '' THEN NULL ELSE UNIX_TIMESTAMP(o) END);
+
+  -- Lookup existing warranty matching supplied values
+  SELECT `id` INTO @wid FROM `warranty` WHERE `eowd` = @eowd AND `opd` = @opd OR `eowd` IS NULL AND `opd` IS NULL;
 
   -- Does a record exist matching the id given?
   SELECT COUNT(*) INTO @exists FROM `computers` WHERE `id` = i;
@@ -103,18 +109,6 @@ ComputerUpdate:BEGIN
     SELECT LAST_INSERT_ID() INTO @mid;
   END IF;
 
-  IF (e != '' OR e IS NOT NULL) THEN
-    SET @eowd = UNIX_TIMESTAMP(e);
-  ELSE
-    SET @eowd = NULL;
-  END IF;
-
-  IF (o != '' OR o IS NOT NULL) THEN
-    SET @opd = UNIX_TIMESTAMP(o);
-  ELSE
-    SET @opd = NULL;
-  END IF;
-
   -- If an id doesn't exist for the warranty create one
   IF (@wid <= 0 OR @wid = '' OR @wid IS NULL) THEN
     INSERT INTO `warranty` (`eowd`, `opd`) VALUES (@eowd, @opd) ON DUPLICATE KEY UPDATE `eowd`=@eowd, `opd`=@opd;
@@ -127,7 +121,6 @@ ComputerUpdate:BEGIN
     SELECT ROW_COUNT() AS affected;
   ELSE
     SELECT -1 AS affected;
-    LEAVE ComputerUpdate;
   END IF;
 
 END//
